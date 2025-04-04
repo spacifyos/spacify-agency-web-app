@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "button.scss";
+@import "input.scss";
+@import "select.scss";
+@import "toggle.scss";
+@import "uChat.scss";
+@import "table.scss";
+@import "tab.scss";
+@import "page/meter-detail";
+@import "page/property-overview";
+@import "page/meter-detail";
+@import "page/explore.scss";
+@import "page/search.scss";
+@import "page/my-property.scss";
+@import "page/account.scss";
+@import "page/my-tenancy";
+@import "carousel.scss";
+@import "page/booking.scss";
+@import "page/e-agreement.scss";
+@import "page/booking-overview.scss";
+@import "page/my-appointment.scss";
+@import "page/appointment-overview.scss";
+@import "page/help-center.scss";
+@import "page/owner.scss";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+* {
+  scrollbar-color: unset;
+  scrollbar-gutter: auto !important;
+}
+
+body {
+  /*color: rgb(var(--foreground-rgb));*/
+  //background: linear-gradient(
+  //    to bottom,
+  //    transparent,
+  //    rgb(var(--background-end-rgb))
+  //  )
+  //  rgb(var(--background-start-rgb));
+  //display: flex;
+  //justify-content: center;
+  //background-color: #d3d3d3;
+}
+
+//::-webkit-scrollbar {
+//  display: none !important;
+//}
+
+.pb-23 {
+  padding-bottom: 88px;
+}
+
+.global-horizontal-padding {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.global-horizontal-margin {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.global-box-shadow {
+  @apply shadow-md;
+}
+
+.global-border-radius {
+  border-radius: 10px;
+}
+
+.toggle-primary-color {
+  @apply bg-primary;
+  border: none;
+}
+
+.toggle-disable-color {
+  @apply bg-disable;
+  border: none;
+}
+
+.border-16 {
+  border-width: 16px;
+}
+
+.border-secondary-color {
+  @apply border-secondary-background;
+}
+
+.divider-line {
+  height: 1px;
+  width: 100%;
+  background-color: #e0ecff !important;
+  @apply my-4;
+}
+
+.divider-custom:before {
+  height: 6px;
+  width: 30%;
+  max-width: 30%;
+  border-radius: 99px;
+}
+
+.divider-custom:after {
+  display: none;
+}
+
+.modal-box {
+  padding-top: 0;
+}
+
+.divider-step-section {
+  &:before,
+  &:after {
+    height: 1px;
+  }
+}
+
+.section-title {
+  @apply text-base font-bold;
+}
+
+.second-section-title {
+  @apply font-bold text-base;
+}
+
+.body-container {
+  @apply global-horizontal-padding relative;
+}
+
+.feature-button {
+  cursor: pointer;
+}
+
+.feature-button:hover {
+  @apply bg-white;
+}
+
+.collapse-arrow > .collapse-title:after {
+  top: 25px !important;
+}
+
+.hide-scroll-bar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.global-border {
+  border: 1px solid #e0ecff;
+}
+
+.desktop-responsive {
+  @apply 2xl:flex xl:flex lg:flex md:flex sm:flex hidden;
+}
+
+.mobile-responsive {
+  @apply 2xl:hidden xl:hidden lg:hidden md:hidden sm:hidden;
+}
+
+.image-zoom-in:hover {
+  transform: scale(1.1);
+}

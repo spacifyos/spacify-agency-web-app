@@ -1,0 +1,54 @@
+.btn {
+  @apply font-normal border-none global-border-radius;
+}
+
+.btn-primary {
+  @apply text-white;
+}
+
+.btn-black {
+  @apply bg-black text-white;
+}
+
+.btn-black:hover {
+  @apply bg-black text-white;
+}
+
+.btn-white {
+  @apply bg-white global-box-shadow;
+}
+
+.btn-white:hover {
+  @apply bg-white shadow-lg;
+}
+
+.btn-primary-outline {
+  @apply bg-white border-primary border border-solid text-primary;
+}
+
+.btn-primary-outline:hover {
+  @apply bg-white global-box-shadow;
+}
+
+.btn-secondary {
+  @apply text-white;
+}
+
+.btn-disable {
+  @apply bg-disable text-black border;
+}
+
+.default-btn:focus-visible,
+//.btn-primary:focus-visible,
+.disable-btn:focus-visible,
+.disable-btn:focus-visible,
+.tag-button:focus-visible,
+.tag-button-active:focus-visible,
+.appointment-cancelled-btn:focus-visible,
+.appointment-reschedule-btn:focus-visible,
+.appointment-confirmed-btn:focus-visible,
+.btn-ghost:focus-visible {
+  outline: none;
+  outline-offset: unset;
+  border: none;
+}

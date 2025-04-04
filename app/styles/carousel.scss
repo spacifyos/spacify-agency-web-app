@@ -1,0 +1,27 @@
+.react-multi-carousel-dot button {
+  width: 6px !important;
+  height: 6px !important;
+  border: 1px solid #d9d9d9;
+  background-color: #d9d9d9;
+}
+
+.react-multi-carousel-dot--active button {
+  @apply bg-primary border-primary;
+  width: 15px !important;
+  height: 7px !important;
+  border-radius: 20px !important;
+}
+
+.owner-invoice-summary .react-multi-carousel-dot button {
+  width: 6px !important;
+  height: 6px !important;
+  border: 1px solid #f65626;
+  background-color: #f65626;
+}
+
+.owner-invoice-summary .react-multi-carousel-dot--active button {
+  @apply bg-white border-white;
+  width: 15px !important;
+  height: 7px !important;
+  border-radius: 20px !important;
+}

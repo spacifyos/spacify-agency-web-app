@@ -1,0 +1,45 @@
+.table :where(thead, tbody) :where(tr) {
+  border: none;
+}
+
+.table :where(tbody) :where(tr) :where(td):first-child :where(p), {
+  border-bottom-left-radius: 10px;
+}
+
+.table :where(tbody) :where(tr):not(:first-child) :where(td):first-child :where(p), {
+  border-top-left-radius: 10px;
+}
+
+.table :where(tbody) :where(tr) :where(td):last-child :where(p), {
+  border-bottom-right-radius: 10px;
+}
+
+.table :where(tbody) :where(tr):not(:first-child) :where(td):last-child :where(p), {
+  border-top-right-radius: 10px;
+}
+
+.table :where(thead) :where(tr) :where(th):first-child :where(p), {
+  border-top-left-radius: 10px;
+}
+
+.table :where(thead) :where(tr) :where(th):last-child :where(p), {
+  border-top-right-radius: 10px;
+}
+
+.table :where(tbody) :where(tr):first-child :where(td) :where(p), {
+  border-top: 1px solid #e0ecff;
+}
+
+.table :where(th) {
+  padding: 0;
+}
+
+.table :where(td) {
+  padding: 0 0 10px 0;
+}
+
+.table :where(p) {
+  @apply bg-white;
+  padding: 12px;
+  height: 40px;
+}

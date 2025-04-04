@@ -1,0 +1,96 @@
+@mixin custom-input($bgColor) {
+  @apply border-white;
+  background-color: $bgColor;
+
+  textarea {
+
+    width: 100%;
+    height: 100%;
+    @apply text-black;
+    -moz-appearance: textfield;
+  }
+  textarea:focus {
+    outline: none;
+    outline-offset: unset;
+  }
+}
+input {
+  width: 100%;
+  @apply text-black;
+  -moz-appearance: textfield;
+}
+
+::placeholder {
+  @apply text-sm text-disable;
+  opacity: 1;
+}
+
+::-webkit-outer-spin-button,
+::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input:focus {
+  outline: none;
+  outline-offset: unset;
+}
+
+.meter-input::placeholder {
+  @apply text-sm;
+}
+
+.meter-input {
+  -moz-appearance: textfield;
+}
+
+.meter-input::-webkit-outer-spin-button,
+.meter-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.user-input {
+  @apply text-black;
+  @apply border-disable;
+}
+
+.default-input {
+  @include custom-input(#FFFFFF);
+}
+
+.user-input:focus,
+.user-input:focus-within {
+  @apply border-disable;
+  outline: none;
+}
+
+.default-input:focus,
+.default-input:focus-within,
+.meter-input:focus,
+.meter-input:focus-within {
+  outline: none;
+  outline-offset: unset;
+  border: none;
+  @include custom-input(#FFFFFF);
+}
+
+.resize-input-icon {
+  -webkit-appearance: none;
+}
+
+.resize-input-icon::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+.resize-input-icon::-webkit-calendar-picker-indicator {
+  display: block;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: transparent;
+  z-index: 999;
+  cursor: pointer;
+}

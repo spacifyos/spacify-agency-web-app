@@ -1,0 +1,95 @@
+.booking-textarea {
+  width: 100%;
+  @apply border-disable;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 4px 0;
+  @apply text-black;
+  height: 100px;
+  resize: none;
+  @apply text-xs;
+}
+
+.booking-textarea::placeholder {
+  @apply text-disable;
+}
+
+.booking-input {
+  @apply border-disable text-black text-xs;
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 4px 0;
+  height: 40px;
+}
+
+.booking-input::placeholder {
+  @apply text-disable;
+}
+
+.booking-select-container {
+  width: 100%;
+  @apply border-disable;
+  border-radius: 10px;
+  margin: 4px 0;
+  padding-right: 10px;
+  @apply text-black;
+}
+
+.booking-select {
+  background-color: transparent;
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px 0 10px 10px;
+  @apply text-black;
+  -webkit-appearance: none;
+  @apply text-xs;
+
+  option[value=""][disabled] {
+    display: none;
+    @apply text-disable;
+  }
+
+  option {
+    @apply text-black;
+  }
+}
+
+.booking-select:required:invalid {
+  @apply text-xs;
+  @apply text-disable;
+}
+
+.error-message {
+  padding-bottom: 4px;
+  @apply text-xs text-error;
+}
+
+.input-title {
+  @apply text-xs text-black;
+}
+
+.booking-select:focus-within,
+.booking-select:focus,
+.booking-textarea:focus-within,
+.booking-textarea:focus {
+  outline: none;
+  outline-offset: unset;
+}
+.booking-input:focus-within,
+.booking-input:focus {
+  outline: none;
+  outline-offset: unset;
+}
+
+.booking-radio:checked {
+  @apply bg-primary;
+  box-shadow:
+    0 0 0 4px #f5f8fd inset,
+    0 0 0 4px #f5f8fd inset;
+}
+
+.booking-radio {
+  height: 20px;
+  width: 20px;
+}

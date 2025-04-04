@@ -1,0 +1,9 @@
+.tabs-bordered > .tab {
+  @apply border-disable bordered border-solid;
+}
+
+.tab:is(.tab-active, [aria-selected="true"]):not(.tab-disabled):not(
+    [disabled]
+  ) {
+  @apply border-black;
+}

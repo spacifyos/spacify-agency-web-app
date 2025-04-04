@@ -1,0 +1,50 @@
+.react-date-picker__wrapper {
+  border: none !important;
+}
+
+.react-time-picker__wrapper {
+  border: none !important;
+}
+
+.custom-date-picker {
+  border-radius: 10px !important;
+  @apply text-base;
+
+  .react-calendar__navigation {
+    margin-bottom: 0;
+    .react-calendar__navigation__label {
+      span {
+        @apply text-base font-bold;
+      }
+    }
+
+    .react-calendar__navigation__arrow {
+    }
+  }
+  .react-calendar__tile--active {
+    border-radius: 200px;
+  }
+  .react-calendar__tile--now {
+    border-radius: 200px;
+    @apply bg-primary;
+    color: white;
+  }
+  .react-calendar__month-view__weekdays {
+    @apply text-disable;
+  }
+}
+.react-date-picker__inputGroup__month {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
+
+.react-time-picker__inputGroup__input.react-time-picker__inputGroup__amPm {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.react-date-picker__button{
+  padding-right: 4px !important;
+}

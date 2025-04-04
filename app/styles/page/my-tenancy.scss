@@ -1,0 +1,9 @@
+.tenancy-auto-pay-button {
+  @apply global-border-radius flex items-center justify-center bg-secondary-background px-2 py-2;
+}
+
+.auto-pay-btn:focus-visible {
+  outline: none;
+  outline-offset: unset;
+  border: none;
+}

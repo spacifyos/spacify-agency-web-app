@@ -1,0 +1,38 @@
+@mixin custom-select($bgColor) {
+  border-radius: 0.5rem;
+
+  select {
+    @apply text-black border-white;
+    background-color: $bgColor;
+  }
+
+  select:required:invalid {
+    @apply text-sm;
+    @apply text-disable;
+  }
+
+  option[value=""][disabled] {
+    display: none;
+  }
+
+  option {
+    @apply text-black;
+  }
+
+  select:focus {
+    outline: none;
+    outline-offset: unset;
+  }
+}
+
+.default-select:focus,
+.default-select:focus-within {
+  outline: none;
+  outline-offset: unset;
+  border: none;
+  @include custom-select(#FFFFFF);
+}
+
+.default-select {
+  @include custom-select(#FFFFFF);
+}

@@ -1,0 +1,65 @@
+.booking-overview-btn {
+  min-height: 30px !important;
+  height: 40px;
+  @apply btn-primary;
+}
+
+.step-section-infor-font {
+  @apply text-disable text-xs;
+}
+
+.step-section-complete-font {
+  @apply text-xs bg-tertiary global-border-radius text-white px-4 leading-5;
+}
+
+.step-section-step-font {
+  @apply text-base font-bold py-2;
+}
+
+.step-section-pending-font {
+  @apply text-xs bg-disable global-border-radius text-white px-4 leading-5;
+}
+
+.modal-box {
+  max-width: 28rem;
+  @apply bg-white;
+}
+
+.modal-x-btn {
+  @apply btn btn-sm btn-circle btn-ghost absolute right-2 top-2;
+}
+
+.modal-title-font {
+  @apply font-bold text-base;
+}
+
+.modal-font-primary {
+  @apply font-bold;
+}
+
+.modal-font-secondary {
+
+}
+
+.modal-font-main {
+  @apply text-primary font-bold;
+}
+
+.modal-sub-font{
+  @apply text-disable text-xs
+}
+
+.divider-bookingOverview {
+  margin: 12px 0;
+}
+
+.payment-details-fee {
+  @apply flex justify-between items-center flex-wrap pb-2;
+}
+
+.divider-step-section {
+  &:before,
+  &:after {
+    height: 1px;
+  }
+}

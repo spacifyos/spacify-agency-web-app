@@ -1,0 +1,15 @@
+.profile-user-info-container {
+  @apply p-5 w-full global-box-shadow global-border-radius bg-white flex flex-col items-center relative;
+}
+
+.profile-coin-container {
+  @apply p-5 global-box-shadow global-border-radius bg-white flex flex-col items-center justify-between relative;
+}
+
+.profile-coin-icon-container {
+  @apply p-2 global-box-shadow global-border-radius bg-primary-background;
+}
+
+.logout-container {
+  @apply flex items-center bg-white p-3 global-box-shadow global-border-radius;
+}
