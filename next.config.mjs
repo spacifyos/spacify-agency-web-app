@@ -13,6 +13,15 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     domains: ["staging-tms.spacify.asia", "tms.spacify.asia"],
   },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/sign-in",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
