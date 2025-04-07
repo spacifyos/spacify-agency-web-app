@@ -4,6 +4,8 @@ import Toast from "@/src/utils/Toast";
 import { apiRequestErrorResponse } from "@/src/services/httpUtilities/apiRequestErrorResponse";
 import axios from "axios";
 import moment from "moment";
+import AuthManager from "@/src/utils/AuthManager";
+import Router from "next/router";
 
 const apiRequest = async (
   api,
@@ -470,11 +472,12 @@ const getMaintenanceTicketOptionRequest = async (
 const getMaintenanceTicketListingRequest = async (
   perPage,
   page,
+  status,
   setLoading,
   successCallback,
 ) => {
   await apiRequest(
-    api.getMaintenanceTicket(perPage, page),
+    api.getMaintenanceTicket(perPage, page, status),
     setLoading,
     successCallback,
   );
@@ -605,6 +608,57 @@ const getListingTagOptionRequest = async (setLoading, successCallback) => {
   );
 };
 
+const getUserProfileRequest = async (setLoading, successCallback) => {
+  await apiRequest(
+    api.getUserProfile(),
+    setLoading,
+    successCallback,
+    () => {},
+    "",
+    true,
+  );
+};
+
+const signOutAccountRequest = async () => {
+  await AuthManager.removeLoginType();
+
+  AuthManager.removeToken().then(() => {
+    Router.replace("/").then(() => Router.reload());
+  });
+};
+
+const getMaintenanceListingTicketRequest = async (
+  per_page,
+  page,
+  status,
+  setLoading,
+  successCallback,
+) => {
+  await apiRequest(
+    api.getMaintenanceTicket(per_page, page, status),
+    setLoading,
+    successCallback,
+    () => {},
+    "",
+    true,
+  );
+};
+
+const getMaintenanceTicketOverviewRequest = async (
+  id,
+  setLoading,
+  successCallback,
+) => {
+  await apiRequest(
+    api.getMaintenanceTicketDetail(id),
+    setLoading,
+    successCallback,
+    () => {},
+    "",
+    true,
+  );
+};
+
 export default {
   signInRequest,
   signUpRequest,
@@ -654,4 +708,7 @@ export default {
   postMaintenanceTicketCheckOutRequest,
   getMeterUsageRequest,
   getListingTagOptionRequest,
+  getUserProfileRequest,
+  signOutAccountRequest,
+  getMaintenanceTicketOverviewRequest,
 };

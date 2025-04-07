@@ -1,4 +1,4 @@
-import { capitalize, get, isEmpty, isEqual, map } from "lodash";
+import { capitalize, first, get, isEmpty, isEqual, map } from "lodash";
 import CustomEmptyBox from "@/components/CustomEmptyBox";
 import * as listingSelector from "@/src/selectors/listing";
 import CustomText from "@/components/CustomText";
@@ -8,36 +8,67 @@ import { getUnitStatus } from "@/src/selectors/listing";
 
 const DesktopUnitContent = ({ unitListing, onClickShareBooking }) => {
   return (
-    <div className="xl:col-span-9 lg:col-span-9 xl:flex lg:flex md:hidden sm:hidden hidden flex-col gap-4 relative">
+    <div className="relative hidden flex-col gap-4 rounded-3xl bg-white p-6 sm:hidden md:hidden lg:col-span-9 lg:flex xl:col-span-10 xl:flex">
       {isEmpty(unitListing) ? (
-        <div className="bg-white flex justify-center items-center h-screen border global-border-radius">
+        <div className="flex h-screen items-center justify-center rounded-3xl">
           <CustomEmptyBox />
         </div>
       ) : (
-        <div className="flex flex-col gap-4 sticky top-4 ">
-          {map(unitListing, (list) => {
+        <div className="sticky top-4 flex flex-col gap-4">
+          {map(unitListing, (list, index) => {
             const name = listingSelector.getName(list);
             const rooms = listingSelector.getRooms(list);
             const isOccupied = listingSelector.getIsOccupied(list);
             const unitStatus = listingSelector.getUnitStatus(list);
+            const genderLabel = listingSelector.getGenderLabel(list);
+            const styleLabel = listingSelector.getStyleLabel(list);
+            const unitStatusTypeLabel =
+              listingSelector.getUnitStatusTypeLabel(list);
+
+            const checkGenderColor = (gender) => {
+              switch (gender) {
+                case "Male":
+                  return "bg-male";
+                case "Female":
+                  return "bg-female";
+                case "Mixed":
+                  return "bg-mixed";
+                default:
+                  return "bg-disable";
+              }
+            };
 
             return (
-              <div className="bg-white border global-border-radius overflow-hidden relative">
-                <div className="px-4 pt-4 sticky">
+              <div className="relative overflow-hidden" key={index}>
+                <div className="sticky">
                   <div className="flex items-center gap-2">
-                    <CustomText textClassName="text-base">
+                    <CustomText
+                      textClassName={`${checkGenderColor(genderLabel)} text-white text-xs py-1 px-1.5 rounded`}
+                    >
+                      {first(genderLabel.split(""))}
+                    </CustomText>
+
+                    <CustomText textClassName="text-base text-primary font-bold">
                       {isEmpty(name) ? "-" : name}
                     </CustomText>
 
+                    {isEmpty(styleLabel) ? (
+                      false
+                    ) : (
+                      <CustomText textClassName="italic">
+                        | {styleLabel}
+                      </CustomText>
+                    )}
+
                     <CustomText
-                      textClassName={`${isEqual(unitStatus, "fully") ? "bg-error" : isEqual(unitStatus, "partial") ? "bg-warning" : "bg-available"} text-xs global-border-radius px-2 py-1 text-white`}
+                      textClassName={`${isEqual(unitStatus, "fully") ? "bg-error" : isEqual(unitStatus, "partial") ? "bg-warning" : "bg-active"} text-xs rounded px-2 py-1 text-white`}
                     >
                       {capitalize(unitStatus)}
                     </CustomText>
                   </div>
 
-                  <div className="flex gap-4 overflow-x-scroll pt-4">
-                    {map(rooms, (room) => {
+                  <div className="hide-scroll-bar flex gap-4 overflow-x-scroll pt-4">
+                    {map(rooms, (room, index) => {
                       const bathroom = listingSelector.getAbbrBathroom(room);
                       const bedType = listingSelector.getAbbrBedType(room);
                       const bookingLink = listingSelector.getBookingLink(room);
@@ -52,6 +83,7 @@ const DesktopUnitContent = ({ unitListing, onClickShareBooking }) => {
 
                       return (
                         <a
+                          key={index}
                           target={
                             isAvailableBook && isEqual(status, "vacant")
                               ? "_blank"
@@ -62,9 +94,9 @@ const DesktopUnitContent = ({ unitListing, onClickShareBooking }) => {
                               ? propertyOverview
                               : "#"
                           }
-                          className={`${isEqual(status, "vacant") ? "bg-available-light" : "bg-error-light"} p-4 global-border-radius flex flex-col gap-2 min-w-64 max-w-64`}
+                          className={`${isEqual(status, "vacant") ? "bg-available-light" : isEqual(status, "occupied") ? "bg-error-light" : "bg-disable-background"} global-border-radius min-w-64 max-w-64 flex flex-col gap-2 p-4`}
                         >
-                          <div className={`flex justify-between items-center`}>
+                          <div className={`flex items-center justify-between`}>
                             <CustomText
                               textClassName={`text-white text-xxs ${
                                 !isAvailableBook && isEqual(status, "vacant")

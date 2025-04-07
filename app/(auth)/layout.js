@@ -1,115 +1,52 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { get, includes, isEmpty, isEqual } from "lodash";
+import { includes, isEqual } from "lodash";
 import * as authSelector from "@/src/selectors/auth";
 import AuthManager from "@/src/utils/AuthManager";
 import Helper from "@/src/utils/Helper";
-import Constant from "@/src/utils/Constant";
-import { deleteCookie } from "cookies-next";
 import CustomImage from "@/components/CustomImage";
 import DesktopModal from "@/components/DesktopModal";
 import CustomText from "@/components/CustomText";
 import CustomButton from "@/components/CustomButton";
 import LoadingOverlay from "@/components/LoadingOverlay";
-import { useRouter } from "next/navigation";
-import Image from "@/src/utils/Image";
+import { usePathname, useRouter } from "next/navigation";
+import Images from "@/src/utils/Image";
+import apiRequest from "@/src/services/httpUtilities/apiRequest";
 
-export default function RootLayout({
-  children,
-  hideNav = false,
-  rightSecondButtonIcon,
-  onClickRightSecondButton,
-  onClickRightButton,
-  rightButtonIcon,
-  rightContent,
-  isFiltered,
-  loading,
-  pageBreadcrumbs,
-  isMinHeight = true,
-  backgroundColor = "bg-primary-background",
-}) {
+export default function RootLayout({ children }) {
   const router = useRouter();
 
-  const pathname = get(router, ["pathname"], "");
+  const pathname = usePathname(router);
 
-  // const getUserProfileRequest = () =>
-  //   dispatch(authAction.getUserProfileRequest());
   const userProfileData = authSelector.getUserProfileData();
   const userProfileLoading = authSelector.getUserProfileLoading();
 
-  const [selectedUserType, setSelectedUserType] = useState("");
   const [signOutLoading, setSignOutLoading] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  const userType = authSelector.getType(userProfileData);
 
   useEffect(() => {
     const checkAuthentication = async () => {
       const token = await AuthManager.retrieveToken();
       const type = await AuthManager.retrieveType();
-
-      if (!isEmpty(token) && !isEmpty(type) && isEmpty(userProfileData)) {
-        fetchUserprofileData();
-      }
     };
 
     checkAuthentication();
   }, []);
 
-  const signOutAccountRequest = () => {};
-
-  const fetchUserprofileData = () => {};
-
-  const onClickSignIn = () => {
-    Helper.documentGetElementById("sign_in_modal").showModal();
-  };
-
-  const onClickSignUp = () => {
-    Helper.documentGetElementById("sign_up_modal").showModal();
-  };
-
-  const onClickMyProperty = () => {
-    if (isEqual(userType, "tenant")) {
-      return router.replace("/user/my-property");
-    } else {
-      return router.replace("/user/owner");
-    }
-  };
-
-  const onClickMyAccount = () => {
-    return router.push("/user/account");
-  };
-
-  const onClickChat = () => {
-    if (isEqual(userType, "tenant")) {
-      return router.replace("/user/chat");
-    } else {
-      return router.replace("/user/owner/chat");
-    }
-  };
-
-  const onClickExplore = () => {
-    router.push("/");
+  const signOutAccountRequest = async () => {
+    await apiRequest.signOutAccountRequest();
   };
 
   const onClickLogoutModal = () => {
     Helper.documentGetElementById("logout_modal").showModal();
   };
 
-  const onClickLogout = () => {
+  const onClickLogout = async () => {
     onClickCancelLogout();
     setSignOutLoading(true);
 
     setTimeout(() => {
       setSignOutLoading(false);
-
-      if (isEqual(userType, "tenant")) {
-        deleteCookie(Constant.TENANT_UCHAT_COOKIES);
-      } else {
-        deleteCookie(Constant.OWNER_UCHAT_COOKIES);
-      }
 
       signOutAccountRequest();
     }, 2000);
@@ -120,95 +57,99 @@ export default function RootLayout({
   };
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col bg-white">
-      <div className="bg-white" style={{ borderBottom: "3px #f5f8fd solid" }}>
-        <div className="container mx-auto flex items-center justify-between py-2 sm:justify-between md:justify-between lg:justify-between xl:justify-between">
-          <CustomImage
-            src={Image.logoHorizontalColor}
-            onClick={onClickExplore}
-            className="w-32 cursor-pointer sm:w-36 md:w-36 lg:w-36 xl:w-40"
-          />
-
-          {isEmpty(userProfileData) ? (
-            <div className="flex gap-3">
-              <CustomButton
-                icon={loading ? "" : Image.signUpIconActive}
-                buttonText={`Sign In`}
-                buttonClassName="btn-white w-36 min-h-10 h-10 xl:flex lg:flex md:hidden sm:hidden hidden"
-                textClassName="text-sm"
-                reverse
-                loadingColor="text-primary"
-                loading={loading}
-                onClick={onClickSignIn}
-              />
-
-              <CustomButton
-                icon={loading ? "" : Image.signUpIconActive}
-                buttonText={`Sign In`}
-                buttonClassName="btn-white min-h-10 h-10 xl:hidden lg:hidden"
-                textClassName="text-sm"
-                reverse
-                loadingColor="text-primary"
-                loading={loading}
-                onClick={onClickSignIn}
-              />
+    <div className="relative min-h-screen w-full bg-white">
+      <div className="grid min-h-screen grid-cols-12">
+        <div className="col-span-2">
+          <div>
+            <div className="flex items-center justify-center p-4">
+              <CustomImage src={Images.logoHorizontalColor} className="w-36" />
             </div>
-          ) : (
-            <div className="flex gap-3">
-              <CustomButton
-                icon={Image.accountIconFillActive}
-                imageStyle={{ width: 13 }}
-                textClassName="text-xs"
-                buttonText={`Hi, ${"name"}`}
-                buttonClassName={`btn-white min-w-40 xl:flex lg:flex md:hidden sm:hidden hidden`}
-                reverse
-                loading={loading}
-                onClick={onClickMyAccount}
-              />
 
-              <CustomButton
-                icon={Image.accountIconFillActive}
-                imageStyle={{ width: 13 }}
-                textClassName="text-xs"
-                // buttonText={`Hi, ${name}`}
-                buttonClassName={`btn-white xl:hidden lg:hidden w-16`}
-                reverse
-                loading={loading}
-                onClick={onClickMyAccount}
-              />
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className={`${backgroundColor} flex flex-1 flex-col px-10`}>
-        <div
-          className={`relative flex h-full flex-1 flex-col ${isMinHeight ? "min-h-screen" : ""}`}
-        >
-          {isEmpty(pageBreadcrumbs) ? (
-            false
-          ) : (
-            <div className="container mx-auto pb-6 pt-2 sm:pb-6 sm:pt-4 md:pb-6 md:pt-4 lg:pb-6 lg:pt-4 xl:pb-6 xl:pt-4">
-              {pageBreadcrumbs}
-            </div>
-          )}
-          {children}
-
-          {loading ? (
             <div
-              className={
-                "absolute top-0 flex h-full w-full items-center justify-center"
-              }
-              style={{
-                backgroundColor: "rgba(256,256,256,0.5)",
-                zIndex: 9999,
-              }}
+              onClick={() => router.push("/my-account")}
+              className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/my-account") ? "border-l-4 border-primary bg-primary-background" : ""} `}
             >
-              <span className="loading loading-dots loading-md text-primary sm:loading-md md:loading-md lg:loading-lg xl:loading-lg"></span>
+              <CustomImage
+                src={
+                  isEqual(pathname, "/my-account")
+                    ? Images.accountIconActive
+                    : Images.accountIconDisable
+                }
+                className="w-4"
+              />
+              <CustomText
+                textClassName={`${isEqual(pathname, "/my-account") ? "text-primary" : "text-disable"} font-light text-sm`}
+              >
+                My Account
+              </CustomText>
             </div>
-          ) : (
-            false
-          )}
+
+            <div
+              onClick={() => router.push("/help-center")}
+              className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/help-center") || includes(pathname, "/help-center") ? "border-l-4 border-primary bg-primary-background" : ""} `}
+            >
+              <CustomImage
+                src={
+                  isEqual(pathname, "/help-center") ||
+                  includes(pathname, "/help-center")
+                    ? Images.helpCenterIconActive
+                    : Images.helpCenterIconDisable
+                }
+                className="w-5"
+              />
+              <CustomText
+                textClassName={`${isEqual(pathname, "/help-center") || includes(pathname, "/help-center") ? "text-primary" : "text-disable"} font-light text-sm`}
+              >
+                Help Center
+              </CustomText>
+            </div>
+
+            <div
+              onClick={() => router.push("/property")}
+              className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/property") ? "border-l-4 border-primary bg-primary-background" : ""} `}
+            >
+              <CustomImage
+                src={
+                  isEqual(pathname, "/property")
+                    ? Images.buildingIconActive
+                    : Images.buildingIconDisable
+                }
+                className="w-5"
+              />
+              <CustomText
+                textClassName={`${isEqual(pathname, "/property") ? "text-primary" : "text-disable"} font-light text-sm`}
+              >
+                Property
+              </CustomText>
+            </div>
+
+            <div
+              className={`flex cursor-pointer items-center gap-2 p-6`}
+              onClick={() =>
+                window.open("https://tms.spacify.asia/privacy-policy", "blank")
+              }
+            >
+              <CustomImage src={Images.termIconDisable} className="w-5" />
+              <CustomText textClassName={`text-disable font-light text-sm`}>
+                Terms and Conditions
+              </CustomText>
+            </div>
+
+            <div
+              className={`flex cursor-pointer items-center gap-2 p-6`}
+              onClick={onClickLogoutModal}
+            >
+              <CustomImage src={Images.signUpIconDisable} className="w-5" />
+              <CustomText textClassName={`text-disable font-light text-sm`}>
+                Log Out
+              </CustomText>
+            </div>
+          </div>
+        </div>
+        <div className="col-span-10 py-4 pr-4">
+          <div className="h-full rounded-3xl bg-primary-background p-8">
+            {children}
+          </div>
         </div>
       </div>
 
@@ -238,8 +179,6 @@ export default function RootLayout({
           </div>
         </div>
       </DesktopModal>
-
-      <LoadingOverlay loading={signOutLoading} />
     </div>
   );
 }

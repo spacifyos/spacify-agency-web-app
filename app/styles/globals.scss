@@ -4,7 +4,6 @@
 @import "button.scss";
 @import "input.scss";
 @import "select.scss";
-@import "toggle.scss";
 @import "uChat.scss";
 @import "table.scss";
 @import "tab.scss";
@@ -105,7 +104,7 @@ body {
 .divider-line {
   height: 1px;
   width: 100%;
-  background-color: #e0ecff !important;
+  background-color: #F5F8FD !important;
   @apply my-4;
 }
 

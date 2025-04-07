@@ -24,9 +24,11 @@ import Helper from "@/src/utils/Helper";
 import * as authSelector from "@/src/selectors/auth";
 import { useRouter } from "next/navigation";
 import MobilePropertySelectionComponent from "@/components/PropertyCardView/MobilePropertySelectionComponent";
+import CustomImage from "@/components/CustomImage";
+import Images from "@/src/utils/Image";
+import CustomText from "@/components/CustomText";
 
 export default function CardListing({ params }) {
-
   const router = useRouter();
 
   const [listingTagOptionData, setListingTagOptionData] = useState([]);
@@ -65,6 +67,8 @@ export default function CardListing({ params }) {
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [isCinemaView, setIsCinemaView] = useState(false);
 
+  const [zoomIn, setZoomIn] = useState(true);
+
   useEffect(() => {
     if (isEmpty(listingTagOptionData)) {
       fetchListingTagOption();
@@ -83,9 +87,9 @@ export default function CardListing({ params }) {
   };
 
   useEffect(() => {
-    if (!isEmpty(unitFilterParams)) {
-      fetchUnitListing(unitFilterParams);
-    }
+    // if (!isEmpty(unitFilterParams)) {
+    fetchUnitListing({ property_id: 5 });
+    // }
   }, [unitFilterParams]);
 
   useEffect(() => {
@@ -265,21 +269,36 @@ export default function CardListing({ params }) {
         onClickReset={onClickReset}
       />
 
-      <div className="flex items-center justify-end pb-4">
-        <label className="flex cursor-pointer items-center gap-2">
-          <input
-            onChange={onChangeViewMode}
-            type="checkbox"
-            checked={isCinemaView}
-            className="toggle"
-          />
-          <span className="text-xs text-black sm:text-xs md:text-sm lg:text-sm xl:text-sm">
-            {`${isCinemaView ? "Cinema" : "Card"} View`}
-          </span>
-        </label>
-      </div>
+      {/*<div className="flex items-center justify-end pb-4">*/}
+      {/*  <div*/}
+      {/*    onClick={() => setZoomIn(!zoomIn)}*/}
+      {/*    className="flex cursor-pointer items-center justify-end gap-1"*/}
+      {/*  >*/}
+      {/*    <CustomImage*/}
+      {/*      className="h-5 w-5"*/}
+      {/*      src={zoomIn ? Images.zoomInIcon : Images.zoomOutIcon}*/}
+      {/*    />*/}
+      {/*    <CustomText textClassName="text-sm">*/}
+      {/*      {zoomIn ? "50%" : "100%"}*/}
+      {/*    </CustomText>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
-      <div className="relative grid grid-cols-12 gap-4 pb-4 sm:gap-4 md:gap-6 lg:gap-6 xl:gap-6">
+      {/*<div className="flex items-center justify-end pb-4">*/}
+      {/*  <label className="flex cursor-pointer items-center gap-2">*/}
+      {/*    <input*/}
+      {/*      onChange={onChangeViewMode}*/}
+      {/*      type="checkbox"*/}
+      {/*      checked={isCinemaView}*/}
+      {/*      className="toggle"*/}
+      {/*    />*/}
+      {/*    <span className="text-xs text-black sm:text-xs md:text-sm lg:text-sm xl:text-sm">*/}
+      {/*      {`${isCinemaView ? "Cinema" : "Card"} View`}*/}
+      {/*    </span>*/}
+      {/*  </label>*/}
+      {/*</div>*/}
+
+      <div className="relative grid grid-cols-12 gap-4 sm:gap-4 md:gap-6 lg:gap-6 xl:gap-6">
         <PropertySelectionComponent
           propertyListing={propertyListing}
           onClickSelectProperty={onClickSelectProperty}
@@ -294,23 +313,24 @@ export default function CardListing({ params }) {
           userRole={userRole}
         />
 
-        {isCinemaView ? (
-          <CinemaUnitContent
-            unitListing={unitListing}
-            onClickSelectRoomDetail={onClickSelectRoomDetail}
-          />
-        ) : (
-          <>
-            <DesktopUnitContent
-              unitListing={unitListing}
-              onClickShareBooking={onClickShareBooking}
-            />
-            <MobileUnitContent
-              unitListing={unitListing}
-              onClickShareBooking={onClickShareBooking}
-            />
-          </>
-        )}
+        {/*{isCinemaView ? (*/}
+        <CinemaUnitContent
+          unitListing={unitListing}
+          onClickSelectRoomDetail={onClickSelectRoomDetail}
+          zoomIn={zoomIn}
+        />
+        {/*  ) : (*/}
+        {/*    <>*/}
+        {/*      <DesktopUnitContent*/}
+        {/*        unitListing={unitListing}*/}
+        {/*        onClickShareBooking={onClickShareBooking}*/}
+        {/*      />*/}
+        {/*      <MobileUnitContent*/}
+        {/*        unitListing={unitListing}*/}
+        {/*        onClickShareBooking={onClickShareBooking}*/}
+        {/*      />*/}
+        {/*    </>*/}
+        {/*  )}*/}
       </div>
     </div>
   );
