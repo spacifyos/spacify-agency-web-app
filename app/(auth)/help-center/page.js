@@ -12,6 +12,7 @@ import Constant from "@/src/utils/Constant";
 import * as maintenanceTicketSelector from "@/src/selectors/maintenance-ticket";
 import CustomEmptyBox from "@/components/CustomEmptyBox";
 import apiRequest from "@/src/services/httpUtilities/apiRequest";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function HelpCenter() {
   const router = useRouter();
@@ -101,6 +102,8 @@ export default function HelpCenter() {
 
   return (
     <div className="h-full rounded-3xl bg-white p-8">
+      <LoadingOverlay loading={maintenanceTicketListingDataLoading} />
+
       <div className="flex h-full flex-1 flex-col">
         <div className="hide-scroll-bar flex items-center overflow-y-hidden overflow-x-scroll pb-4">
           {map(btnLists, (list, index) => {

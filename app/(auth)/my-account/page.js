@@ -15,6 +15,7 @@ import CustomButton from "@/components/CustomButton";
 import DesktopChangePasswordModal from "@/components/EditProfile/DesktopChangePasswordModal";
 import BookingInput from "@/components/Booking/BookingInput";
 import CustomLabelValue from "@/components/CustomLabelValue";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function Account() {
   const router = useRouter();
@@ -174,6 +175,8 @@ export default function Account() {
 
   return (
     <div className="flex h-full flex-col justify-between rounded-3xl bg-white p-8">
+      <LoadingOverlay loading={userProfileLoading || editProfileLoading} />
+
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-center">
           <CustomImage

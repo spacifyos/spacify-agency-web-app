@@ -52,7 +52,7 @@ const CinemaUnitContent = ({
 
             return (
               <div key={index}>
-                <div className="" style={{ zoom: zoomIn ? "0.5" : "1" }}>
+                <div className="" style={{ zoom: 1 }}>
                   <div className="flex items-center gap-2 pb-4">
                     <CustomText
                       textClassName={`${checkGenderColor(genderLabel)} text-white text-xs py-1 px-1.5 rounded`}

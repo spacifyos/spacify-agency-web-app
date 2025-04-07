@@ -34,6 +34,7 @@ import apiInstance from "@/src/services/httpUtilities/httpManager";
 import CommentComponent from "@/components/HelpCenter/CommentComponent";
 import TechnicianInFormationBoard from "@/components/HelpCenter/TechnicianInFormationBoard";
 import CommentImageUploadModal from "@/components/HelpCenter/CommentImageUploadModal";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function RequestOverview() {
   const router = useRouter();
@@ -849,6 +850,10 @@ export default function RequestOverview() {
 
   return (
     <div className="h-full rounded-3xl">
+      <LoadingOverlay
+        loading={ticketUpdateLoading || maintenanceTicketOverviewDataLoading}
+      />
+
       <div className="relative flex flex-col justify-center gap-6">
         <RequestOverviewDetail
           data={maintenanceTicketOverviewData}

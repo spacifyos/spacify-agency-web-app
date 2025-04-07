@@ -16,11 +16,7 @@ import apiRequest from "@/src/services/httpUtilities/apiRequest";
 
 export default function RootLayout({ children }) {
   const router = useRouter();
-
   const pathname = usePathname(router);
-
-  const userProfileData = authSelector.getUserProfileData();
-  const userProfileLoading = authSelector.getUserProfileLoading();
 
   const [signOutLoading, setSignOutLoading] = useState(false);
 
@@ -60,90 +56,88 @@ export default function RootLayout({ children }) {
     <div className="relative min-h-screen w-full bg-white">
       <div className="grid min-h-screen grid-cols-12">
         <div className="col-span-2">
-          <div>
-            <div className="flex items-center justify-center p-4">
-              <CustomImage src={Images.logoHorizontalColor} className="w-36" />
-            </div>
+          <div className="flex items-center justify-center p-4">
+            <CustomImage src={Images.logoHorizontalColor} className="w-36" />
+          </div>
 
-            <div
-              onClick={() => router.push("/my-account")}
-              className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/my-account") ? "border-l-4 border-primary bg-primary-background" : ""} `}
-            >
-              <CustomImage
-                src={
-                  isEqual(pathname, "/my-account")
-                    ? Images.accountIconActive
-                    : Images.accountIconDisable
-                }
-                className="w-4"
-              />
-              <CustomText
-                textClassName={`${isEqual(pathname, "/my-account") ? "text-primary" : "text-disable"} font-light text-sm`}
-              >
-                My Account
-              </CustomText>
-            </div>
-
-            <div
-              onClick={() => router.push("/help-center")}
-              className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/help-center") || includes(pathname, "/help-center") ? "border-l-4 border-primary bg-primary-background" : ""} `}
-            >
-              <CustomImage
-                src={
-                  isEqual(pathname, "/help-center") ||
-                  includes(pathname, "/help-center")
-                    ? Images.helpCenterIconActive
-                    : Images.helpCenterIconDisable
-                }
-                className="w-5"
-              />
-              <CustomText
-                textClassName={`${isEqual(pathname, "/help-center") || includes(pathname, "/help-center") ? "text-primary" : "text-disable"} font-light text-sm`}
-              >
-                Help Center
-              </CustomText>
-            </div>
-
-            <div
-              onClick={() => router.push("/property")}
-              className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/property") ? "border-l-4 border-primary bg-primary-background" : ""} `}
-            >
-              <CustomImage
-                src={
-                  isEqual(pathname, "/property")
-                    ? Images.buildingIconActive
-                    : Images.buildingIconDisable
-                }
-                className="w-5"
-              />
-              <CustomText
-                textClassName={`${isEqual(pathname, "/property") ? "text-primary" : "text-disable"} font-light text-sm`}
-              >
-                Property
-              </CustomText>
-            </div>
-
-            <div
-              className={`flex cursor-pointer items-center gap-2 p-6`}
-              onClick={() =>
-                window.open("https://tms.spacify.asia/privacy-policy", "blank")
+          <div
+            onClick={() => router.push("/my-account")}
+            className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/my-account") ? "border-l-4 border-primary bg-primary-background" : ""} `}
+          >
+            <CustomImage
+              src={
+                isEqual(pathname, "/my-account")
+                  ? Images.accountIconActive
+                  : Images.accountIconDisable
               }
+              className="w-4"
+            />
+            <CustomText
+              textClassName={`${isEqual(pathname, "/my-account") ? "text-primary" : "text-disable"} font-light text-sm`}
             >
-              <CustomImage src={Images.termIconDisable} className="w-5" />
-              <CustomText textClassName={`text-disable font-light text-sm`}>
-                Terms and Conditions
-              </CustomText>
-            </div>
+              My Account
+            </CustomText>
+          </div>
 
-            <div
-              className={`flex cursor-pointer items-center gap-2 p-6`}
-              onClick={onClickLogoutModal}
+          <div
+            onClick={() => router.push("/help-center")}
+            className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/help-center") || includes(pathname, "/help-center") ? "border-l-4 border-primary bg-primary-background" : ""} `}
+          >
+            <CustomImage
+              src={
+                isEqual(pathname, "/help-center") ||
+                includes(pathname, "/help-center")
+                  ? Images.helpCenterIconActive
+                  : Images.helpCenterIconDisable
+              }
+              className="w-5"
+            />
+            <CustomText
+              textClassName={`${isEqual(pathname, "/help-center") || includes(pathname, "/help-center") ? "text-primary" : "text-disable"} font-light text-sm`}
             >
-              <CustomImage src={Images.signUpIconDisable} className="w-5" />
-              <CustomText textClassName={`text-disable font-light text-sm`}>
-                Log Out
-              </CustomText>
-            </div>
+              Help Center
+            </CustomText>
+          </div>
+
+          <div
+            onClick={() => router.push("/property")}
+            className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/property") ? "border-l-4 border-primary bg-primary-background" : ""} `}
+          >
+            <CustomImage
+              src={
+                isEqual(pathname, "/property")
+                  ? Images.buildingIconActive
+                  : Images.buildingIconDisable
+              }
+              className="w-5"
+            />
+            <CustomText
+              textClassName={`${isEqual(pathname, "/property") ? "text-primary" : "text-disable"} font-light text-sm`}
+            >
+              Property
+            </CustomText>
+          </div>
+
+          <div
+            className={`flex cursor-pointer items-center gap-2 p-6`}
+            onClick={() =>
+              window.open("https://tms.spacify.asia/privacy-policy", "blank")
+            }
+          >
+            <CustomImage src={Images.termIconDisable} className="w-5" />
+            <CustomText textClassName={`text-disable font-light text-sm`}>
+              Terms and Conditions
+            </CustomText>
+          </div>
+
+          <div
+            className={`flex cursor-pointer items-center gap-2 p-6`}
+            onClick={onClickLogoutModal}
+          >
+            <CustomImage src={Images.signUpIconDisable} className="w-5" />
+            <CustomText textClassName={`text-disable font-light text-sm`}>
+              Log Out
+            </CustomText>
           </div>
         </div>
         <div className="col-span-10 py-4 pr-4">

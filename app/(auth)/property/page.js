@@ -27,6 +27,7 @@ import MobilePropertySelectionComponent from "@/components/PropertyCardView/Mobi
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
 import CustomText from "@/components/CustomText";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function CardListing({ params }) {
   const router = useRouter();
@@ -87,9 +88,9 @@ export default function CardListing({ params }) {
   };
 
   useEffect(() => {
-    // if (!isEmpty(unitFilterParams)) {
-    fetchUnitListing({ property_id: 5 });
-    // }
+    if (!isEmpty(unitFilterParams)) {
+      fetchUnitListing(unitFilterParams);
+    }
   }, [unitFilterParams]);
 
   useEffect(() => {
@@ -243,7 +244,9 @@ export default function CardListing({ params }) {
   };
 
   return (
-    <div className="flex h-full flex-1 flex-col">
+    <div className="h-full">
+      <LoadingOverlay loading={propertyListingLoading || unitListingLoading} />
+
       <CardViewModal
         data={selectedRoom}
         onClickShareBooking={onClickShareBooking}
