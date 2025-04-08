@@ -13,7 +13,7 @@ const MobilePropertySelectionComponent = ({
 }) => {
   return (
     <div className="relative col-span-12 lg:hidden xl:hidden">
-      <div className="sticky top-4 flex flex-row gap-2 overflow-y-scroll sm:flex-row md:flex-row lg:h-screen lg:flex-col xl:h-screen xl:flex-col">
+      <div className="hide-scroll-bar sticky top-4 flex flex-row gap-2 overflow-x-scroll sm:flex-row md:flex-row lg:h-screen lg:flex-col xl:h-screen xl:flex-col">
         {map(propertyListing, (list) => {
           const imageUrl = listingSelector.getImageUrl(list);
           const name = listingSelector.getName(list);
@@ -35,11 +35,12 @@ const MobilePropertySelectionComponent = ({
 
           return (
             <div
+              style={{ minWidth: 200 }}
               key={propertyId}
-              className={`global-border-radius flex min-w-28 cursor-pointer items-center justify-between border bg-white p-3 ${isEqual(propertyId, selectedPropertyId) ? "border-2 border-primary" : "border"}`}
+              className={`flex cursor-pointer flex-col items-center justify-center rounded-3xl bg-white p-4 ${isSelectProperty ? "border border-2 border-primary" : ""}`}
               onClick={() => onClickSelectProperty(propertyId)}
             >
-              <div className="flex flex-col items-start justify-start">
+              <div className="flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center gap-2 pb-2 sm:flex-col md:flex-col lg:flex-row xl:flex-row">
                   <div
                     style={{
@@ -68,7 +69,7 @@ const MobilePropertySelectionComponent = ({
                   </CustomText>
                 </div>
 
-                {includes(userRole, Constant.MASTER_AGENCY_ROLE) ? (
+                {!includes(userRole, Constant.MASTER_AGENCY_ROLE) ? (
                   <>
                     <div className="flex items-center gap-1 pb-1">
                       <CustomText
@@ -83,7 +84,7 @@ const MobilePropertySelectionComponent = ({
                       </CustomText>
                     </div>
 
-                    <div className="hidden lg:block xl:block">
+                    <div className="">
                       <div className="flex gap-1 pb-1">
                         <CustomText
                           textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
@@ -113,13 +114,6 @@ const MobilePropertySelectionComponent = ({
                           textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
                         >{`${carParkOccupancyRate}%`}</CustomText>
                       </div>
-                    </div>
-
-                    <div className="w-full lg:hidden xl:hidden">
-                      <CustomText textClassName="text-xs text-center">{`R: ${totalOccupiedRoom}/${totalRoom} (${totalVacantRoom})`}</CustomText>
-                      <CustomText textClassName="text-xs text-center">{`OR: ${roomOccupancyRate}%`}</CustomText>
-                      <CustomText textClassName="text-xs text-center">{`CP: ${totalOccupiedCarPark}/${totalCarPark} (${totalVacantCarPark})`}</CustomText>
-                      <CustomText textClassName="text-xs text-center">{`OR: ${carParkOccupancyRate}%`}</CustomText>
                     </div>
                   </>
                 ) : (

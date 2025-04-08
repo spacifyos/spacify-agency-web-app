@@ -7,7 +7,6 @@ const nextConfig = {
     CLOUDFLARE_RECAPTCHA_SITE: process.env.CLOUDFLARE_RECAPTCHA_SITE,
     SENTRY_DSN: process.env.SENTRY_DSN,
     PRODUCTION: process.env.PRODUCTION,
-    PROJECT_NAME: process.env.PROJECT_NAME,
   },
   images: {
     formats: ["image/avif", "image/webp"],

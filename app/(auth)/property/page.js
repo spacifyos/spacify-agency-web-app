@@ -244,7 +244,7 @@ export default function CardListing({ params }) {
   };
 
   return (
-    <div className="h-full">
+    <div className="relative flex h-full flex-col overflow-hidden">
       <LoadingOverlay loading={propertyListingLoading || unitListingLoading} />
 
       <CardViewModal
@@ -272,36 +272,7 @@ export default function CardListing({ params }) {
         onClickReset={onClickReset}
       />
 
-      {/*<div className="flex items-center justify-end pb-4">*/}
-      {/*  <div*/}
-      {/*    onClick={() => setZoomIn(!zoomIn)}*/}
-      {/*    className="flex cursor-pointer items-center justify-end gap-1"*/}
-      {/*  >*/}
-      {/*    <CustomImage*/}
-      {/*      className="h-5 w-5"*/}
-      {/*      src={zoomIn ? Images.zoomInIcon : Images.zoomOutIcon}*/}
-      {/*    />*/}
-      {/*    <CustomText textClassName="text-sm">*/}
-      {/*      {zoomIn ? "50%" : "100%"}*/}
-      {/*    </CustomText>*/}
-      {/*  </div>*/}
-      {/*</div>*/}
-
-      {/*<div className="flex items-center justify-end pb-4">*/}
-      {/*  <label className="flex cursor-pointer items-center gap-2">*/}
-      {/*    <input*/}
-      {/*      onChange={onChangeViewMode}*/}
-      {/*      type="checkbox"*/}
-      {/*      checked={isCinemaView}*/}
-      {/*      className="toggle"*/}
-      {/*    />*/}
-      {/*    <span className="text-xs text-black sm:text-xs md:text-sm lg:text-sm xl:text-sm">*/}
-      {/*      {`${isCinemaView ? "Cinema" : "Card"} View`}*/}
-      {/*    </span>*/}
-      {/*  </label>*/}
-      {/*</div>*/}
-
-      <div className="relative grid grid-cols-12 gap-4 sm:gap-4 md:gap-6 lg:gap-6 xl:gap-6">
+      <div className="hide-scroll-bar grid h-full grid-cols-12 gap-4 overflow-y-scroll sm:gap-4 md:gap-6 lg:gap-6 xl:gap-6">
         <PropertySelectionComponent
           propertyListing={propertyListing}
           onClickSelectProperty={onClickSelectProperty}

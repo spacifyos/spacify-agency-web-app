@@ -59,48 +59,48 @@ export default function AgencySignIn() {
   };
 
   return (
-    <div className="container mx-auto flex max-w-screen-md flex-1 flex-col items-start justify-start pt-10 sm:pt-10 md:pt-20 lg:pt-20 xl:pt-20">
+    <div className="container mx-auto flex min-h-screen max-w-screen-md flex-col items-center justify-center">
       <CustomText textClassName="text-primary font-bold text-center w-full xl:text-3xl lg:text-2xl md:text-2xl sm:text-xl text-xl xl:pb-10 lg:pb-10 md:pb-10 sm:pb-5 pb-5">
         Agency Sign In
       </CustomText>
 
-      <div className="w-full">
-        <div className="global-box-shadow global-border-radius bg-white p-4 sm:p-6 md:p-6 lg:p-8 xl:p-8">
-          <input
-            type="email"
-            value={email}
-            onChange={onChangeEmail}
-            placeholder={"Email"}
-            className="input input-bordered user-input mb-4 w-full bg-white"
+      <div className="global-box-shadow rounded-3xl bg-white p-4 sm:p-6 md:p-6 lg:p-8 xl:p-8">
+        <input
+          type="email"
+          value={email}
+          onChange={onChangeEmail}
+          placeholder={"Email"}
+          className="user-input input-bordered input mb-4 w-full bg-white"
+        />
+
+        <input
+          type="password"
+          value={password}
+          onChange={onChangePassword}
+          placeholder={"Password"}
+          className="user-input input-bordered input mb-4 w-full bg-white"
+        />
+
+        <div className="flex justify-center">
+          <CustomButton
+            buttonClassName="btn-primary w-2/4 mb-2"
+            buttonText={"Sign In"}
+            onClick={onClickToLogin}
+            loading={signInLoading}
+            disable={signInLoading}
           />
-
-          <input
-            type="password"
-            value={password}
-            onChange={onChangePassword}
-            placeholder={"Password"}
-            className="input input-bordered user-input mb-4 w-full bg-white"
-          />
-
-          <div className="flex justify-center">
-            <CustomButton
-              buttonClassName="btn-primary w-2/4 mb-2"
-              buttonText={"Sign In"}
-              onClick={onClickToLogin}
-            />
-          </div>
-
-          <CustomText textClassName="text-xs my-5 text-center">
-            By using our services, you are deemed unconditionally agree, consent
-            and be bound by our terms and conditions and privacy policy.
-          </CustomText>
-
-          <CustomText textClassName="text-xs text-center text-disable">
-            This site is protected by reCAPTCHA and the Google{" "}
-            <span className="underline">Privacy Policy</span> and{" "}
-            <span className="underline">Terms of Service</span> apply.
-          </CustomText>
         </div>
+
+        <CustomText textClassName="text-xs my-5 text-center">
+          By using our services, you are deemed unconditionally agree, consent
+          and be bound by our terms and conditions and privacy policy.
+        </CustomText>
+
+        <CustomText textClassName="text-xs text-center text-disable">
+          This site is protected by reCAPTCHA and the Google{" "}
+          <span className="underline">Privacy Policy</span> and{" "}
+          <span className="underline">Terms of Service</span> apply.
+        </CustomText>
       </div>
     </div>
   );

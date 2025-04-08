@@ -13,7 +13,7 @@ const LoadingOverlay = ({ loading = false }) => {
   return loading ? (
     <div
       className={
-        "absolute flex h-full w-full items-center justify-center"
+        "absolute inset-0 flex h-full w-full items-center justify-center"
       }
       style={{ backgroundColor: "rgba(256,256,256,0.5)", zIndex: 9999 }}
     >

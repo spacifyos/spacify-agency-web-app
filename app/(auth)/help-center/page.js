@@ -101,49 +101,47 @@ export default function HelpCenter() {
   };
 
   return (
-    <div className="h-full rounded-3xl bg-white p-8">
+    <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-white p-8">
       <LoadingOverlay loading={maintenanceTicketListingDataLoading} />
 
-      <div className="flex h-full flex-1 flex-col">
-        <div className="hide-scroll-bar flex items-center overflow-y-hidden overflow-x-scroll pb-4">
-          {map(btnLists, (list, index) => {
-            const value = get(list, ["value"], "");
-            const label = get(list, ["label"], "");
+      <div className="hide-scroll-bar flex items-center overflow-y-hidden overflow-x-scroll pb-4">
+        {map(btnLists, (list, index) => {
+          const value = get(list, ["value"], "");
+          const label = get(list, ["label"], "");
 
+          return (
+            <CustomButton
+              key={index}
+              buttonText={label}
+              buttonClassName={`btn-sm ${isEqual(selectedStatus, value) ? "btn-primary" : "btn-white"} mr-2`}
+              textClassName="text-xs"
+              onClick={() => setSelectedStatus(value)}
+            />
+          );
+        })}
+      </div>
+
+      <div className="hide-scroll-bar flex h-full flex-col gap-4 overflow-y-scroll px-1">
+        {isEmpty(maintenanceTicketListingData) ? (
+          <div className="flex h-full flex-1 items-center justify-center py-10">
+            <CustomEmptyBox emptyTitle="No ticket found" />
+          </div>
+        ) : (
+          map(maintenanceTicketListingData, (data, index) => {
             return (
-              <CustomButton
+              <HelpCenterListingCard
                 key={index}
-                buttonText={label}
-                buttonClassName={`btn-sm ${isEqual(selectedStatus, value) ? "btn-primary" : "btn-white"} mr-2`}
-                textClassName="text-xs"
-                onClick={() => setSelectedStatus(value)}
+                data={data}
+                onClickToRequestOverview={onClickToRequestOverview}
               />
             );
-          })}
-        </div>
-
-        <div className="flex h-full flex-col gap-4">
-          {isEmpty(maintenanceTicketListingData) ? (
-            <div className="flex h-full flex-1 items-center justify-center py-10">
-              <CustomEmptyBox emptyTitle="No ticket found" />
-            </div>
-          ) : (
-            map(maintenanceTicketListingData, (data, index) => {
-              return (
-                <HelpCenterListingCard
-                  key={index}
-                  data={data}
-                  onClickToRequestOverview={onClickToRequestOverview}
-                />
-              );
-            })
-          )}
-        </div>
+          })
+        )}
 
         {hasMorePage &&
         lastPage > 1 &&
         !isEmpty(maintenanceTicketListingData) ? (
-          <div className="flex justify-center pt-3">
+          <div className="flex h-full justify-center pt-3">
             <CustomButton
               buttonClassName="btn-primary min-h-9 h-9 w-32"
               buttonText="Load More"

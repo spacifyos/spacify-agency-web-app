@@ -849,7 +849,7 @@ export default function RequestOverview() {
   };
 
   return (
-    <div className="h-full rounded-3xl">
+    <div className="relative h-full rounded-3xl">
       <LoadingOverlay
         loading={ticketUpdateLoading || maintenanceTicketOverviewDataLoading}
       />

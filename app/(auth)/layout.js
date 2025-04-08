@@ -2,14 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { includes, isEqual } from "lodash";
-import * as authSelector from "@/src/selectors/auth";
 import AuthManager from "@/src/utils/AuthManager";
 import Helper from "@/src/utils/Helper";
 import CustomImage from "@/components/CustomImage";
 import DesktopModal from "@/components/DesktopModal";
 import CustomText from "@/components/CustomText";
 import CustomButton from "@/components/CustomButton";
-import LoadingOverlay from "@/components/LoadingOverlay";
 import { usePathname, useRouter } from "next/navigation";
 import Images from "@/src/utils/Image";
 import apiRequest from "@/src/services/httpUtilities/apiRequest";
@@ -19,6 +17,7 @@ export default function RootLayout({ children }) {
   const pathname = usePathname(router);
 
   const [signOutLoading, setSignOutLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -30,7 +29,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   const signOutAccountRequest = async () => {
-    await apiRequest.signOutAccountRequest();
+    await apiRequest.signOutAccountRequest(router);
   };
 
   const onClickLogoutModal = () => {
@@ -53,9 +52,9 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <div className="relative min-h-screen w-full bg-white">
-      <div className="grid min-h-screen grid-cols-12">
-        <div className="col-span-2">
+    <div className="relative h-screen w-full overflow-hidden bg-white">
+      <div className="relative grid h-screen grid-cols-12">
+        <div className="col-span-2 hidden sm:hidden md:hidden lg:hidden xl:block">
           <div className="flex items-center justify-center p-4">
             <CustomImage src={Images.logoHorizontalColor} className="w-36" />
           </div>
@@ -140,8 +139,149 @@ export default function RootLayout({ children }) {
             </CustomText>
           </div>
         </div>
-        <div className="col-span-10 py-4 pr-4">
-          <div className="h-full rounded-3xl bg-primary-background p-8">
+
+        <div className="col-span-12 flex items-center justify-between pr-4 sm:flex md:flex lg:flex xl:hidden">
+          <div className="flex items-center justify-center p-4">
+            <CustomImage src={Images.logoHorizontalColor} className="w-36" />
+          </div>
+
+          <div className="drawer" style={{ width: "unset" }}>
+            <input
+              id="my-drawer"
+              type="checkbox"
+              className="drawer-toggle"
+              checked={isChecked}
+              onChange={(e) => setIsChecked(e.target.checked)}
+            />
+
+            <div className="drawer-content">
+              <label htmlFor="my-drawer" className="cursor-pointer">
+                <CustomImage
+                  src={Images.burgerMenuIconActive}
+                  className="w-10"
+                />
+              </label>
+            </div>
+            <div className="drawer-side z-10 max-h-screen">
+              <label
+                htmlFor="my-drawer"
+                aria-label="close sidebar"
+                className="drawer-overlay"
+              ></label>
+              <ul className="menu min-h-full w-80 bg-base-200 bg-white p-4 text-base-content">
+                {/* Sidebar content here */}
+                <li>
+                  <div
+                    onClick={() => {
+                      router.push("/my-account");
+                      setIsChecked(false);
+                    }}
+                    className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/my-account") ? "border-l-4 border-primary bg-primary-background" : ""} `}
+                  >
+                    <CustomImage
+                      src={
+                        isEqual(pathname, "/my-account")
+                          ? Images.accountIconActive
+                          : Images.accountIconDisable
+                      }
+                      className="w-4"
+                    />
+                    <CustomText
+                      textClassName={`${isEqual(pathname, "/my-account") ? "text-primary" : "text-disable"} font-light text-sm`}
+                    >
+                      My Account
+                    </CustomText>
+                  </div>
+                </li>
+                <li>
+                  <div
+                    onClick={() => {
+                      router.push("/help-center");
+                      setIsChecked(false);
+                    }}
+                    className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/help-center") || includes(pathname, "/help-center") ? "border-l-4 border-primary bg-primary-background" : ""} `}
+                  >
+                    <CustomImage
+                      src={
+                        isEqual(pathname, "/help-center") ||
+                        includes(pathname, "/help-center")
+                          ? Images.helpCenterIconActive
+                          : Images.helpCenterIconDisable
+                      }
+                      className="w-5"
+                    />
+                    <CustomText
+                      textClassName={`${isEqual(pathname, "/help-center") || includes(pathname, "/help-center") ? "text-primary" : "text-disable"} font-light text-sm`}
+                    >
+                      Help Center
+                    </CustomText>
+                  </div>
+                </li>
+                <li>
+                  {" "}
+                  <div
+                    onClick={() => {
+                      router.push("/property");
+                      setIsChecked(false);
+                    }}
+                    className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/property") ? "border-l-4 border-primary bg-primary-background" : ""} `}
+                  >
+                    <CustomImage
+                      src={
+                        isEqual(pathname, "/property")
+                          ? Images.buildingIconActive
+                          : Images.buildingIconDisable
+                      }
+                      className="w-5"
+                    />
+                    <CustomText
+                      textClassName={`${isEqual(pathname, "/property") ? "text-primary" : "text-disable"} font-light text-sm`}
+                    >
+                      Property
+                    </CustomText>
+                  </div>
+                </li>
+                <li>
+                  <div
+                    className={`flex cursor-pointer items-center gap-2 p-6`}
+                    onClick={() =>
+                      window.open(
+                        "https://tms.spacify.asia/privacy-policy",
+                        "blank",
+                      )
+                    }
+                  >
+                    <CustomImage src={Images.termIconDisable} className="w-5" />
+                    <CustomText
+                      textClassName={`text-disable font-light text-sm`}
+                    >
+                      Terms and Conditions
+                    </CustomText>
+                  </div>
+                </li>
+                <li>
+                  <div
+                    className={`flex cursor-pointer items-center gap-2 p-6`}
+                    onClick={onClickLogoutModal}
+                  >
+                    <CustomImage
+                      src={Images.signUpIconDisable}
+                      className="w-5"
+                    />
+                    <CustomText
+                      textClassName={`text-disable font-light text-sm`}
+                    >
+                      Log Out
+                    </CustomText>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-span-12 overflow-hidden pb-4 pl-4 pr-4 pt-0 sm:col-span-12 sm:pb-4 sm:pl-4 sm:pt-0 md:col-span-12 md:pb-4 md:pl-4 md:pt-0 lg:col-span-12 lg:pb-4 lg:pl-4 lg:pt-0 xl:col-span-10 xl:pb-4 xl:pl-0 xl:pt-4">
+          <div className="h-full overflow-hidden rounded-3xl bg-primary-background p-8">
             {children}
           </div>
         </div>

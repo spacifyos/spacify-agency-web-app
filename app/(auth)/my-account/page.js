@@ -174,7 +174,7 @@ export default function Account() {
   };
 
   return (
-    <div className="flex h-full flex-col justify-between rounded-3xl bg-white p-8">
+    <div className="relative flex h-full flex-col justify-between rounded-3xl bg-white p-8">
       <LoadingOverlay loading={userProfileLoading || editProfileLoading} />
 
       <div className="flex flex-col gap-4">

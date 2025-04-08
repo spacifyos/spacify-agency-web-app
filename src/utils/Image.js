@@ -1,10 +1,7 @@
 const GeneralImage = {
-  accountIconFillBlack:
-    "/images/general_icon/accounr_icon_fill_black.png",
-  accountIconFillDisable:
-    "/images/general_icon/accounr_icon_fill_disable.png",
-  accountIconFillWhite:
-    "/images/general_icon/accounr_icon_fill_white.png",
+  accountIconFillBlack: "/images/general_icon/accounr_icon_fill_black.png",
+  accountIconFillDisable: "/images/general_icon/accounr_icon_fill_disable.png",
+  accountIconFillWhite: "/images/general_icon/accounr_icon_fill_white.png",
   accountIconBlack: "/images/general_icon/account_icon_black.png",
   accountIconDisable: "/images/general_icon/account_icon_disable.png",
   accountIconWhite: "/images/general_icon/account_icon_white.png",
@@ -12,18 +9,14 @@ const GeneralImage = {
   addIconDisable: "/images/general_icon/add_icon_disable.png",
   addIconWhite: "/images/general_icon/add_icon_white.png",
   agreementIconBlack: "/images/general_icon/agreement_icon_black.png",
-  agreementIconDisable:
-    "/images/general_icon/agreement_icon_disable.png",
+  agreementIconDisable: "/images/general_icon/agreement_icon_disable.png",
   agreementIconWhite: "/images/general_icon/agreement_icon_white.png",
   alertIconBlack: "/images/general_icon/alert_icon_black.png",
   alertIconDisable: "/images/general_icon/alert_icon_disable.png",
   alertIconWhite: "/images/general_icon/alert_icon_white.png",
-  appointmentIconBlack:
-    "/images/general_icon/appointment_icon_black.png",
-  appointmentIconDisable:
-    "/images/general_icon/appointment_icon_disable.png",
-  appointmentIconWhite:
-    "/images/general_icon/appointment_icon_white.png",
+  appointmentIconBlack: "/images/general_icon/appointment_icon_black.png",
+  appointmentIconDisable: "/images/general_icon/appointment_icon_disable.png",
+  appointmentIconWhite: "/images/general_icon/appointment_icon_white.png",
   bankIconBlack: "/images/general_icon/bank_icon_black.png",
   bankIconDisable: "/images/general_icon/bank_icon_disable.png",
   bankIconWhite: "/images/general_icon/bank_icon_white.png",
@@ -66,12 +59,9 @@ const GeneralImage = {
   uncheckIconWhite: "/images/general_icon/uncheck_icon_white.png",
   circleIconActive: "/images/general_icon/circle_icon_active.png",
   circleIconAqua: "/images/general_icon/circle_icon_aqua.png",
-  circleIconFillBlack:
-    "/images/general_icon/circle_icon_fill_black.png",
-  circleIconFillDisable:
-    "/images/general_icon/circle_icon_fill_disable.png",
-  circleIconFillWhite:
-    "/images/general_icon/circle_icon_fill_white.png",
+  circleIconFillBlack: "/images/general_icon/circle_icon_fill_black.png",
+  circleIconFillDisable: "/images/general_icon/circle_icon_fill_disable.png",
+  circleIconFillWhite: "/images/general_icon/circle_icon_fill_white.png",
   cleaningIconBlack: "/images/general_icon/cleaning_icon_black.png",
   cleaningIconDisable: "/images/general_icon/cleaning_icon_disable.png",
   cleaningIconWhite: "/images/general_icon/cleaning_icon_white.png",
@@ -93,8 +83,7 @@ const GeneralImage = {
   editIconDisable: "/images/general_icon/edit_icon_disable.png",
   editIconWhite: "/images/general_icon/edit_icon_white.png",
   electricalIconBlack: "/images/general_icon/electrical_icon_black.png",
-  electricalIconDisable:
-    "/images/general_icon/electrical_icon_disable.png",
+  electricalIconDisable: "/images/general_icon/electrical_icon_disable.png",
   electricalIconWhite: "/images/general_icon/electrical_icon_white.png",
   emailIconBlack: "/images/general_icon/email_icon_black.png",
   emailIconDisable: "/images/general_icon/email_icon_disable.png",
@@ -119,17 +108,13 @@ const GeneralImage = {
     "/images/general_icon/general_enquiry_icon_disable.png",
   generalEnquiryIconWhite:
     "/images/general_icon/general_enquiry_icon_white.png",
-  helpCenterIconBlack:
-    "/images/general_icon/help_center_icon_black.png",
-  helpCenterIconDisable:
-    "/images/general_icon/help_center_icon_disable.png",
-  helpCenterIconWhite:
-    "/images/general_icon/help_center_icon_white.png",
+  helpCenterIconBlack: "/images/general_icon/help_center_icon_black.png",
+  helpCenterIconDisable: "/images/general_icon/help_center_icon_disable.png",
+  helpCenterIconWhite: "/images/general_icon/help_center_icon_white.png",
   homeIconBlack: "/images/general_icon/home_icon_black.png",
   homeIconDisable: "/images/general_icon/home_icon_disable.png",
   homeIconFillBlack: "/images/general_icon/home_icon_fill_black.png",
-  homeIconFillDisable:
-    "/images/general_icon/home_icon_fill_disable.png",
+  homeIconFillDisable: "/images/general_icon/home_icon_fill_disable.png",
   homeIconFillWhite: "/images/general_icon/home_icon_fill_white.png",
   homeIconWhite: "/images/general_icon/home_icon_white.png",
   imageIconBlack: "/images/general_icon/image_icon_black.png",
@@ -169,8 +154,7 @@ const GeneralImage = {
   moreIconDisable: "/images/general_icon/more_icon_disable.png",
   moreIconWhite: "/images/general_icon/more_icon_white.png",
   occupancyIconBlack: "/images/general_icon/occupancy_icon_black.png",
-  occupancyIconDisable:
-    "/images/general_icon/occupancy_icon_disable.png",
+  occupancyIconDisable: "/images/general_icon/occupancy_icon_disable.png",
   occupancyIconWhite: "/images/general_icon/occupancy_icon_white.png",
   paymentFailedIcon: "/images/general_icon/payment_failed_icon.png",
   paymentSuccessIcon: "/images/general_icon/payment_success_icon.png",
@@ -191,12 +175,10 @@ const GeneralImage = {
   qrIconBlack: "/images/general_icon/qr_icon_black.png",
   qrIconDisable: "/images/general_icon/qr_icon_disable.png",
   qrIconWhite: "/images/general_icon/qr_icon_white.png",
-  questionMarkIconBlack:
-    "/images/general_icon/question_mark_icon_black.png",
+  questionMarkIconBlack: "/images/general_icon/question_mark_icon_black.png",
   questionMarkIconDisable:
     "/images/general_icon/question_mark_icon_disable.png",
-  questionMarkIconWhite:
-    "/images/general_icon/question_mark_icon_white.png",
+  questionMarkIconWhite: "/images/general_icon/question_mark_icon_white.png",
   refreshIconBlack: "/images/general_icon/refresh_icon_black.png",
   refreshIconDisable: "/images/general_icon/refresh_icon_disable.png",
   refreshIconWhite: "/images/general_icon/refresh_icon_white.png",
@@ -214,12 +196,9 @@ const GeneralImage = {
   roomOccupiedIcon: "/images/general_icon/room_occupied_icon.png",
   searchIconBlack: "/images/general_icon/search_icon_black.png",
   searchIconDisable: "/images/general_icon/search_icon_disable.png",
-  searchIconFillBlack:
-    "/images/general_icon/search_icon_fill_black.png",
-  searchIconFillDisable:
-    "/images/general_icon/search_icon_fill_disable.png",
-  searchIconFillWhite:
-    "/images/general_icon/search_icon_fill_white.png",
+  searchIconFillBlack: "/images/general_icon/search_icon_fill_black.png",
+  searchIconFillDisable: "/images/general_icon/search_icon_fill_disable.png",
+  searchIconFillWhite: "/images/general_icon/search_icon_fill_white.png",
   searchIconWhite: "/images/general_icon/search_icon_white.png",
   shareIconBlack: "/images/general_icon/share_icon_black.png",
   shareIconDisable: "/images/general_icon/share_icon_disable.png",
@@ -228,8 +207,7 @@ const GeneralImage = {
   signUpIconDisable: "/images/general_icon/sign_up_icon_disable.png",
   signUpIconWhite: "/images/general_icon/sign_up_icon_white.png",
   smartLockIconBlack: "/images/general_icon/smart_lock_icon_black.png",
-  smartLockIconDisable:
-    "/images/general_icon/smart_lock_icon_disable.png",
+  smartLockIconDisable: "/images/general_icon/smart_lock_icon_disable.png",
   smartLockIconWhite: "/images/general_icon/smart_lock_icon_white.png",
   spaceIconBlack: "/images/general_icon/space_icon_black.png",
   spaceIconDisable: "/images/general_icon/space_icon_disable.png",
@@ -276,25 +254,21 @@ const GeneralImage = {
 const primaryImage = {
   cinemaCarIcon: "/images/primary_icon/cinema_car_icon.png",
   alertIconActive: "/images/primary_icon/alert_icon_active.png",
-  appointmentIconActive:
-    "/images/primary_icon/appointment_icon_active.png",
+  appointmentIconActive: "/images/primary_icon/appointment_icon_active.png",
   bankIconActive: "/images/primary_icon/bank_icon_active.png",
   bathroomIconActive: "/images/primary_icon/bathroom_icon_active.png",
   chartIconActive: "/images/primary_icon/chart_icon_active.png",
   cinemaHouseIcon: "/images/primary_icon/cinema_house_icon.png",
-  circleIconFillActive:
-    "/images/primary_icon/circle_icon_fill_active.png",
+  circleIconFillActive: "/images/primary_icon/circle_icon_fill_active.png",
   cleaningIconActive: "/images/primary_icon/cleaning_icon_active.png",
   coinIconActive: "/images/primary_icon/coin_icon_active.png",
   collegeIcon: "/images/primary_icon/college_icon.png",
   downIconActive: "/images/primary_icon/down_icon_active.png",
   editIconActive: "/images/primary_icon/edit_icon_active.png",
-  electricalIconActive:
-    "/images/primary_icon/electrical_icon_active.png",
+  electricalIconActive: "/images/primary_icon/electrical_icon_active.png",
   enquiryIconActive: "/images/primary_icon/enquiry_icon_active.png",
   feedbackIconActive: "/images/primary_icon/feedback_icon_active.png",
-  femaleUnitIconActive:
-    "/images/primary_icon/female_unit_icon_active.png",
+  femaleUnitIconActive: "/images/primary_icon/female_unit_icon_active.png",
   generalEnquiryIconActive:
     "/images/primary_icon/general_enquiry_icon_active.png",
   imageIconActive: "/images/primary_icon/image_icon_active.png",
@@ -308,11 +282,9 @@ const primaryImage = {
   outlineStartIcon: "/images/primary_icon/outline_start_icon.png",
   plumbingIconActive: "/images/primary_icon/plumbimg_icon_active.png",
   promotionIconWhite: "/images/primary_icon/promotion_icon_white.png",
-  questionMarkIconActive:
-    "/images/primary_icon/question_mark_icon_active.png",
+  questionMarkIconActive: "/images/primary_icon/question_mark_icon_active.png",
   recommendIcon: "/images/primary_icon/recommend_icon.png",
-  renoExpertIconActive:
-    "/images/primary_icon/RenoExpert_icon_active.png",
+  renoExpertIconActive: "/images/primary_icon/RenoExpert_icon_active.png",
   rightIconActive: "/images/primary_icon/right_icon_active.png",
   ringIconActive: "/images/primary_icon/ring_icon_active.png",
   upIconActive: "/images/primary_icon/up_icon_active.png",
@@ -320,8 +292,7 @@ const primaryImage = {
   washingMachineIconActive:
     "/images/primary_icon/washing_machine_icon_active.png",
   windowIconActive: "/images/primary_icon/window_icon_active.png",
-  accountIconFillActive:
-    "/images/primary_icon/accounr_icon_fill_active.png",
+  accountIconFillActive: "/images/primary_icon/accounr_icon_fill_active.png",
   accountIconActive: "/images/primary_icon/account_icon_active.png",
   addIconActive: "/images/primary_icon/add_icon_active.png",
   agreementIconActive: "/images/primary_icon/agreement_icon_active.png",
@@ -337,8 +308,7 @@ const primaryImage = {
   emailIconActive: "/images/primary_icon/email_icon_active.png",
   expensesIconActive: "/images/primary_icon/expenses_icon_active.png",
   filterIconActive: "/images/primary_icon/filter_icon_active.png",
-  helpCenterIconActive:
-    "/images/primary_icon/help_center_icon_active.png",
+  helpCenterIconActive: "/images/primary_icon/help_center_icon_active.png",
   homeIconActive: "/images/primary_icon/home_icon_active.png",
   homeIconFillActive: "/images/primary_icon/home_icon_fill_active.png",
   incomeIconActive: "/images/primary_icon/income_icon_active.png",
@@ -354,12 +324,10 @@ const primaryImage = {
   refreshIconActive: "/images/primary_icon/refresh_icon_active.png",
   refundIconActive: "/images/primary_icon/refund_icon_active.png",
   searchIconActive: "/images/primary_icon/search_icon_active.png",
-  searchIconFillActive:
-    "/images/primary_icon/search_icon_fill_active.png",
+  searchIconFillActive: "/images/primary_icon/search_icon_fill_active.png",
   shareIconActive: "/images/primary_icon/share_icon_active.png",
   signUpIconActive: "/images/primary_icon/sign_up_icon_active.png",
-  smartLockIconActive:
-    "/images/primary_icon/smart_lock_icon_active.png",
+  smartLockIconActive: "/images/primary_icon/smart_lock_icon_active.png",
   spaceIconActive: "/images/primary_icon/space_icon_active.png",
   termIconActive: "/images/primary_icon/term_icon_active.png",
   withdrawIconActive: "/images/primary_icon/withdraw_icon_active.png",
@@ -375,6 +343,7 @@ const primaryImage = {
   tenantCard: "/images/tenant_card.png",
   imageNotFound: "/images/logo.webp",
   pageNotFound: "/images/404_image.png",
+  burgerMenuIconActive: "/images/primary_icon/burger_menu_icon_active.png",
 };
 
 export default { ...primaryImage, ...GeneralImage };

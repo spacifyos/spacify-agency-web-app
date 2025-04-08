@@ -23,12 +23,12 @@ const FilterSection = ({
   onClickReset,
 }) => {
   return (
-    <div>
+    <div className="">
       <div
-        className={`grid xl:grid-cols-11 lg:grid-cols-11 md:grid-cols-11 sm:grid-cols-11 grid-cols-11 gap-2 ${isOpenFilter ? "pb-2" : "pb-7"}`}
+        className={`grid grid-cols-11 gap-2 sm:grid-cols-11 md:grid-cols-11 lg:grid-cols-11 xl:grid-cols-11 ${isOpenFilter ? "pb-2" : "pb-7"}`}
       >
         <CustomSelect
-          className="xl:col-span-5 lg:col-span-5 md:col-span-5 sm:col-span-9 col-span-9"
+          className="col-span-9 sm:col-span-9 md:col-span-5 lg:col-span-5 xl:col-span-5"
           placeholder={"Property"}
           optionList={propertyOption}
           onChange={onChangePropertyValue}
@@ -36,7 +36,7 @@ const FilterSection = ({
         />
 
         <CustomSelect
-          className="w-full xl:col-span-5 lg:col-span-5 md:col-span-5 sm:col-span-5 col-span-5 xl:block lg:block md:block hidden"
+          className="col-span-5 hidden w-full sm:col-span-5 md:col-span-5 md:block lg:col-span-5 lg:block xl:col-span-5 xl:block"
           placeholder={"Unit"}
           optionList={unitOption}
           onChange={onChangeUnitValue}
@@ -44,7 +44,7 @@ const FilterSection = ({
         />
 
         <div
-          className="bg-white xl:col-span-1 lg:col-span-1 md:col-span-1 sm:col-span-2 col-span-2 flex justify-center items-center global-box-shadow global-border-radius cursor-pointer"
+          className="global-box-shadow global-border-radius col-span-2 flex cursor-pointer items-center justify-center bg-white sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1"
           onClick={() => setIsOpenFilter(!isOpenFilter)}
         >
           <CustomImage src={Images.filterIconBlack} className="h-6 w-6" />
@@ -52,9 +52,9 @@ const FilterSection = ({
       </div>
 
       {isOpenFilter ? (
-        <div className="grid xl:grid-cols-10 lg:grid-cols-10 md:grid-cols-10 sm:grid-cols-10 grid-cols-10 gap-2 pb-7">
+        <div className="grid grid-cols-10 gap-2 pb-7 sm:grid-cols-10 md:grid-cols-10 lg:grid-cols-10 xl:grid-cols-10">
           <CustomSelect
-            className="xl:col-span-5 lg:col-span-5 md:col-span-5 sm:col-span-5 col-span-5 xl:hidden lg:hidden md:hidden"
+            className="col-span-5 sm:col-span-5 md:col-span-5 md:hidden lg:col-span-5 lg:hidden xl:col-span-5 xl:hidden"
             placeholder={"Unit"}
             optionList={unitOption}
             onChange={onChangeUnitValue}
@@ -62,7 +62,7 @@ const FilterSection = ({
           />
 
           <CustomSelect
-            className="xl:col-span-3 lg:col-span-3 md:col-span-3 sm:col-span-5 col-span-5"
+            className="col-span-5 sm:col-span-5 md:col-span-3 lg:col-span-3 xl:col-span-3"
             placeholder={"Bedroom"}
             optionList={bedroomOption}
             onChange={onChangeBedroomValue}
@@ -70,7 +70,7 @@ const FilterSection = ({
           />
 
           <CustomSelect
-            className="xl:col-span-3 lg:col-span-3 md:col-span-3 sm:col-span-4 col-span-4"
+            className="col-span-4 sm:col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-3"
             placeholder={"Bathroom"}
             optionList={bathroomOption}
             onChange={onChangeBathroomValue}
@@ -78,7 +78,7 @@ const FilterSection = ({
           />
 
           <CustomSelect
-            className="xl:col-span-3 lg:col-span-3 md:col-span-3 sm:col-span-4 col-span-4"
+            className="col-span-4 sm:col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-3"
             placeholder={"Status"}
             optionList={[
               { label: "Available", value: true },

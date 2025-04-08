@@ -5,7 +5,6 @@ import { apiRequestErrorResponse } from "@/src/services/httpUtilities/apiRequest
 import axios from "axios";
 import moment from "moment";
 import AuthManager from "@/src/utils/AuthManager";
-import Router from "next/router";
 
 const apiRequest = async (
   api,
@@ -91,18 +90,6 @@ const postEditProfileRequest = async (
   await apiRequest(api.postEditProfile(postData), setLoading, successCallback);
 };
 
-const postBookingCreateRequest = async (
-  postData,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.postBookingCreate(postData),
-    setLoading,
-    successCallback,
-  );
-};
-
 const postOtpRequest = async (postData, setLoading, successCallback) => {
   await apiRequest(api.postOtpRequest(postData), setLoading, successCallback);
 };
@@ -127,35 +114,6 @@ const postForgotPasswordRequest = async (
   );
 };
 
-const getInvoicePaymentLinkRequest = async (
-  code,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.getInvoicePaymentLink(code),
-    setLoading,
-    successCallback,
-  );
-};
-
-const postSyncMeterRequest = async (id, setLoading, successCallback) => {
-  await apiRequest(api.postSyncMeter(id), setLoading, successCallback);
-};
-
-const postMeterTopUpRequest = async (
-  id,
-  postData,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.postMeterTopUp(id, postData),
-    setLoading,
-    successCallback,
-  );
-};
-
 const getRootDataRequest = async (
   setLoading,
   successCallback,
@@ -168,30 +126,6 @@ const getRootDataRequest = async (
     () => {},
     successMessage,
     true,
-  );
-};
-
-const getAgreementPdf = async (id, setLoading, successCallback) => {
-  await apiRequest(api.getAgreementPdf(id), setLoading, successCallback);
-};
-
-const getAgreementDownload = async (id, setLoading, successCallback) => {
-  await apiRequest(
-    api.getAgreementPdfDownload(id),
-    setLoading,
-    successCallback,
-  );
-};
-
-const postAgreeAgreement = async (id, setLoading, successCallback) => {
-  await apiRequest(api.postAgreeAgreement(id), setLoading, successCallback);
-};
-
-const postSignAgreement = async (id, postData, setLoading, successCallback) => {
-  await apiRequest(
-    api.postSignAgreement(id, postData),
-    setLoading,
-    successCallback,
   );
 };
 
@@ -231,159 +165,6 @@ const downloadFileRequest = async (url, headers, fileName) => {
   } catch (error) {
     console.error("Error downloading the file", error);
   }
-};
-
-const getOwnerPropertyList = async (setLoading, successCallback) => {
-  await apiRequest(
-    api.getOwnerPropertyList(),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
-};
-
-const getOwnerPropertyOverview = async (id, setLoading, successCallback) => {
-  await apiRequest(
-    api.getOwnerPropertyOverview(id),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
-};
-
-const getOwnerTransaction = async (setLoading, successCallback) => {
-  await apiRequest(
-    api.getOwnerTransaction(),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
-};
-
-const getUChatUserRequest = async (setLoading, successCallback) => {
-  await apiRequest(
-    api.getUserProfile(),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
-};
-
-const postUpdateBankDetailRequest = async (
-  postData,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.postUpdateBankDetail(postData),
-    setLoading,
-    successCallback,
-  );
-};
-
-const getWalletRequest = async (setLoading, successCallback) => {
-  await apiRequest(
-    api.getWallet(),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
-};
-
-const getWalletTransactionListingRequest = async (
-  perPage,
-  page,
-  params,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.getWalletTransactionListing(perPage, page, params),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
-};
-
-const getWalletTransactionDetailRequest = async (
-  id,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.getWalletTransactionDetail(id),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
-};
-
-const getOwnerReportListingRequest = async (
-  params,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.getOwnerReportListing(params),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
-};
-
-const getOwnerReportOverviewRequest = async (
-  id,
-  month,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.getOwnerReportOverview(id, month),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
-};
-
-const postWalletWithdrawRequest = async (
-  postData,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.postWalletWithdraw(postData),
-    setLoading,
-    successCallback,
-  );
-};
-
-const getRentTrackerRequest = async (id, year, setLoading, successCallback) => {
-  await apiRequest(
-    api.getRentTracker(id, year),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
 };
 
 const postPropertyListingCardViewRequest = async (
@@ -580,23 +361,6 @@ const postMaintenanceTicketCheckOutRequest = async (
   );
 };
 
-const getMeterUsageRequest = async (
-  id,
-  month,
-  year,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.getMeterUsage(id, month, year),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
-};
-
 const getListingTagOptionRequest = async (setLoading, successCallback) => {
   await apiRequest(
     api.getListingTagOption(),
@@ -619,29 +383,12 @@ const getUserProfileRequest = async (setLoading, successCallback) => {
   );
 };
 
-const signOutAccountRequest = async () => {
+const signOutAccountRequest = async (router) => {
   await AuthManager.removeLoginType();
 
   AuthManager.removeToken().then(() => {
-    Router.replace("/").then(() => Router.reload());
+    router.replace("/sign-in");
   });
-};
-
-const getMaintenanceListingTicketRequest = async (
-  per_page,
-  page,
-  status,
-  setLoading,
-  successCallback,
-) => {
-  await apiRequest(
-    api.getMaintenanceTicket(per_page, page, status),
-    setLoading,
-    successCallback,
-    () => {},
-    "",
-    true,
-  );
 };
 
 const getMaintenanceTicketOverviewRequest = async (
@@ -664,33 +411,13 @@ export default {
   signUpRequest,
   postChangePasswordRequest,
   postEditProfileRequest,
-  postBookingCreateRequest,
   postOtpRequest,
   postOtpVerify,
   postAuthVerify,
   postForgotPasswordRequest,
-  getInvoicePaymentLinkRequest,
-  postSyncMeterRequest,
-  postMeterTopUpRequest,
   getRootDataRequest,
-  getAgreementPdf,
-  getAgreementDownload,
-  postAgreeAgreement,
-  postSignAgreement,
   patchUserPinNumber,
   downloadFileRequest,
-  getOwnerPropertyList,
-  getOwnerPropertyOverview,
-  getOwnerTransaction,
-  getUChatUserRequest,
-  postUpdateBankDetailRequest,
-  getWalletRequest,
-  getWalletTransactionListingRequest,
-  getWalletTransactionDetailRequest,
-  getOwnerReportListingRequest,
-  getOwnerReportOverviewRequest,
-  postWalletWithdrawRequest,
-  getRentTrackerRequest,
   postPropertyListingCardViewRequest,
   postUnitCardViewRequest,
   getPropertyOptionRequest,
@@ -706,7 +433,6 @@ export default {
   getMaintenanceTicketCommentRequest,
   postMaintenanceTicketCheckInRequest,
   postMaintenanceTicketCheckOutRequest,
-  getMeterUsageRequest,
   getListingTagOptionRequest,
   getUserProfileRequest,
   signOutAccountRequest,
