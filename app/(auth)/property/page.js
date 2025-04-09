@@ -36,7 +36,8 @@ export default function CardListing({ params }) {
   const [listingTagOptionDataLoading, setListingTagOptionDataLoading] =
     useState(false);
 
-  const userProfileData = authSelector.getUserProfileData();
+  const [userProfileData, setUserProfileData] = useState([]);
+  const [userProfileDataLoading, setUserProfileDataLoading] = useState(false);
 
   const userRole = authSelector.getRolePermissionsRole(userProfileData);
 
@@ -99,7 +100,14 @@ export default function CardListing({ params }) {
 
   useEffect(() => {
     fetchPropertyOption();
+    fetchUserProfileData();
   }, []);
+
+  const fetchUserProfileData = async () => {
+    await apiRequest.getUserProfileRequest(setUserProfileDataLoading, (res) =>
+      setUserProfileData(res),
+    );
+  };
 
   const fetchPropertyOption = async () => {
     await apiRequest.getPropertyOptionRequest(

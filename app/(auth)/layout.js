@@ -11,13 +11,30 @@ import CustomButton from "@/components/CustomButton";
 import { usePathname, useRouter } from "next/navigation";
 import Images from "@/src/utils/Image";
 import apiRequest from "@/src/services/httpUtilities/apiRequest";
+import * as authSelector from "@/src/selectors/auth";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function RootLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname(router);
 
+  const [userProfileData, setUserProfileData] = useState([]);
+  const [userProfileDataLoading, setUserProfileDataLoading] = useState(false);
+
   const [signOutLoading, setSignOutLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
+  const userRole = authSelector.getRolePermissionsRole(userProfileData);
+
+  useEffect(() => {
+    fetchUserProfileData();
+  }, []);
+
+  const fetchUserProfileData = async () => {
+    await apiRequest.getUserProfileRequest(setUserProfileDataLoading, (res) =>
+      setUserProfileData(res),
+    );
+  };
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -53,6 +70,8 @@ export default function RootLayout({ children }) {
 
   return (
     <div className="relative h-full w-full overflow-hidden bg-white">
+      <LoadingOverlay loading={signOutLoading} />
+
       <div className="relative flex h-full flex-col sm:flex-col md:flex-col lg:flex-col xl:flex-row">
         <div className="hidden w-64 sm:hidden md:hidden lg:hidden xl:block">
           <div className="flex items-center justify-center p-4">
@@ -98,24 +117,28 @@ export default function RootLayout({ children }) {
             </CustomText>
           </div>
 
-          <div
-            onClick={() => router.push("/property")}
-            className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/property") ? "border-l-4 border-primary bg-primary-background" : ""} `}
-          >
-            <CustomImage
-              src={
-                isEqual(pathname, "/property")
-                  ? Images.buildingIconActive
-                  : Images.buildingIconDisable
-              }
-              className="w-5"
-            />
-            <CustomText
-              textClassName={`${isEqual(pathname, "/property") ? "text-primary" : "text-disable"} font-light text-sm`}
+          {!Helper.isTechnician(userRole) ? (
+            <div
+              onClick={() => router.push("/property")}
+              className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/property") ? "border-l-4 border-primary bg-primary-background" : ""} `}
             >
-              Property
-            </CustomText>
-          </div>
+              <CustomImage
+                src={
+                  isEqual(pathname, "/property")
+                    ? Images.buildingIconActive
+                    : Images.buildingIconDisable
+                }
+                className="w-5"
+              />
+              <CustomText
+                textClassName={`${isEqual(pathname, "/property") ? "text-primary" : "text-disable"} font-light text-sm`}
+              >
+                Property
+              </CustomText>
+            </div>
+          ) : (
+            false
+          )}
 
           <div
             className={`flex cursor-pointer items-center gap-2 p-6`}
@@ -222,30 +245,34 @@ export default function RootLayout({ children }) {
                     </CustomText>
                   </div>
                 </li>
-                <li>
-                  <div
-                    onClick={() => {
-                      router.push("/property");
-                      setIsChecked(false);
-                    }}
-                    style={{ borderRadius: 0 }}
-                    className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/property") ? "border-l-4 border-primary bg-primary-background" : ""} `}
-                  >
-                    <CustomImage
-                      src={
-                        isEqual(pathname, "/property")
-                          ? Images.buildingIconActive
-                          : Images.buildingIconDisable
-                      }
-                      className="w-5"
-                    />
-                    <CustomText
-                      textClassName={`${isEqual(pathname, "/property") ? "text-primary" : "text-disable"} font-light text-sm`}
+                {!Helper.isTechnician(userRole) ? (
+                  <li>
+                    <div
+                      onClick={() => {
+                        router.push("/property");
+                        setIsChecked(false);
+                      }}
+                      style={{ borderRadius: 0 }}
+                      className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/property") ? "border-l-4 border-primary bg-primary-background" : ""} `}
                     >
-                      Property
-                    </CustomText>
-                  </div>
-                </li>
+                      <CustomImage
+                        src={
+                          isEqual(pathname, "/property")
+                            ? Images.buildingIconActive
+                            : Images.buildingIconDisable
+                        }
+                        className="w-5"
+                      />
+                      <CustomText
+                        textClassName={`${isEqual(pathname, "/property") ? "text-primary" : "text-disable"} font-light text-sm`}
+                      >
+                        Property
+                      </CustomText>
+                    </div>
+                  </li>
+                ) : (
+                  false
+                )}
                 <li>
                   <div
                     className={`flex cursor-pointer items-center gap-2 p-6`}

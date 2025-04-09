@@ -4,6 +4,7 @@ import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
 import CustomText from "@/components/CustomText";
 import Constant from "@/src/utils/Constant";
+import Helper from "@/src/utils/Helper";
 
 const PropertySelectionComponent = ({
   propertyListing,
@@ -13,7 +14,7 @@ const PropertySelectionComponent = ({
 }) => {
   return (
     <div
-      className="hidden flex-col gap-4 lg:flex xl:flex overflow-y-scroll hide-scroll-bar"
+      className="hide-scroll-bar hidden flex-col gap-4 overflow-y-scroll lg:flex xl:flex"
       style={{ width: 220 }}
     >
       {map(propertyListing, (list, index) => {
@@ -66,7 +67,8 @@ const PropertySelectionComponent = ({
               {isEmpty(name) ? "-" : name}
             </CustomText>
 
-            {includes(userRole, Constant.MASTER_AGENCY_ROLE) ? (
+            {Helper.isSuperAdmin(userRole) ||
+            Helper.isMasterAgency(userRole) ? (
               <>
                 <div className="flex items-center gap-1 pb-1">
                   <CustomText

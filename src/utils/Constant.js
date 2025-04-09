@@ -4,6 +4,7 @@ const Constant = {
   TENANT_UCHAT_COOKIES: "cw_user_pzh0cmyd7blgdoiw",
   OWNER_UCHAT_COOKIES: "cw_user_vza3qkxeepbyzkuu",
 
+  SUPER_ADMIN: "super-admin",
   MASTER_AGENCY_ROLE: "master-agency",
   AGENCY_ROLE: "agency",
   TECHNICIAN_ROLE: "technician",

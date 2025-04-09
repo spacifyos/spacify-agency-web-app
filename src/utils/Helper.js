@@ -114,6 +114,10 @@ const getFileAsBase64 = async (url, headers) => {
   }
 };
 
+const isSuperAdmin = (role) => {
+  return includes(role, Constant.SUPER_ADMIN);
+};
+
 const isMasterAgency = (role) => {
   return includes(role, Constant.MASTER_AGENCY_ROLE);
 };
@@ -143,6 +147,7 @@ export default {
   getFileAsBase64,
   windowInnerHeight,
   documentGetElementByClassName,
+  isSuperAdmin,
   isMasterAgency,
   isAgency,
   isTechnician,
