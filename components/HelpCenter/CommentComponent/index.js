@@ -102,6 +102,7 @@ const CommentComponent = ({
             onChange={(e) => setMessageValue(e.target.value)}
           />
           <CustomButton
+            buttonStyles={{ height: 40, minHeight: 40, maxHeight: 40 }}
             buttonClassName="btn-primary max-w-20 w-20 min-h-10 h-10"
             buttonText="Send"
             onClick={onClickSendMessage}

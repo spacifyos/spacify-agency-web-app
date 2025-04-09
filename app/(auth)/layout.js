@@ -171,7 +171,7 @@ export default function RootLayout({ children }) {
                 aria-label="close sidebar"
                 className="drawer-overlay"
               ></label>
-              <ul className="menu min-h-full w-80 bg-base-200 bg-white text-base-content">
+              <ul className="menu min-h-full w-80 bg-base-200 bg-white p-0 text-base-content">
                 {/* Sidebar content here */}
                 <li>
                   <div
@@ -179,6 +179,7 @@ export default function RootLayout({ children }) {
                       router.push("/my-account");
                       setIsChecked(false);
                     }}
+                    style={{ borderRadius: 0 }}
                     className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/my-account") ? "border-l-4 border-primary bg-primary-background" : ""} `}
                   >
                     <CustomImage
@@ -202,7 +203,8 @@ export default function RootLayout({ children }) {
                       router.push("/help-center");
                       setIsChecked(false);
                     }}
-                    className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/help-center") || includes(pathname, "/help-center") ? "border-l-4 border-primary bg-primary-background" : ""} `}
+                    style={{ borderRadius: 0 }}
+                    className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/help-center") || includes(pathname, "/help-center") ? "border-l-4 border-primary bg-primary-background" : ""}`}
                   >
                     <CustomImage
                       src={
@@ -221,12 +223,12 @@ export default function RootLayout({ children }) {
                   </div>
                 </li>
                 <li>
-                  {" "}
                   <div
                     onClick={() => {
                       router.push("/property");
                       setIsChecked(false);
                     }}
+                    style={{ borderRadius: 0 }}
                     className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/property") ? "border-l-4 border-primary bg-primary-background" : ""} `}
                   >
                     <CustomImage

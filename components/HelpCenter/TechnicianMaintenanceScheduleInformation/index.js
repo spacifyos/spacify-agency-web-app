@@ -24,6 +24,7 @@ const TechnicianMaintenanceScheduleInformation = ({
   onChangeVideo,
   onClickUpdateTicket,
   onClickCheckIn,
+  ticketUpdateLoading,
 }) => {
   const videoId = get(videos, ["id"], "");
   const loading = get(videos, ["loading"], false);
@@ -257,6 +258,8 @@ const TechnicianMaintenanceScheduleInformation = ({
           buttonClassName="btn-primary"
           buttonText={"Submit"}
           onClick={onClickUpdateTicket}
+          loading={ticketUpdateLoading}
+          disable={ticketUpdateLoading}
         />
       </div>
 

@@ -4,6 +4,7 @@ import { get, head, isEmpty, map, size, isArray } from "lodash";
 import Image from "next/image";
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
+import { Navigation } from "swiper/modules";
 
 const ImageModal = ({
   data,
@@ -15,11 +16,11 @@ const ImageModal = ({
 
   return openImageModal ? (
     <div
-      className="h-full fixed inset-0 z-10 flex-1 h-screen overflow-hidden flex flex-col justify-center items-center"
+      className="fixed inset-0 z-10 flex h-full h-screen flex-1 flex-col items-center justify-center overflow-hidden"
       style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
     >
       {size(data) <= 1 ? (
-        <div className=" flex justify-center items-center overflow-hidden">
+        <div className="flex items-center justify-center overflow-hidden">
           <CustomImage
             src={
               isEmpty(imageDataValidate)
@@ -89,7 +90,7 @@ const ImageModal = ({
       <div></div>
 
       <div
-        className="absolute top-3 right-3 z-10 w-10 h-10 flex items-center justify-center rounded-3xl cursor-pointer"
+        className="absolute right-3 top-3 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-3xl"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
         onClick={onClickCloseImageModal}
       >

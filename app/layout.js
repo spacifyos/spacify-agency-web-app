@@ -1,4 +1,8 @@
 import "@/app/styles/globals.scss";
+import "@/src/lib/swiper/swiper.css";
+import "@/src/lib/swiper/modules/effect-cards.css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 import { Toaster } from "react-hot-toast";
 import Head from "next/head";
 
@@ -8,7 +12,7 @@ export default function RootLayout({ children }) {
       <Head>
         <meta
           name="keywords"
-          content="Spacify Asia, Property, Rental Management, Smart Meter"
+          content="Spacify Asia"
         />
 
         <meta name="apple-mobile-web-app-capable" content="yes" />

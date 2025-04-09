@@ -604,7 +604,7 @@ export default function RequestOverview() {
   };
 
   const updateSuccessCallback = () => {
-    router.refresh();
+    // location.reload();
   };
 
   const onClickSendMessage = async () => {
@@ -849,7 +849,7 @@ export default function RequestOverview() {
   };
 
   return (
-    <div className="relative flex h-full flex-col gap-6 overflow-hidden overflow-y-scroll rounded-3xl">
+    <div className="hide-scroll-bar relative flex h-full flex-col gap-6 overflow-hidden overflow-y-scroll rounded-3xl">
       <LoadingOverlay
         loading={ticketUpdateLoading || maintenanceTicketOverviewDataLoading}
       />
@@ -887,6 +887,7 @@ export default function RequestOverview() {
         onChangeVideo={onChangeVideo}
         onClickUpdateTicket={onClickUpdateTicket}
         onClickCheckIn={onClickCheckIn}
+        ticketUpdateLoading={ticketUpdateLoading}
       />
 
       <CommentComponent
