@@ -94,13 +94,15 @@ const CinemaUnitContent = ({
                       const status = listingSelector.getStatus(room);
                       const bookingSettingLink =
                         listingSelector.getBookingSettingLink(room);
+                      const spaceStatusTypeValue =
+                        listingSelector.getSpaceStatusTypeValue(room);
 
                       return (
                         <div
                           key={idx}
                           onClick={() => onClickSelectRoomDetail(room)}
                           style={{ maxWidth: 112 }}
-                          className={`${isEqual(status, "vacant") ? "bg-available-light" : "bg-error-light"} global-border-radius flex cursor-pointer flex-col gap-1 overflow-hidden p-2`}
+                          className={`${spaceStatusTypeValue === 4 ? "bg-disable-background" : isEqual(status, "vacant") ? "bg-available-light" : "bg-error-light"} global-border-radius flex cursor-pointer flex-col gap-1 overflow-hidden p-2`}
                         >
                           <div className={`flex flex-col items-start gap-1`}>
                             <div className="flex items-center gap-0.5">
@@ -141,12 +143,16 @@ const CinemaUnitContent = ({
                                 |
                               </CustomText>
 
-                              <CustomText textClassName="text-xs font-bold line-clamp-1">
+                              <CustomText
+                                textClassName={`${spaceStatusTypeValue === 4 ? "text-disable" : "text-black"} text-xs font-bold line-clamp-1`}
+                              >
                                 RM{!isEmpty(rental) ? "0" : toNumber(rental)}
                               </CustomText>
                             </div>
 
-                            <CustomText textClassName="text-xs font-bold text-primary line-clamp-1">
+                            <CustomText
+                              textClassName={`${spaceStatusTypeValue === 4 ? "text-disable" : "text-primary"} text-xs font-bold line-clamp-1`}
+                            >
                               {isEmpty(name) ? "-" : name}
                             </CustomText>
 
@@ -154,11 +160,15 @@ const CinemaUnitContent = ({
                               false
                             ) : (
                               <div className="flex items-center justify-start gap-3">
-                                <CustomText textClassName="text-xs bg-primary text-white px-1.5 py-0.5 rounded">
+                                <CustomText
+                                  textClassName={`${spaceStatusTypeValue === 4 ? "bg-disable" : "bg-primary"} text-xs text-white px-1.5 py-0.5 rounded`}
+                                >
                                   {isEmpty(bedType) ? "-" : bedType}
                                 </CustomText>
 
-                                <CustomText textClassName="text-xs bg-secondary text-white px-1.5 py-0.5 rounded">
+                                <CustomText
+                                  textClassName={`${spaceStatusTypeValue === 4 ? "bg-disable" : "bg-secondary"} text-xs text-white px-1.5 py-0.5 rounded`}
+                                >
                                   {isEmpty(bathroom) ? "-" : bathroom}
                                 </CustomText>
                               </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { includes, isEqual } from "lodash";
+import { includes, isEmpty, isEqual } from "lodash";
 import AuthManager from "@/src/utils/AuthManager";
 import Helper from "@/src/utils/Helper";
 import CustomImage from "@/components/CustomImage";
@@ -40,6 +40,10 @@ export default function RootLayout({ children }) {
     const checkAuthentication = async () => {
       const token = await AuthManager.retrieveToken();
       const type = await AuthManager.retrieveType();
+
+      if (isEmpty(token) || isEmpty(type)) {
+        router.replace("/sign-in");
+      }
     };
 
     checkAuthentication();
@@ -117,7 +121,9 @@ export default function RootLayout({ children }) {
             </CustomText>
           </div>
 
-          {!Helper.isTechnician(userRole) ? (
+          {Helper.isMasterAgency(userRole) ||
+          Helper.isAgency(userRole) ||
+          Helper.isSuperAdmin(userRole) ? (
             <div
               onClick={() => router.push("/property")}
               className={`flex cursor-pointer items-center gap-2 p-6 ${isEqual(pathname, "/property") ? "border-l-4 border-primary bg-primary-background" : ""} `}
@@ -245,7 +251,9 @@ export default function RootLayout({ children }) {
                     </CustomText>
                   </div>
                 </li>
-                {!Helper.isTechnician(userRole) ? (
+                {Helper.isMasterAgency(userRole) ||
+                Helper.isAgency(userRole) ||
+                Helper.isSuperAdmin(userRole) ? (
                   <li>
                     <div
                       onClick={() => {

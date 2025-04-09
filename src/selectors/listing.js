@@ -181,3 +181,5 @@ export const getGenderLabel = (state) => get(state, ["gender", "label"], "");
 export const getStyleLabel = (state) => get(state, ["style", "label"], "");
 export const getUnitStatusTypeLabel = (state) =>
   get(state, ["unit_status_type", "label"], "");
+export const getSpaceStatusTypeValue = (state) =>
+  get(state, ["space_status_type", "value"], 0);
