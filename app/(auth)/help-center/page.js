@@ -101,10 +101,10 @@ export default function HelpCenter() {
   };
 
   return (
-    <div className="relative flex h-full flex-col overflow-hidden rounded-3xl bg-white p-8">
+    <div className="relative flex h-full flex-col gap-4 overflow-hidden">
       <LoadingOverlay loading={maintenanceTicketListingDataLoading} />
 
-      <div className="hide-scroll-bar flex items-center overflow-y-hidden overflow-x-scroll pb-4">
+      <div className="hide-scroll-bar flex items-center overflow-y-hidden overflow-x-scroll py-1">
         {map(btnLists, (list, index) => {
           const value = get(list, ["value"], "");
           const label = get(list, ["label"], "");
@@ -141,7 +141,7 @@ export default function HelpCenter() {
         {hasMorePage &&
         lastPage > 1 &&
         !isEmpty(maintenanceTicketListingData) ? (
-          <div className="flex h-full justify-center pt-3">
+          <div className="flex h-full justify-center">
             <CustomButton
               buttonClassName="btn-primary min-h-9 h-9 w-32"
               buttonText="Load More"

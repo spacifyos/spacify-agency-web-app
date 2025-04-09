@@ -59,7 +59,7 @@ export default function AgencySignIn() {
   };
 
   return (
-    <div className="container mx-auto flex min-h-screen max-w-screen-md flex-col items-center justify-center">
+    <div className="container mx-auto h-full max-w-screen-md flex flex-col items-center justify-center">
       <CustomText textClassName="text-primary font-bold text-center w-full xl:text-3xl lg:text-2xl md:text-2xl sm:text-xl text-xl xl:pb-10 lg:pb-10 md:pb-10 sm:pb-5 pb-5">
         Agency Sign In
       </CustomText>

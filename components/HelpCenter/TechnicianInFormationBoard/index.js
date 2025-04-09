@@ -33,7 +33,10 @@ const TechnicianInFormationBoard = ({
           maintenanceTicketSelector.getIsAllowToCheckIn(item);
 
         return (
-          <div className="rounded-3xl bg-white p-8" key={index}>
+          <div
+            className="rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8"
+            key={index}
+          >
             <div className="flex items-center justify-between">
               <CustomText textClassName="text-disable text-sm">
                 Technician {index + 1}

@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full bg-primary-background">
+    <div className="relative h-full w-full bg-primary-background">
       {children}
     </div>
   );

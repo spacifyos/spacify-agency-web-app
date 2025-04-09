@@ -39,6 +39,12 @@
   }
 }
 
+html,
+body {
+  //overflow: hidden;
+  height: 100%;
+}
+
 * {
   scrollbar-color: unset;
   scrollbar-gutter: auto !important;
@@ -104,7 +110,7 @@ body {
 .divider-line {
   height: 1px;
   width: 100%;
-  background-color: #F5F8FD !important;
+  background-color: #f5f8fd !important;
   @apply my-4;
 }
 
@@ -135,7 +141,7 @@ body {
 }
 
 .second-section-title {
-  @apply font-bold text-base;
+  @apply text-base font-bold;
 }
 
 .body-container {
@@ -168,11 +174,11 @@ body {
 }
 
 .desktop-responsive {
-  @apply 2xl:flex xl:flex lg:flex md:flex sm:flex hidden;
+  @apply hidden sm:flex md:flex lg:flex xl:flex 2xl:flex;
 }
 
 .mobile-responsive {
-  @apply 2xl:hidden xl:hidden lg:hidden md:hidden sm:hidden;
+  @apply sm:hidden md:hidden lg:hidden xl:hidden 2xl:hidden;
 }
 
 .image-zoom-in:hover {

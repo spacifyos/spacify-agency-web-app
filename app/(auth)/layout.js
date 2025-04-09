@@ -52,9 +52,9 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-white">
-      <div className="relative grid h-screen grid-cols-12">
-        <div className="col-span-2 hidden sm:hidden md:hidden lg:hidden xl:block">
+    <div className="relative h-full w-full overflow-hidden bg-white">
+      <div className="relative flex h-full flex-col sm:flex-col md:flex-col lg:flex-col xl:flex-row">
+        <div className="hidden w-64 sm:hidden md:hidden lg:hidden xl:block">
           <div className="flex items-center justify-center p-4">
             <CustomImage src={Images.logoHorizontalColor} className="w-36" />
           </div>
@@ -140,9 +140,12 @@ export default function RootLayout({ children }) {
           </div>
         </div>
 
-        <div className="col-span-12 flex items-center justify-between pr-4 sm:flex md:flex lg:flex xl:hidden">
+        <div className="flex w-full items-center justify-between pr-4 sm:flex md:flex lg:flex xl:hidden">
           <div className="flex items-center justify-center p-4">
-            <CustomImage src={Images.logoHorizontalColor} className="w-36" />
+            <CustomImage
+              src={Images.logoHorizontalColor}
+              className="w-24 sm:w-24 md:w-28 lg:w-32"
+            />
           </div>
 
           <div className="drawer" style={{ width: "unset" }}>
@@ -158,7 +161,7 @@ export default function RootLayout({ children }) {
               <label htmlFor="my-drawer" className="cursor-pointer">
                 <CustomImage
                   src={Images.burgerMenuIconActive}
-                  className="w-10"
+                  className="w-7"
                 />
               </label>
             </div>
@@ -168,7 +171,7 @@ export default function RootLayout({ children }) {
                 aria-label="close sidebar"
                 className="drawer-overlay"
               ></label>
-              <ul className="menu min-h-full w-80 bg-base-200 bg-white p-4 text-base-content">
+              <ul className="menu min-h-full w-80 bg-base-200 bg-white text-base-content">
                 {/* Sidebar content here */}
                 <li>
                   <div
@@ -280,8 +283,8 @@ export default function RootLayout({ children }) {
           </div>
         </div>
 
-        <div className="col-span-12 overflow-hidden pb-4 pl-4 pr-4 pt-0 sm:col-span-12 sm:pb-4 sm:pl-4 sm:pt-0 md:col-span-12 md:pb-4 md:pl-4 md:pt-0 lg:col-span-12 lg:pb-4 lg:pl-4 lg:pt-0 xl:col-span-10 xl:pb-4 xl:pl-0 xl:pt-4">
-          <div className="h-full overflow-hidden rounded-3xl bg-primary-background p-8">
+        <div className="h-full w-full overflow-hidden pb-0 pl-0 pr-0 pt-0 xl:pb-4 xl:pr-4 xl:pt-4">
+          <div className="h-full overflow-hidden rounded-3xl bg-primary-background p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
             {children}
           </div>
         </div>

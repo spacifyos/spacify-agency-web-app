@@ -12,8 +12,8 @@ const MobilePropertySelectionComponent = ({
   userRole,
 }) => {
   return (
-    <div className="relative col-span-12 lg:hidden xl:hidden">
-      <div className="hide-scroll-bar sticky top-4 flex flex-row gap-2 overflow-x-scroll sm:flex-row md:flex-row lg:h-screen lg:flex-col xl:h-screen xl:flex-col">
+    <div className="relative lg:hidden xl:hidden">
+      <div className="hide-scroll-bar flex flex-row gap-2 overflow-x-scroll sm:flex-row md:flex-row lg:flex-col xl:flex-col">
         {map(propertyListing, (list) => {
           const imageUrl = listingSelector.getImageUrl(list);
           const name = listingSelector.getName(list);
@@ -35,7 +35,7 @@ const MobilePropertySelectionComponent = ({
 
           return (
             <div
-              style={{ minWidth: 200 }}
+              style={{ minWidth: 180 }}
               key={propertyId}
               className={`flex cursor-pointer flex-col items-center justify-center rounded-3xl bg-white p-4 ${isSelectProperty ? "border border-2 border-primary" : ""}`}
               onClick={() => onClickSelectProperty(propertyId)}
@@ -63,7 +63,7 @@ const MobilePropertySelectionComponent = ({
                   </div>
 
                   <CustomText
-                    textClassName={`text-xs xl:text-start lg:text-start md:text-center sm:text-center text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"} line-clamp-2`}
+                    textClassName={`text-xs xl:text-start lg:text-start md:text-center sm:text-center text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"} line-clamp-1`}
                   >
                     {isEmpty(name) ? "-" : name}
                   </CustomText>

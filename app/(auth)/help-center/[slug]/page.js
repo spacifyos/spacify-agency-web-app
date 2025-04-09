@@ -849,61 +849,59 @@ export default function RequestOverview() {
   };
 
   return (
-    <div className="relative h-full rounded-3xl">
+    <div className="relative flex h-full flex-col gap-6 overflow-hidden overflow-y-scroll rounded-3xl">
       <LoadingOverlay
         loading={ticketUpdateLoading || maintenanceTicketOverviewDataLoading}
       />
 
-      <div className="relative flex flex-col justify-center gap-6">
-        <RequestOverviewDetail
-          data={maintenanceTicketOverviewData}
-          imageLoading={imageLoading}
-          imageList={imageList}
-          videoValue={videoValue}
-          videoLoading={videoLoading}
-          onClickPopupImage={onClickPopupImage}
-          onClickPopupVideo={onClickPopupVideo}
-        />
+      <RequestOverviewDetail
+        data={maintenanceTicketOverviewData}
+        imageLoading={imageLoading}
+        imageList={imageList}
+        videoValue={videoValue}
+        videoLoading={videoLoading}
+        onClickPopupImage={onClickPopupImage}
+        onClickPopupVideo={onClickPopupVideo}
+      />
 
-        <TechnicianInFormationBoard
-          data={maintenanceTicketOverviewData}
-          onClickCheckIn={onClickCheckIn}
-          onClickCheckOut={onClickCheckOut}
-          checkInLoading={checkInLoading}
-          checkOutLoading={checkOutLoading}
-        />
+      <TechnicianInFormationBoard
+        data={maintenanceTicketOverviewData}
+        onClickCheckIn={onClickCheckIn}
+        onClickCheckOut={onClickCheckOut}
+        checkInLoading={checkInLoading}
+        checkOutLoading={checkOutLoading}
+      />
 
-        <MaintenanceScheduleInformationComponent
-          data={maintenanceTicketOverviewData}
-          images={technicianImageList}
-          videos={technicianVideoValue}
-          onClickPopupImage={onClickPopupImage}
-          onClickPopupVideo={onClickPopupVideo}
-          onClickRemoveGallery={onClickRemoveGallery}
-          setPostData={setPostData}
-          postData={postData}
-          onChangeImage={onChangeImage}
-          uploadImageRef={uploadImageRef}
-          uploadVideoRef={uploadVideoRef}
-          onChangeVideo={onChangeVideo}
-          onClickUpdateTicket={onClickUpdateTicket}
-          onClickCheckIn={onClickCheckIn}
-        />
+      <MaintenanceScheduleInformationComponent
+        data={maintenanceTicketOverviewData}
+        images={technicianImageList}
+        videos={technicianVideoValue}
+        onClickPopupImage={onClickPopupImage}
+        onClickPopupVideo={onClickPopupVideo}
+        onClickRemoveGallery={onClickRemoveGallery}
+        setPostData={setPostData}
+        postData={postData}
+        onChangeImage={onChangeImage}
+        uploadImageRef={uploadImageRef}
+        uploadVideoRef={uploadVideoRef}
+        onChangeVideo={onChangeVideo}
+        onClickUpdateTicket={onClickUpdateTicket}
+        onClickCheckIn={onClickCheckIn}
+      />
 
-        <CommentComponent
-          onClickSendMessage={onClickSendMessage}
-          setMessageValue={setMessageValue}
-          messageValue={messageValue}
-          data={commentData}
-          pagination={commentDataPagination}
-          postCommentLoading={postCommentLoading}
-          getCommentLoading={getCommentLoading}
-          onClickLoadMore={onClickLoadMore}
-          onChangeCommentImage={onChangeCommentImage}
-          uploadCommentImageRef={uploadCommentImageRef}
-          onClickSelectedCommentImage={onClickSelectedCommentImage}
-        />
-      </div>
+      <CommentComponent
+        onClickSendMessage={onClickSendMessage}
+        setMessageValue={setMessageValue}
+        messageValue={messageValue}
+        data={commentData}
+        pagination={commentDataPagination}
+        postCommentLoading={postCommentLoading}
+        getCommentLoading={getCommentLoading}
+        onClickLoadMore={onClickLoadMore}
+        onChangeCommentImage={onChangeCommentImage}
+        uploadCommentImageRef={uploadCommentImageRef}
+        onClickSelectedCommentImage={onClickSelectedCommentImage}
+      />
 
       <ImageModal
         data={selectedImageList}

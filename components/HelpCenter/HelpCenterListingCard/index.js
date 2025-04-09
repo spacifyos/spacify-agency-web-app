@@ -18,7 +18,7 @@ const HelpCenterListingCard = ({ data, onClickToRequestOverview }) => {
 
   return (
     <div
-      className="global-box-shadow global-border-radius p-4 bg-white cursor-pointer relative"
+      className="relative cursor-pointer rounded-3xl bg-white p-4"
       onClick={() => onClickToRequestOverview(id)}
     >
       <div className="flex items-center gap-2 pb-2">
@@ -31,7 +31,7 @@ const HelpCenterListingCard = ({ data, onClickToRequestOverview }) => {
         )}
       </div>
 
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <div className="pr-2">
           <CustomText textClassName="font-bold text-sm">{date}</CustomText>
 
@@ -44,7 +44,7 @@ const HelpCenterListingCard = ({ data, onClickToRequestOverview }) => {
           </CustomText>
         </div>
 
-        <CustomImage src={Images.rightIconBlack} className="w-3 h-3" />
+        <CustomImage src={Images.rightIconBlack} className="h-3 w-3" />
       </div>
 
       <div
@@ -52,11 +52,11 @@ const HelpCenterListingCard = ({ data, onClickToRequestOverview }) => {
         style={{ marginTop: 10, marginBottom: 10 }}
       ></div>
 
-      <div className="flex gap-3 flex-wrap">
+      <div className="flex flex-wrap gap-3">
         <div className="flex items-center">
           <CustomImage
             src={Images.buildingIconActive}
-            className="mr-1 w-4 min-w-4"
+            className="min-w-4 mr-1 w-4"
           />
           <CustomText textClassName="text-sm">{address}</CustomText>
         </div>
@@ -64,7 +64,7 @@ const HelpCenterListingCard = ({ data, onClickToRequestOverview }) => {
         <div className="flex items-center">
           <CustomImage
             src={Images.spaceIconActive}
-            className="mr-1 w-4 min-w-4"
+            className="min-w-4 mr-1 w-4"
           />
           <CustomText textClassName="text-sm">{roomName}</CustomText>
         </div>

@@ -12,7 +12,10 @@ const PropertySelectionComponent = ({
   userRole,
 }) => {
   return (
-    <div className="col-span-2 hidden flex-col gap-4 lg:flex xl:flex">
+    <div
+      className="hidden flex-col gap-4 lg:flex xl:flex overflow-y-scroll hide-scroll-bar"
+      style={{ width: 220 }}
+    >
       {map(propertyListing, (list, index) => {
         const imageUrl = listingSelector.getImageUrl(list);
         const name = listingSelector.getName(list);

@@ -28,7 +28,7 @@ const CommentComponent = ({
   const currentPage = maintenanceTicketSelector.getCurrentPage(pagination);
 
   return (
-    <div className="rounded-3xl bg-white p-8">
+    <div className="h-full rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
       <CustomText textClassName="text-disable text-sm">Comment</CustomText>
       <div
         className="divider-line"

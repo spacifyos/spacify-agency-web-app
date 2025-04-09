@@ -11,17 +11,17 @@ const MessageTimeLine = ({ item, onClickSelectedCommentImage }) => {
   const isAuthor = get(item, ["is_author"], false);
 
   return (
-    <div className="grid grid-cols-12 gap-1 h-full pb-4">
-      <div className="flex flex-col justify-center items-center col-span-1">
+    <div className="grid grid-cols-12 gap-1 pb-4">
+      <div className="col-span-1 flex flex-col items-center justify-center">
         <CustomImage
           src={isAuthor ? Images.circleIconActive : Images.circleIconAqua}
-          className="w-4 h-6"
+          className="h-6 w-4"
         />
-        <div className="h-full bg-disable w-0.5 mt-2.5"></div>
+        <div className="mt-2.5 h-full w-0.5 bg-disable"></div>
       </div>
 
-      <div className="flex-col flex w-full col-span-11">
-        <div className="flex flex-col gap-1 items-start pb-2">
+      <div className="col-span-11 flex w-full flex-col">
+        <div className="flex flex-col items-start gap-1 pb-2">
           {/*<CustomImage*/}
           {/*  // src={img}*/}
           {/*  imageStyle={{ width: 40, height: 40 }}*/}
@@ -45,7 +45,7 @@ const MessageTimeLine = ({ item, onClickSelectedCommentImage }) => {
               <CustomImage
                 key={index}
                 onClick={() => onClickSelectedCommentImage(image)}
-                className="w-14 h-14 border global-border-radius cursor-pointer overflow-hidden"
+                className="global-border-radius h-14 w-14 cursor-pointer overflow-hidden border"
                 src={isEmpty(image) ? Images.imageNotFound : image}
               />
             ))}

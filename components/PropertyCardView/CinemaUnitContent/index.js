@@ -20,7 +20,7 @@ const CinemaUnitContent = ({
   zoomIn,
 }) => {
   return (
-    <div className="sticky top-0 col-span-12 h-screen sm:col-span-12 md:col-span-12 lg:col-span-10 xl:col-span-10">
+    <div className="hide-scroll-bar h-full w-full overflow-y-scroll">
       {isEmpty(unitListing) ? (
         <div className="flex h-full w-full items-center justify-center rounded-3xl bg-white">
           <CustomEmptyBox />
@@ -99,7 +99,8 @@ const CinemaUnitContent = ({
                         <div
                           key={idx}
                           onClick={() => onClickSelectRoomDetail(room)}
-                          className={`${isEqual(status, "vacant") ? "bg-available-light" : "bg-error-light"} global-border-radius max-w-28 flex cursor-pointer flex-col gap-1 overflow-hidden p-2`}
+                          style={{ maxWidth: 112 }}
+                          className={`${isEqual(status, "vacant") ? "bg-available-light" : "bg-error-light"} global-border-radius flex cursor-pointer flex-col gap-1 overflow-hidden p-2`}
                         >
                           <div className={`flex flex-col items-start gap-1`}>
                             <div className="flex items-center gap-0.5">

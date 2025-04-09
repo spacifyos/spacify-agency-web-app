@@ -252,27 +252,27 @@ export default function CardListing({ params }) {
         onClickShareBooking={onClickShareBooking}
       />
 
-      <FilterSection
-        isOpenFilter={isOpenFilter}
-        setIsOpenFilter={setIsOpenFilter}
-        propertyOption={propertyOption}
-        onChangePropertyValue={onChangePropertyValue}
-        propertyValue={propertyValue}
-        unitOption={unitOption}
-        onChangeUnitValue={onChangeUnitValue}
-        unitValue={unitValue}
-        bedroomOption={bedroomOption}
-        onChangeBedroomValue={onChangeBedroomValue}
-        bedroomValue={bedroomValue}
-        bathroomOption={bathroomOption}
-        onChangeBathroomValue={onChangeBathroomValue}
-        bathroomValue={bathroomValue}
-        onChangeStatusValue={onChangeStatusValue}
-        statusValue={statusValue}
-        onClickReset={onClickReset}
-      />
+      {/*<FilterSection*/}
+      {/*  isOpenFilter={isOpenFilter}*/}
+      {/*  setIsOpenFilter={setIsOpenFilter}*/}
+      {/*  propertyOption={propertyOption}*/}
+      {/*  onChangePropertyValue={onChangePropertyValue}*/}
+      {/*  propertyValue={propertyValue}*/}
+      {/*  unitOption={unitOption}*/}
+      {/*  onChangeUnitValue={onChangeUnitValue}*/}
+      {/*  unitValue={unitValue}*/}
+      {/*  bedroomOption={bedroomOption}*/}
+      {/*  onChangeBedroomValue={onChangeBedroomValue}*/}
+      {/*  bedroomValue={bedroomValue}*/}
+      {/*  bathroomOption={bathroomOption}*/}
+      {/*  onChangeBathroomValue={onChangeBathroomValue}*/}
+      {/*  bathroomValue={bathroomValue}*/}
+      {/*  onChangeStatusValue={onChangeStatusValue}*/}
+      {/*  statusValue={statusValue}*/}
+      {/*  onClickReset={onClickReset}*/}
+      {/*/>*/}
 
-      <div className="hide-scroll-bar grid h-full grid-cols-12 gap-4 overflow-y-scroll sm:gap-4 md:gap-6 lg:gap-6 xl:gap-6">
+      <div className="flex h-full flex-col gap-4 sm:flex-col sm:gap-4 md:flex-col md:gap-6 lg:flex-row lg:gap-6 xl:flex-row xl:gap-6">
         <PropertySelectionComponent
           propertyListing={propertyListing}
           onClickSelectProperty={onClickSelectProperty}

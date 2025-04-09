@@ -174,7 +174,7 @@ export default function Account() {
   };
 
   return (
-    <div className="relative flex h-full flex-col justify-between rounded-3xl bg-white p-8">
+    <div className="hide-scroll-bar relative flex h-full flex-col justify-between overflow-y-scroll rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
       <LoadingOverlay loading={userProfileLoading || editProfileLoading} />
 
       <div className="flex flex-col gap-4">

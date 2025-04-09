@@ -28,7 +28,7 @@ const RequestOverviewDetail = ({
   const isAllowedEntry = maintenanceTicketSelector.getIsAllowedEntry(data);
 
   return (
-    <div className="rounded-3xl bg-white p-8">
+    <div className="rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
       <div className="flex justify-between">
         <CustomLabelValue
           label="Request Number"

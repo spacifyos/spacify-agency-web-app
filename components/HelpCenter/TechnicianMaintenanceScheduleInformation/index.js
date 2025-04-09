@@ -34,8 +34,8 @@ const TechnicianMaintenanceScheduleInformation = ({
   const status = maintenanceTicketSelector.getStatusValue(data);
 
   return (
-    <div className="rounded-3xl bg-white p-8">
-      <div className="flex justify-between items-center">
+    <div className="rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
+      <div className="flex items-center justify-between">
         <CustomText textClassName="text-disable text-sm">
           Maintenance Schedule Information
         </CustomText>
@@ -122,7 +122,7 @@ const TechnicianMaintenanceScheduleInformation = ({
                 return (
                   <div
                     key={index}
-                    className={`w-28 h-28 relative overflow-hidden flex justify-center items-center border ${isEmpty(path) ? "" : status ? "border-available" : "border-error"} global-border-radius cursor-pointer`}
+                    className={`relative flex h-28 w-28 items-center justify-center overflow-hidden border ${isEmpty(path) ? "" : status ? "border-available" : "border-error"} global-border-radius cursor-pointer`}
                   >
                     <CustomImage
                       onClick={() => onClickPopupImage(index, "technician")}
@@ -134,17 +134,17 @@ const TechnicianMaintenanceScheduleInformation = ({
                       className={`${loading ? "opacity-50" : ""}`}
                     />
                     {loading ? (
-                      <span className="loading loading-spinner loading-lg text-primary absolute"></span>
+                      <span className="loading loading-spinner loading-lg absolute text-primary"></span>
                     ) : (
                       <div
-                        className="absolute top-1 right-1 cursor-pointer bg-white rounded-2xl"
+                        className="absolute right-1 top-1 cursor-pointer rounded-2xl bg-white"
                         onClick={() =>
                           onClickRemoveGallery(id, "image", isUploadedImage)
                         }
                       >
                         <CustomImage
                           src={Images.deleteIcon}
-                          className="w-5 h-5"
+                          className="h-5 w-5"
                         />
                       </div>
                     )}
@@ -156,7 +156,7 @@ const TechnicianMaintenanceScheduleInformation = ({
                 false
               ) : (
                 <div
-                  className="bg-primary-background global-border-radius cursor-pointer flex items-center justify-center w-28 h-28"
+                  className="global-border-radius flex h-28 w-28 cursor-pointer items-center justify-center bg-primary-background"
                   onClick={() =>
                     uploadImageRef && uploadImageRef.current.click()
                   }
@@ -184,35 +184,35 @@ const TechnicianMaintenanceScheduleInformation = ({
             <CustomText textClassName="text-xs pb-1">
               {"Upload Video (max file size: 50MB, up to 1 video):"}
             </CustomText>
-            <div className=" flex flex-row items-center gap-2 pb-3">
+            <div className="flex flex-row items-center gap-2 pb-3">
               {isEmpty(videos) ? (
                 false
               ) : (
                 <div
-                  className={`w-28 h-28 relative flex justify-center items-center border ${isEmpty(videoPath) ? "" : videoStatus ? "border-available" : "border-error"} global-border-radius`}
+                  className={`relative flex h-28 w-28 items-center justify-center border ${isEmpty(videoPath) ? "" : videoStatus ? "border-available" : "border-error"} global-border-radius`}
                 >
                   {loading ? (
                     false
                   ) : (
                     <CustomImage
                       src={Images.playIcon}
-                      className="w-14 h-14 cursor-pointer"
+                      className="h-14 w-14 cursor-pointer"
                       onClick={() => onClickPopupVideo("technician")}
                     />
                   )}
 
                   {loading ? (
-                    <span className="loading loading-spinner loading-lg text-primary absolute"></span>
+                    <span className="loading loading-spinner loading-lg absolute text-primary"></span>
                   ) : (
                     <div
-                      className="absolute top-1 right-1 cursor-pointer z-10"
+                      className="absolute right-1 top-1 z-10 cursor-pointer"
                       onClick={() =>
                         onClickRemoveGallery(videoId, "video", isUploadedVideo)
                       }
                     >
                       <CustomImage
                         src={Images.deleteIcon}
-                        className="w-5 h-5"
+                        className="h-5 w-5"
                       />
                     </div>
                   )}
@@ -221,7 +221,7 @@ const TechnicianMaintenanceScheduleInformation = ({
 
               {isEmpty(videos) ? (
                 <div
-                  className="bg-primary-background global-border-radius cursor-pointer flex items-center justify-center w-28 h-28"
+                  className="global-border-radius flex h-28 w-28 cursor-pointer items-center justify-center bg-primary-background"
                   onClick={() =>
                     uploadVideoRef && uploadVideoRef.current.click()
                   }
@@ -260,7 +260,7 @@ const TechnicianMaintenanceScheduleInformation = ({
         />
       </div>
 
-      <div className="flex flex-col justify-center items-center pt-4">
+      <div className="flex flex-col items-center justify-center pt-4">
         <CustomText textClassName="text-disable text-xs">
           Maintenance Schedule Information Will Be Updated Soon
         </CustomText>
