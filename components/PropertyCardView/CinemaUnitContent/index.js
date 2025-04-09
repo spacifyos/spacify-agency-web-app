@@ -26,7 +26,7 @@ const CinemaUnitContent = ({
           <CustomEmptyBox />
         </div>
       ) : (
-        <div className="flex flex-col rounded-3xl bg-white p-6">
+        <div className="flex h-full flex-col rounded-3xl bg-white p-6">
           {map(unitListing, (list, index) => {
             const name = listingSelector.getName(list);
             const rooms = listingSelector.getRooms(list);

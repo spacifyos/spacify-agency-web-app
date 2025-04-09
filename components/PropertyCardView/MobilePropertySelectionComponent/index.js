@@ -69,7 +69,7 @@ const MobilePropertySelectionComponent = ({
                   </CustomText>
                 </div>
 
-                {!includes(userRole, Constant.MASTER_AGENCY_ROLE) ? (
+                {includes(userRole, Constant.MASTER_AGENCY_ROLE) ? (
                   <>
                     <div className="flex items-center gap-1 pb-1">
                       <CustomText
