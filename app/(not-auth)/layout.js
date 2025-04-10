@@ -12,6 +12,7 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
     const checkAuthentication = async () => {
+
       const token = await AuthManager.retrieveToken();
       const type = await AuthManager.retrieveType();
 
