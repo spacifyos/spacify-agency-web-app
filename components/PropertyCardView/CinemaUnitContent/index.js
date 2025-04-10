@@ -20,13 +20,13 @@ const CinemaUnitContent = ({
   zoomIn,
 }) => {
   return (
-    <div className="hide-scroll-bar h-full w-full overflow-y-scroll">
+    <div className="h-full w-full">
       {isEmpty(unitListing) ? (
         <div className="flex h-full w-full items-center justify-center rounded-3xl bg-white">
           <CustomEmptyBox />
         </div>
       ) : (
-        <div className="flex h-full flex-col rounded-3xl bg-white p-6">
+        <div className="hide-scroll-bar flex h-full flex-col overflow-y-scroll rounded-3xl bg-white p-6">
           {map(unitListing, (list, index) => {
             const name = listingSelector.getName(list);
             const rooms = listingSelector.getRooms(list);
