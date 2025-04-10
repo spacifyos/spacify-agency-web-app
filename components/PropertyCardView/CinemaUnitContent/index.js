@@ -146,7 +146,7 @@ const CinemaUnitContent = ({
                               <CustomText
                                 textClassName={`${spaceStatusTypeValue === 4 ? "text-disable" : "text-black"} text-xs font-bold line-clamp-1`}
                               >
-                                RM{!isEmpty(rental) ? "0" : toNumber(rental)}
+                                RM{isEmpty(rental) ? "0" : toNumber(rental)}
                               </CustomText>
                             </div>
 
