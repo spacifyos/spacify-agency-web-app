@@ -10,17 +10,13 @@ export default function RootLayout({ children }) {
   const router = useRouter();
   const pathname = get(router, ["pathname"], "");
 
-  const userProfileData = authSelector.getUserProfileData();
-  const userProfileLoading = authSelector.getUserProfileLoading();
-
-  const userType = authSelector.getType(userProfileData);
-
   useEffect(() => {
     const checkAuthentication = async () => {
       const token = await AuthManager.retrieveToken();
       const type = await AuthManager.retrieveType();
 
-      if (!isEmpty(token) && !isEmpty(type) && isEmpty(userProfileData)) {
+      if (!isEmpty(token) && !isEmpty(type)) {
+        router.replace("/property");
       }
     };
 
