@@ -59,6 +59,7 @@ export default function CardListing({ params }) {
   const [propertyValue, setPropertyValue] = useState("");
   const [unitValue, setUnitValue] = useState("");
   const [statusValue, setStatusValue] = useState(false);
+  const [genderValue, setGenderValue] = useState("");
 
   const [bedroomValue, setBedroomValue] = useState("");
   const [bathroomValue, setBathroomValue] = useState("");
@@ -147,6 +148,10 @@ export default function CardListing({ params }) {
   const onClickSelectProperty = (propertyId) => {
     setSelectedPropertyId(propertyId);
     setUnitFilterParams({ property_id: propertyId });
+    setGenderValue("");
+    setBathroomValue("");
+    setBedroomValue("");
+    setStatusValue("");
   };
 
   const onClickShareBooking = (url) => {
@@ -177,6 +182,14 @@ export default function CardListing({ params }) {
       ...{ unit_id: e.target.value },
     });
     setUnitValue(e.target.value);
+  };
+
+  const onChangeGenderValue = (e) => {
+    setUnitFilterParams({
+      ...unitFilterParams,
+      ...{ gender: e.target.value },
+    });
+    setGenderValue(e.target.value);
   };
 
   const onChangeStatusValue = (e) => {
@@ -235,6 +248,7 @@ export default function CardListing({ params }) {
     setUnitValue("");
     setBathroomValue("");
     setBedroomValue("");
+    setGenderValue("");
   };
 
   const onClickSelectRoomDetail = (data) => {
@@ -273,6 +287,8 @@ export default function CardListing({ params }) {
         onChangeStatusValue={onChangeStatusValue}
         statusValue={statusValue}
         onClickReset={onClickReset}
+        genderValue={genderValue}
+        onChangeGenderValue={onChangeGenderValue}
       />
       <div className="relative flex h-full flex-col overflow-hidden">
         <CardViewModal

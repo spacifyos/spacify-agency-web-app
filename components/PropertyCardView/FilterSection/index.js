@@ -21,6 +21,8 @@ const FilterSection = ({
   onChangeStatusValue,
   statusValue,
   onClickReset,
+  onChangeGenderValue,
+  genderValue,
 }) => {
   return (
     <div className="">
@@ -28,7 +30,7 @@ const FilterSection = ({
         className={`grid grid-cols-11 gap-2 sm:grid-cols-11 md:grid-cols-11 lg:grid-cols-11 xl:grid-cols-11 ${isOpenFilter ? "pb-2" : "pb-7"}`}
       >
         <CustomSelect
-          className="col-span-9 sm:col-span-9 md:col-span-5 lg:col-span-5 xl:col-span-5"
+          className="col-span-9 sm:col-span-9 md:col-span-4 lg:col-span-4 xl:col-span-4"
           placeholder={"Property"}
           optionList={propertyOption}
           onChange={onChangePropertyValue}
@@ -36,12 +38,24 @@ const FilterSection = ({
         />
 
         <CustomSelect
-          className="col-span-5 hidden w-full sm:col-span-5 md:col-span-5 md:block lg:col-span-5 lg:block xl:col-span-5 xl:block"
+          className="col-span-3 hidden w-full sm:col-span-3 md:col-span-3 md:block lg:col-span-3 lg:block xl:col-span-3 xl:block"
           placeholder={"Unit"}
           optionList={unitOption}
           onChange={onChangeUnitValue}
           value={unitValue}
         />
+
+        {/*<CustomSelect*/}
+        {/*  className="col-span-3 hidden w-full sm:col-span-3 md:col-span-3 md:block lg:col-span-3 lg:block xl:col-span-3 xl:block"*/}
+        {/*  placeholder={"Gender"}*/}
+        {/*  optionList={[*/}
+        {/*    { label: "Male", value: "male" },*/}
+        {/*    { label: "Female", value: "female" },*/}
+        {/*    { label: "Mixed", value: "mixed" },*/}
+        {/*  ]}*/}
+        {/*  onChange={onChangeGenderValue}*/}
+        {/*  value={genderValue}*/}
+        {/*/>*/}
 
         <div
           className="global-box-shadow global-border-radius col-span-2 flex cursor-pointer items-center justify-center bg-white sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1"
@@ -61,6 +75,18 @@ const FilterSection = ({
             value={unitValue}
           />
 
+          {/*<CustomSelect*/}
+          {/*  className="col-span-5 sm:col-span-5 md:col-span-5 md:hidden lg:col-span-5 lg:hidden xl:col-span-5 xl:hidden"*/}
+          {/*  placeholder={"Gender"}*/}
+          {/*  optionList={[*/}
+          {/*    { label: "Male", value: "male" },*/}
+          {/*    { label: "Female", value: "female" },*/}
+          {/*    { label: "Mixed", value: "mixed" },*/}
+          {/*  ]}*/}
+          {/*  onChange={onChangeGenderValue}*/}
+          {/*  value={genderValue}*/}
+          {/*/>*/}
+
           <CustomSelect
             className="col-span-5 sm:col-span-5 md:col-span-3 lg:col-span-3 xl:col-span-3"
             placeholder={"Bedroom"}
@@ -70,7 +96,7 @@ const FilterSection = ({
           />
 
           <CustomSelect
-            className="col-span-4 sm:col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-3"
+            className="col-span-5 sm:col-span-5 md:col-span-3 lg:col-span-3 xl:col-span-3"
             placeholder={"Bathroom"}
             optionList={bathroomOption}
             onChange={onChangeBathroomValue}
