@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { get, isEmpty } from "lodash";
+import { get, isEmpty, isEqual } from "lodash";
 import * as authSelector from "@/src/selectors/auth";
 import AuthManager from "@/src/utils/AuthManager";
 import { useRouter } from "next/navigation";
@@ -12,11 +12,10 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
     const checkAuthentication = async () => {
-
       const token = await AuthManager.retrieveToken();
       const type = await AuthManager.retrieveType();
 
-      if (!isEmpty(token) && !isEmpty(type)) {
+      if (!isEmpty(token) && !isEmpty(type) && !isEqual(type, 'tenant') && !isEqual(type, 'owner')) {
         router.replace("/property");
       }
     };
