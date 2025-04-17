@@ -15,13 +15,13 @@ export const apiRequestErrorResponse = (err, ignoreToast = false) => {
   // }
 
   if (statusCode === 403) {
-    Router.replace("/403");
+    window.location.href = "/403";
     unknowErrorMsgFunction(statusCode);
     return;
   }
 
   if (statusCode === 404) {
-    Router.replace("/404");
+    window.location.href = "/404";
     unknowErrorMsgFunction(statusCode);
     return;
   }

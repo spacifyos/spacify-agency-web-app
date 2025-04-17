@@ -1,42 +1,59 @@
 import api from "@/src/services/httpUtilities/httpService";
-import _, { isEmpty, get } from "lodash";
+import { isEmpty, get } from "lodash";
 import Toast from "@/src/utils/Toast";
 import { apiRequestErrorResponse } from "@/src/services/httpUtilities/apiRequestErrorResponse";
 import axios from "axios";
 import moment from "moment";
 import AuthManager from "@/src/utils/AuthManager";
 
+/**
+ * Generic API request handler with standardized response processing
+ * @param {Promise} apiCall - The API call to execute
+ * @param {Function} setLoading - Loading state setter function
+ * @param {Function} [successCallback=() => {}] - Success callback function
+ * @param {Function} [errorCallback=() => {}] - Error callback function
+ * @param {string} [successMessage=""] - Success message to display
+ * @param {boolean} [ignoreSuccessMessage=false] - Whether to ignore success message
+ * @returns {Promise<void>}
+ */
 const apiRequest = async (
-  api,
+  apiCall,
   setLoading,
   successCallback = () => {},
   errorCallback = () => {},
   successMessage = "",
   ignoreSuccessMessage = false,
 ) => {
+  if (!apiCall || typeof apiCall.then !== "function") {
+    throw new Error("Invalid API call provided");
+  }
+
   try {
     setLoading(true);
-    const res = await api;
+    const response = await apiCall;
 
-    const status = get(res, ["status"], 0);
-    const data = get(res, ["data", "data"], "");
-    const pagination = get(res, ["data", "pagination"], "");
-    const config = get(res, ["data", "config"], "");
-    const code = get(res, ["data", "code"], 0);
-    const message = get(res, ["data", "message"], "");
+    const status = get(response, "status", 0);
+    const data = get(response, "data.data", null);
+    const pagination = get(response, "data.pagination", null);
+    const config = get(response, "data.config", null);
+    const code = get(response, "data.code", 0);
+    const message = get(response, "data.message", "");
 
     if (status === 200 || code === 200 || code === 204) {
       setLoading(false);
-      successCallback(isEmpty(data) ? config : data, pagination);
+      const responseData = isEmpty(data) ? config : data;
+      successCallback(responseData, pagination);
 
-      if (!ignoreSuccessMessage) {
-        Toast.success(isEmpty(message) ? successMessage : message);
+      if (!ignoreSuccessMessage && (message || successMessage)) {
+        Toast.success(message || successMessage);
       }
+    } else {
+      throw new Error(`Unexpected response status: ${status}`);
     }
-  } catch (err) {
+  } catch (error) {
     setLoading(false);
-    errorCallback(err);
-    apiRequestErrorResponse(err, ignoreSuccessMessage);
+    errorCallback(error);
+    apiRequestErrorResponse(error, ignoreSuccessMessage);
   }
 };
 
@@ -143,7 +160,18 @@ const patchUserPinNumber = async (
   );
 };
 
+/**
+ * Handles file download with proper error handling and file naming
+ * @param {string} url - The URL to download from
+ * @param {Object} headers - Request headers
+ * @param {string} [fileName] - Optional custom file name
+ * @returns {Promise<void>}
+ */
 const downloadFileRequest = async (url, headers, fileName) => {
+  if (!url) {
+    throw new Error("Download URL is required");
+  }
+
   try {
     const response = await axios.get(url, {
       headers,
@@ -158,12 +186,13 @@ const downloadFileRequest = async (url, headers, fileName) => {
       `${isEmpty(fileName) ? moment().format("YYYYMMDDHHmmss") : fileName}.pdf`,
     );
 
-    // specify the file name and extension
     document.body.appendChild(fileLink);
     fileLink.click();
     fileLink.remove();
+    window.URL.revokeObjectURL(fileUrl);
   } catch (error) {
-    console.error("Error downloading the file", error);
+    console.error("Error downloading file:", error);
+    Toast.error("Failed to download file. Please try again.");
   }
 };
 
@@ -383,12 +412,20 @@ const getUserProfileRequest = async (setLoading, successCallback) => {
   );
 };
 
+/**
+ * Handles user sign out with proper cleanup
+ * @param {Object} router - Next.js router instance
+ * @returns {Promise<void>}
+ */
 const signOutAccountRequest = async (router) => {
-  await AuthManager.removeLoginType();
-
-  AuthManager.removeToken().then(() => {
+  try {
+    await AuthManager.removeLoginType();
+    await AuthManager.removeToken();
     router.replace("/sign-in");
-  });
+  } catch (error) {
+    console.error("Error during sign out:", error);
+    Toast.error("Failed to sign out. Please try again.");
+  }
 };
 
 const getMaintenanceTicketOverviewRequest = async (
