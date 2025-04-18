@@ -1,16 +1,8 @@
-"use client";
-
 import CustomText from "@/components/CustomText";
 import CustomButton from "@/components/CustomButton";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-export default function Page({ error, reset }) {
-  const router = useRouter();
-
-  const onClickGoToBack = () => {
-    router.replace("/");
-  };
-
+export default function ErrorPage() {
   return (
     <div className="flex h-screen flex-1 flex-col items-center justify-center bg-primary-background px-10">
       <div className="flex gap-1">
@@ -35,25 +27,21 @@ export default function Page({ error, reset }) {
       </div>
 
       <CustomText textClassName="text-lg text-center font-bold pb-2">
-        Oops! Internet Server Error.
+        Oops! Something went wrong!
       </CustomText>
 
       <CustomText textClassName="text-center text-sm pb-6">
-        User can try again later.
+        An unexpected error occurred
       </CustomText>
 
       <div className="flex gap-4">
-        <CustomButton
-          buttonText="Try Again"
-          buttonClassName="btn-primary"
-          onClick={reset}
-        />
-        <CustomButton
-          buttonText="Go to home page"
-          buttonClassName="btn-primary"
-          onClick={onClickGoToBack}
-        />
+        <Link href="/">
+          <CustomButton
+            buttonText="Go to home page"
+            buttonClassName="btn-primary"
+          />
+        </Link>
       </div>
     </div>
   );
-}
+} 
