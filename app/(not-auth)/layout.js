@@ -15,8 +15,13 @@ export default function RootLayout({ children }) {
       const token = await AuthManager.retrieveToken();
       const type = await AuthManager.retrieveType();
 
-      if (!isEmpty(token) && !isEmpty(type) && !isEqual(type, 'tenant') && !isEqual(type, 'owner')) {
-        router.replace("/property");
+      if (
+        !isEmpty(token) &&
+        !isEmpty(type) &&
+        !isEqual(type, "tenant") &&
+        !isEqual(type, "owner")
+      ) {
+        router.replace("/my-account");
       }
     };
 

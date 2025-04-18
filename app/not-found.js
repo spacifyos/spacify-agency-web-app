@@ -1,3 +1,5 @@
+"use client";
+
 import CustomText from "@/components/CustomText";
 import CustomButton from "@/components/CustomButton";
 import { useRouter } from "next/navigation";

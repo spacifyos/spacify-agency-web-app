@@ -12,6 +12,9 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     domains: ["staging-tms.spacify.asia", "tms.spacify.asia"],
   },
+  experimental: {
+    authInterrupts: true,
+  },
   async redirects() {
     return [
       {

@@ -1,9 +1,8 @@
 import _ from "lodash";
 import Toast from "@/src/utils/Toast";
-import Router from "next/router";
 import AuthManager from "@/src/utils/AuthManager";
 
-export const apiRequestErrorResponse = (err, ignoreToast = false) => {
+export const apiRequestErrorResponse = async (err, ignoreToast = false) => {
   const response = _.get(err, ["response"], "");
   const message = _.get(err, ["message"], "");
   const statusCode = _.get(response, "status", null);
@@ -15,7 +14,9 @@ export const apiRequestErrorResponse = (err, ignoreToast = false) => {
   // }
 
   if (statusCode === 403) {
-    window.location.href = "/403";
+    await AuthManager.removeToken();
+    await AuthManager.retrieveType();
+    window.location.href = "/forbidden";
     unknowErrorMsgFunction(statusCode);
     return;
   }
@@ -24,6 +25,10 @@ export const apiRequestErrorResponse = (err, ignoreToast = false) => {
     window.location.href = "/404";
     unknowErrorMsgFunction(statusCode);
     return;
+  }
+
+  if (statusCode >= 500) {
+    throw new Error(message || "Internal Server Error");
   }
 
   if (!_.isEmpty(response)) {
