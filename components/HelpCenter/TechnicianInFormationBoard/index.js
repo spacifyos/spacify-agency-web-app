@@ -53,7 +53,7 @@ const TechnicianInFormationBoard = ({
                   />
                 ) : !checkedOut ? (
                   <CustomButton
-                    buttonClassName={`${checkOutLoading ? "btn-primary" : "btn-primary-outline"} btn-xs min-h-8 max-h-8 min-w-20`}
+                    buttonClassName={`${checkOutLoading ? "btn-primary" : "btn-primary-outline"} btn-xs min-h-8 max-h-8 min-w-20 w-20`}
                     buttonText="Check Out"
                     onClick={onClickCheckOut}
                     disable={checkOutLoading}

@@ -24,7 +24,9 @@ const CustomButton = ({
       onClick={disable ? () => {} : onClick}
     >
       {loading ? (
-        <span className={`loading loading-spinner ${loadingColor}`}></span>
+        <span
+          className={`loading loading-spinner loading-xs ${loadingColor}`}
+        ></span>
       ) : !isEmpty(buttonText) ? (
         <p className={textClassName}>{buttonText}</p>
       ) : (

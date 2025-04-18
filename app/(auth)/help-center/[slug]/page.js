@@ -603,7 +603,8 @@ export default function RequestOverview() {
     );
   };
 
-  const updateSuccessCallback = () => {
+  const updateSuccessCallback = async () => {
+    await fetchMaintenanceData();
     // location.reload();
   };
 
@@ -631,7 +632,7 @@ export default function RequestOverview() {
       id,
       postData,
       setCheckInLoading,
-      () => router.reload(),
+      () => fetchMaintenanceData(),
     );
   };
 
@@ -662,7 +663,7 @@ export default function RequestOverview() {
       id,
       postData,
       setCheckOutLoading,
-      () => router.reload(),
+      () => fetchMaintenanceData(),
     );
   };
 
@@ -851,7 +852,11 @@ export default function RequestOverview() {
   return (
     <div className="hide-scroll-bar relative flex h-full flex-col gap-6 overflow-hidden overflow-y-scroll rounded-3xl">
       <LoadingOverlay
-        loading={ticketUpdateLoading || maintenanceTicketOverviewDataLoading}
+        loading={
+          ticketUpdateLoading ||
+          (maintenanceTicketOverviewDataLoading &&
+            !isEmpty(maintenanceTicketOverviewData))
+        }
       />
 
       <RequestOverviewDetail
