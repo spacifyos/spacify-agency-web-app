@@ -15,7 +15,7 @@ const VideoModal = ({
 
   return openVideoModal ? (
     <div
-      className="h-full fixed inset-0 z-10 flex-1 h-screen overflow-hidden flex flex-col justify-center items-center"
+      className="fixed inset-0 z-10 flex h-full h-screen flex-1 flex-col items-center justify-center overflow-hidden"
       style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
     >
       <div
@@ -28,12 +28,12 @@ const VideoModal = ({
         <video
           src={isEmpty(video) ? tempUrl : video}
           controls
-          className="w-full h-full"
+          className="h-full w-full"
         />
       </div>
 
       <div
-        className="absolute top-1 right-1 z-10 w-10 h-10 flex items-center justify-center rounded cursor-pointer"
+        className="absolute right-1 top-1 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
         onClick={onClickCloseVideoModal}
       >
