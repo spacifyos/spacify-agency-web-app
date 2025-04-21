@@ -296,14 +296,7 @@ export default function CardListing({ params }) {
           onClickShareBooking={onClickShareBooking}
         />
 
-        <div className="flex h-full flex-col gap-4 sm:flex-col sm:gap-4 md:flex-col md:gap-6 lg:flex-row lg:gap-6 xl:flex-row xl:gap-6">
-          <PropertySelectionComponent
-            propertyListing={propertyListing}
-            onClickSelectProperty={onClickSelectProperty}
-            selectedPropertyId={selectedPropertyId}
-            userRole={userRole}
-          />
-
+        <div className="flex h-full flex-col gap-4 overflow-y-scroll lg:hidden xl:hidden">
           <MobilePropertySelectionComponent
             propertyListing={propertyListing}
             onClickSelectProperty={onClickSelectProperty}
@@ -311,24 +304,26 @@ export default function CardListing({ params }) {
             userRole={userRole}
           />
 
-          {/*{isCinemaView ? (*/}
           <CinemaUnitContent
             unitListing={unitListing}
             onClickSelectRoomDetail={onClickSelectRoomDetail}
             zoomIn={zoomIn}
           />
-          {/*  ) : (*/}
-          {/*    <>*/}
-          {/*      <DesktopUnitContent*/}
-          {/*        unitListing={unitListing}*/}
-          {/*        onClickShareBooking={onClickShareBooking}*/}
-          {/*      />*/}
-          {/*      <MobileUnitContent*/}
-          {/*        unitListing={unitListing}*/}
-          {/*        onClickShareBooking={onClickShareBooking}*/}
-          {/*      />*/}
-          {/*    </>*/}
-          {/*  )}*/}
+        </div>
+
+        <div className="hidden h-full flex-row gap-6 lg:flex xl:flex">
+          <PropertySelectionComponent
+            propertyListing={propertyListing}
+            onClickSelectProperty={onClickSelectProperty}
+            selectedPropertyId={selectedPropertyId}
+            userRole={userRole}
+          />
+
+          <CinemaUnitContent
+            unitListing={unitListing}
+            onClickSelectRoomDetail={onClickSelectRoomDetail}
+            zoomIn={zoomIn}
+          />
         </div>
       </div>
     </div>
