@@ -7,15 +7,17 @@ export const apiRequestErrorResponse = async (err, ignoreToast = false) => {
   const message = _.get(err, ["message"], "");
   const statusCode = _.get(response, "status", null);
 
-  // if (statusCode === 401) {
-  //   AuthManager.removeLoginType();
-  //   AuthManager.removeToken().then(() => Router.replace("/sign-in"));
-  //   return;
-  // }
+  if (statusCode === 401) {
+    await AuthManager.removeLoginType();
+    await AuthManager.removeToken().then(
+      () => (window.location.href = "/sign-in"),
+    );
+    return;
+  }
 
   if (statusCode === 403) {
-    await AuthManager.removeToken();
-    await AuthManager.retrieveType();
+    // await AuthManager.removeToken();
+    // await AuthManager.retrieveType();
     window.location.href = "/forbidden";
     unknowErrorMsgFunction(statusCode);
     return;
