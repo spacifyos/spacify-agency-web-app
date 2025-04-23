@@ -47,7 +47,7 @@ export default function AgencySignIn() {
     AuthManager.setToken(authToken);
     AuthManager.setLoginType(userType);
 
-    return router.replace(`/property`);
+    return router.replace(`/my-account`);
   };
 
   const onChangeEmail = (e) => {
