@@ -21,6 +21,7 @@ const DesktopUnitContent = ({ unitListing, onClickShareBooking }) => {
             const isOccupied = listingSelector.getIsOccupied(list);
             const unitStatus = listingSelector.getUnitStatus(list);
             const genderLabel = listingSelector.getGenderLabel(list);
+            const genderValue = listingSelector.getGenderValue(list);
             const styleLabel = listingSelector.getStyleLabel(list);
             const unitStatusTypeLabel =
               listingSelector.getUnitStatusTypeLabel(list);
@@ -43,7 +44,7 @@ const DesktopUnitContent = ({ unitListing, onClickShareBooking }) => {
                 <div className="sticky">
                   <div className="flex items-center gap-2">
                     <CustomText
-                      textClassName={`${checkGenderColor(genderLabel)} text-white text-xs py-1 px-1.5 rounded`}
+                      textClassName={`${checkGenderColor(genderValue)} text-white text-xs py-1 px-1.5 rounded`}
                     >
                       {first(genderLabel.split(""))}
                     </CustomText>

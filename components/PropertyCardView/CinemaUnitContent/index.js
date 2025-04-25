@@ -33,17 +33,18 @@ const CinemaUnitContent = ({
             const isOccupied = listingSelector.getIsOccupied(list);
             const unitStatus = listingSelector.getUnitStatus(list);
             const genderLabel = listingSelector.getGenderLabel(list);
+            const genderValue = listingSelector.getGenderValue(list);
             const styleLabel = listingSelector.getStyleLabel(list);
             const unitStatusTypeLabel =
               listingSelector.getUnitStatusTypeLabel(list);
 
             const checkGenderColor = (gender) => {
               switch (gender) {
-                case "Male":
+                case "male":
                   return "bg-male";
-                case "Female":
+                case "female":
                   return "bg-female";
-                case "Mixed":
+                case "mixed":
                   return "bg-mixed";
                 default:
                   return "bg-disable";
@@ -55,7 +56,7 @@ const CinemaUnitContent = ({
                 <div className="" style={{ zoom: 1 }}>
                   <div className="flex items-center gap-2 pb-4">
                     <CustomText
-                      textClassName={`${checkGenderColor(genderLabel)} text-white text-xs py-1 px-1.5 rounded`}
+                      textClassName={`${checkGenderColor(genderValue)} text-white text-xs py-1 px-1.5 rounded`}
                     >
                       {first(genderLabel.split(""))}
                     </CustomText>

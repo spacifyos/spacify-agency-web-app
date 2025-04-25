@@ -178,6 +178,7 @@ export const getIsOccupied = (state) => get(state, ["is_occupied"], false);
 export const getUnitStatus = (state) => get(state, ["unit_status"], "");
 export const getUnitIds = (state) => get(state, ["unit_ids"], []);
 export const getGenderLabel = (state) => get(state, ["gender", "label"], "");
+export const getGenderValue = (state) => get(state, ["gender", "value"], "");
 export const getStyleLabel = (state) => get(state, ["style", "label"], "");
 export const getUnitStatusTypeLabel = (state) =>
   get(state, ["unit_status_type", "label"], "");
