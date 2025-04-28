@@ -12,13 +12,8 @@ import * as listingSelector from "@/src/selectors/listing";
 import CustomText from "@/components/CustomText";
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
-import { useState } from "react";
 
-const CinemaUnitContent = ({
-  unitListing,
-  onClickSelectRoomDetail,
-  zoomIn,
-}) => {
+const CinemaUnitContent = ({ unitListing, onClickSelectRoomDetail }) => {
   return (
     <div className="h-full w-full">
       {isEmpty(unitListing) ? (
@@ -51,14 +46,18 @@ const CinemaUnitContent = ({
               }
             };
 
-            return (
+            return isEmpty(rooms) ? (
+              false
+            ) : (
               <div key={index}>
                 <div className="" style={{ zoom: 1 }}>
                   <div className="flex items-center gap-2 pb-4">
                     <CustomText
                       textClassName={`${checkGenderColor(genderValue)} text-white text-xs py-1 px-1.5 rounded`}
                     >
-                      {first(genderLabel.split(""))}
+                      {isEmpty(genderLabel)
+                        ? "N/A"
+                        : first(genderLabel.split(""))}
                     </CustomText>
 
                     <CustomText textClassName="text-base text-primary font-bold">

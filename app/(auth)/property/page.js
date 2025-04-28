@@ -16,22 +16,14 @@ import Toast from "@/src/utils/Toast";
 import * as reportSelector from "@/src/selectors/report";
 import FilterSection from "@/components/PropertyCardView/FilterSection";
 import PropertySelectionComponent from "@/components/PropertyCardView/PropertySelectionComponent";
-import DesktopUnitContent from "@/components/PropertyCardView/DesktopUnitContent";
-import MobileUnitContent from "@/components/PropertyCardView/MobileUnitContent";
 import CinemaUnitContent from "@/components/PropertyCardView/CinemaUnitContent";
 import CardViewModal from "@/components/PropertyCardView/CardViewModal";
 import Helper from "@/src/utils/Helper";
 import * as authSelector from "@/src/selectors/auth";
-import { useRouter } from "next/navigation";
 import MobilePropertySelectionComponent from "@/components/PropertyCardView/MobilePropertySelectionComponent";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
-import CustomText from "@/components/CustomText";
 import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function CardListing({ params }) {
-  const router = useRouter();
-
   const [listingTagOptionData, setListingTagOptionData] = useState([]);
   const [listingTagOptionDataLoading, setListingTagOptionDataLoading] =
     useState(false);
@@ -58,19 +50,15 @@ export default function CardListing({ params }) {
 
   const [propertyValue, setPropertyValue] = useState("");
   const [unitValue, setUnitValue] = useState("");
-  const [statusValue, setStatusValue] = useState(false);
   const [genderValue, setGenderValue] = useState("");
-
   const [bedroomValue, setBedroomValue] = useState("");
   const [bathroomValue, setBathroomValue] = useState("");
+  const [statusValue, setStatusValue] = useState(false);
 
   const bathroomOption = get(listingTagOptionData, ["bathroom"], []);
   const bedroomOption = get(listingTagOptionData, ["bedroom"], []);
 
   const [isOpenFilter, setIsOpenFilter] = useState(false);
-  const [isCinemaView, setIsCinemaView] = useState(false);
-
-  const [zoomIn, setZoomIn] = useState(true);
 
   useEffect(() => {
     if (isEmpty(listingTagOptionData)) {
@@ -148,10 +136,10 @@ export default function CardListing({ params }) {
   const onClickSelectProperty = (propertyId) => {
     setSelectedPropertyId(propertyId);
     setUnitFilterParams({ property_id: propertyId });
-    setGenderValue("");
-    setBathroomValue("");
-    setBedroomValue("");
-    setStatusValue("");
+    // setGenderValue("");
+    // setBathroomValue("");
+    // setBedroomValue("");
+    // setStatusValue("");
   };
 
   const onClickShareBooking = (url) => {
@@ -170,73 +158,99 @@ export default function CardListing({ params }) {
       id: e.target.value,
     });
 
+    setUnitFilterParams({
+      ...unitFilterParams,
+      ...{
+        property_id: e.target.value,
+        ...(genderValue && { gender: genderValue }),
+        ...(statusValue && { is_available_listing: statusValue }),
+        ...(bedroomValue || bathroomValue
+          ? { tags: concat(bedroomValue, bathroomValue) }
+          : {}),
+      },
+    });
+
+    setSelectedPropertyId(e.target.value);
     setPropertyValue(e.target.value);
     setUnitOption(targetUnit);
     setUnitListing([]);
-    setUnitFilterParams(null);
   };
 
   const onChangeUnitValue = (e) => {
-    setUnitFilterParams({
-      ...unitFilterParams,
-      ...{ unit_id: e.target.value },
-    });
+    if (!isEmpty(propertyValue)) {
+      setUnitFilterParams({
+        ...unitFilterParams,
+        ...{ unit_id: e.target.value },
+      });
+    }
     setUnitValue(e.target.value);
   };
 
   const onChangeGenderValue = (e) => {
-    setUnitFilterParams({
-      ...unitFilterParams,
-      ...{ gender: e.target.value },
-    });
+    if (!isEmpty(propertyValue)) {
+      setUnitFilterParams({
+        ...unitFilterParams,
+        ...(genderValue && { gender: genderValue }),
+      });
+    }
+
     setGenderValue(e.target.value);
   };
 
   const onChangeStatusValue = (e) => {
-    setUnitFilterParams({
-      ...unitFilterParams,
-      ...{ is_available_listing: e.target.value },
-    });
+    if (!isEmpty(propertyValue)) {
+      setUnitFilterParams({
+        ...unitFilterParams,
+        ...{ is_available_listing: e.target.value },
+      });
+    }
+
     setStatusValue(e.target.value);
   };
 
   const onChangeBedroomValue = (e) => {
-    setUnitFilterParams((preState) => {
-      const preTags = get(preState, ["tags"], []);
-      const checkPreTags = remove(
-        preTags,
-        (preTag) => !includes(preTag, "bed"),
-      );
+    if (!isEmpty(propertyValue)) {
+      setUnitFilterParams((preState) => {
+        const preTags = get(preState, ["tags"], []);
+        const checkPreTags = remove(
+          preTags,
+          (preTag) => !includes(preTag, "bed"),
+        );
 
-      return {
-        ...unitFilterParams,
-        ...{
-          tags: isEmpty(e.target.value)
-            ? checkPreTags
-            : concat(checkPreTags, e.target.value),
-        },
-      };
-    });
+        return {
+          ...unitFilterParams,
+          ...{
+            tags: isEmpty(e.target.value)
+              ? checkPreTags
+              : concat(checkPreTags, e.target.value),
+          },
+        };
+      });
+    }
+
     setBedroomValue(e.target.value);
   };
 
   const onChangeBathroomValue = (e) => {
-    setUnitFilterParams((preState) => {
-      const preTags = get(preState, ["tags"], []);
-      const checkPreTags = remove(
-        preTags,
-        (preTag) => !includes(preTag, "bathroom"),
-      );
+    if (!isEmpty(propertyValue)) {
+      setUnitFilterParams((preState) => {
+        const preTags = get(preState, ["tags"], []);
+        const checkPreTags = remove(
+          preTags,
+          (preTag) => !includes(preTag, "bathroom"),
+        );
 
-      return {
-        ...unitFilterParams,
-        ...{
-          tags: isEmpty(e.target.value)
-            ? checkPreTags
-            : concat(checkPreTags, e.target.value),
-        },
-      };
-    });
+        return {
+          ...unitFilterParams,
+          ...{
+            tags: isEmpty(e.target.value)
+              ? checkPreTags
+              : concat(checkPreTags, e.target.value),
+          },
+        };
+      });
+    }
+
     setBathroomValue(e.target.value);
   };
 
@@ -255,14 +269,6 @@ export default function CardListing({ params }) {
     setSelectedRoom(data);
 
     Helper.documentGetElementById("card_view_modal").showModal();
-  };
-
-  const onChangeViewMode = (e) => {
-    setIsCinemaView(!isCinemaView);
-  };
-
-  const onClickGoBack = () => {
-    router.push("/user/account");
   };
 
   return (
@@ -307,7 +313,6 @@ export default function CardListing({ params }) {
           <CinemaUnitContent
             unitListing={unitListing}
             onClickSelectRoomDetail={onClickSelectRoomDetail}
-            zoomIn={zoomIn}
           />
         </div>
 
@@ -322,7 +327,6 @@ export default function CardListing({ params }) {
           <CinemaUnitContent
             unitListing={unitListing}
             onClickSelectRoomDetail={onClickSelectRoomDetail}
-            zoomIn={zoomIn}
           />
         </div>
       </div>

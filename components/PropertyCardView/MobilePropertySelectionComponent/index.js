@@ -1,4 +1,4 @@
-import { includes, isEmpty, isEqual, map, size } from "lodash";
+import { includes, isEmpty, isEqual, map, size, toString } from "lodash";
 import * as listingSelector from "@/src/selectors/listing";
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
@@ -31,7 +31,10 @@ const MobilePropertySelectionComponent = ({
           const totalVacantRoom = listingSelector.getTotalVacantRoom(list);
           const totalUnits = listingSelector.getUnitIds(list);
 
-          const isSelectProperty = isEqual(propertyId, selectedPropertyId);
+          const isSelectProperty = isEqual(
+            toString(propertyId),
+            toString(selectedPropertyId),
+          );
 
           return (
             <div

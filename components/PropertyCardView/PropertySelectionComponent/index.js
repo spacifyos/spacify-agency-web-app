@@ -1,9 +1,8 @@
-import { includes, isEmpty, isEqual, map, size } from "lodash";
+import { isEmpty, isEqual, map, size, toString } from "lodash";
 import * as listingSelector from "@/src/selectors/listing";
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
 import CustomText from "@/components/CustomText";
-import Constant from "@/src/utils/Constant";
 import Helper from "@/src/utils/Helper";
 
 const PropertySelectionComponent = ({
@@ -33,7 +32,10 @@ const PropertySelectionComponent = ({
         const totalVacantRoom = listingSelector.getTotalVacantRoom(list);
         const totalUnits = listingSelector.getUnitIds(list);
 
-        const isSelectProperty = isEqual(propertyId, selectedPropertyId);
+        const isSelectProperty = isEqual(
+          toString(propertyId),
+          toString(selectedPropertyId),
+        );
 
         return (
           <div
