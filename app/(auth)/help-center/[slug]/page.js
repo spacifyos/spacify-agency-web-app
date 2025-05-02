@@ -1,11 +1,8 @@
 "use client";
 
-import Images from "@/src/utils/Image";
 import { useParams, useRouter } from "next/navigation";
 import RequestOverviewDetail from "@/components/HelpCenter/RequestOverviewDetail";
 import MaintenanceScheduleInformationComponent from "@/components/HelpCenter/TechnicianMaintenanceScheduleInformation";
-import CustomText from "@/components/CustomText";
-import CustomImage from "@/components/CustomImage";
 import * as maintenanceTicketSelector from "@/src/selectors/maintenance-ticket";
 import { useEffect, useRef, useState } from "react";
 import apiRequest from "@/src/services/httpUtilities/apiRequest";
@@ -41,8 +38,13 @@ export default function RequestOverview() {
   const id = get(useParams(router), ["slug"], "");
 
   const uploadImageRef = useRef(null);
+  const uploadCameraImageRef = useRef(null);
   const uploadVideoRef = useRef(null);
+  const uploadCameraVideoRef = useRef(null);
   const uploadCommentImageRef = useRef(null);
+
+  const [showImageSourceModal, setShowImageSourceModal] = useState(false);
+  const [showVideoSourceModal, setShowVideoSourceModal] = useState(false);
 
   const [secret, setSecret] = useState("");
   const [videoLoading, setVideoLoading] = useState(false);
@@ -183,6 +185,7 @@ export default function RequestOverview() {
   };
 
   const fetchMaintenanceData = async () => {
+    setTechnicianImageList([]);
     await apiRequest.getMaintenanceTicketOverviewRequest(
       id,
       setMaintenanceTicketOverviewDataLoading,
@@ -311,34 +314,42 @@ export default function RequestOverview() {
 
   const onClickCloseImageModal = () => {
     setOpenImageModal(false);
-
     setSelectedImage(null);
     setSelectedImageList([]);
   };
 
-  const onClickPopupImage = (selectedImage, type) => {
-    if (isEqual(type, "technician")) {
-      setSelectedImageList(technicianImageList);
-    } else {
-      setSelectedImageList(imageList);
-    }
+  const onClickPopupImage = (selectedImage) => {
+    try {
+      if (isEmpty(technicianImageList)) {
+        Toast.error("No image available");
+        return;
+      }
 
-    setSelectedImage(selectedImage);
-    setOpenImageModal(true);
+      setSelectedImageList(technicianImageList);
+      setSelectedImage(selectedImage);
+      setOpenImageModal(true);
+    } catch (error) {
+      Toast.error("Failed to open video");
+    }
   };
 
   const onClickCloseVideoModal = () => {
     setOpenVideoModal(false);
+    setSelectedVideo(null);
   };
 
-  const onClickPopupVideo = (type) => {
-    if (isEqual(type, "technician")) {
-      setSelectedVideo(technicianVideoValue);
-    } else {
-      setSelectedVideo(videoValue);
-    }
+  const onClickPopupVideo = () => {
+    try {
+      if (isEmpty(technicianVideoValue)) {
+        Toast.error("No video available");
+        return;
+      }
 
-    setOpenVideoModal(true);
+      setSelectedVideo(technicianVideoValue);
+      setOpenVideoModal(true);
+    } catch (error) {
+      Toast.error("Failed to open video");
+    }
   };
 
   const onClickRemoveGallery = async (id, type, isUploadedDocument) => {
@@ -357,14 +368,15 @@ export default function RequestOverview() {
     }
   };
 
-  const deleteSuccessCallback = () => {
-    router.reload();
+  const deleteSuccessCallback = async () => {
+    onClickRemoveVideo();
+    await fetchMaintenanceData();
   };
 
   const checkImageSize = async (image) => {
-    const isLt2M = image && image.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      Toast.error(`Your some image is larger than 2MB`);
+    const isLt5M = image && image.size / 1024 / 1024 < 5;
+    if (!isLt5M) {
+      Toast.error(`Your some image is larger than 5MB`);
       return;
     }
 
@@ -703,9 +715,9 @@ export default function RequestOverview() {
   };
 
   const checkCommentImageSize = async (image) => {
-    const isLt2M = image && image.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      Toast.error(`Your some image is larger than 2MB`);
+    const isLt5M = image && image.size / 1024 / 1024 < 5;
+    if (!isLt5M) {
+      Toast.error(`Your some image is larger than 5MB`);
       return;
     }
 
@@ -849,6 +861,24 @@ export default function RequestOverview() {
     setOpenImageModal(true);
   };
 
+  const handleImageSourceSelect = (source) => {
+    setShowImageSourceModal(false);
+    if (source === "camera") {
+      uploadCameraImageRef && uploadCameraImageRef.current.click();
+    } else {
+      uploadImageRef && uploadImageRef.current.click();
+    }
+  };
+
+  const handleVideoSourceSelect = (source) => {
+    setShowVideoSourceModal(false);
+    if (source === "camera") {
+      uploadCameraVideoRef && uploadCameraVideoRef.current.click();
+    } else {
+      uploadVideoRef && uploadVideoRef.current.click();
+    }
+  };
+
   return (
     <div className="hide-scroll-bar relative flex h-full flex-col gap-6 overflow-hidden overflow-y-scroll rounded-3xl">
       <LoadingOverlay
@@ -888,7 +918,15 @@ export default function RequestOverview() {
         postData={postData}
         onChangeImage={onChangeImage}
         uploadImageRef={uploadImageRef}
+        uploadCameraImageRef={uploadCameraImageRef}
         uploadVideoRef={uploadVideoRef}
+        uploadCameraVideoRef={uploadCameraVideoRef}
+        showImageSourceModal={showImageSourceModal}
+        setShowImageSourceModal={setShowImageSourceModal}
+        showVideoSourceModal={showVideoSourceModal}
+        setShowVideoSourceModal={setShowVideoSourceModal}
+        handleImageSourceSelect={handleImageSourceSelect}
+        handleVideoSourceSelect={handleVideoSourceSelect}
         onChangeVideo={onChangeVideo}
         onClickUpdateTicket={onClickUpdateTicket}
         onClickCheckIn={onClickCheckIn}

@@ -6,7 +6,6 @@ const VideoModal = ({
   onClickCloseVideoModal,
   openVideoModal,
 }) => {
-  const video = replace(get(selectedVideo, ["video"], ""), "quicktime", "mp4");
   const tempUrl = replace(
     get(selectedVideo, ["tempUrl"], ""),
     "quicktime",
@@ -15,7 +14,7 @@ const VideoModal = ({
 
   return openVideoModal ? (
     <div
-      className="fixed inset-0 z-10 flex h-full h-screen flex-1 flex-col items-center justify-center overflow-hidden"
+      className="fixed inset-0 z-10 flex h-full flex-1 flex-col items-center justify-center overflow-hidden"
       style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
     >
       <div
@@ -25,11 +24,7 @@ const VideoModal = ({
           height: "100%",
         }}
       >
-        <video
-          src={isEmpty(video) ? tempUrl : video}
-          controls
-          className="h-full w-full"
-        />
+        <video src={tempUrl} controls className="h-full w-full" />
       </div>
 
       <div
@@ -40,9 +35,7 @@ const VideoModal = ({
         <CustomText textClassName="text-lg text-white">X</CustomText>
       </div>
     </div>
-  ) : (
-    false
-  );
+  ) : null;
 };
 
 export default VideoModal;

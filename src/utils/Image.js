@@ -333,6 +333,7 @@ const primaryImage = {
   withdrawIconActive: "/images/primary_icon/withdraw_icon_active.png",
   uploadIconActive: "/images/primary_icon/upload_icon_active.png",
   reportIconActive: "/images/primary_icon/report_icon_active.png",
+  cameraIconActive: "/images/primary_icon/camera_icon_active.png",
   emptyBox: "/images/emptyBox.png",
   icBackSample: "/images/ic_back_sample.png",
   icFrontSample: "/images/ic_front_sample.png",

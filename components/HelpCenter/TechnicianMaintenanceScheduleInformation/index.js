@@ -8,6 +8,8 @@ import BookingTextArea from "@/components/BookingTextArea";
 import CustomButton from "@/components/CustomButton";
 import BookingSelect from "@/components/Booking/BookingSelect";
 import Constant from "@/src/utils/Constant";
+import MediaUploadModal from "@/components/MediaUploadModal";
+import MediaInput from "@/components/MediaInput";
 
 const TechnicianMaintenanceScheduleInformation = ({
   data,
@@ -19,12 +21,20 @@ const TechnicianMaintenanceScheduleInformation = ({
   setPostData,
   postData,
   uploadImageRef,
+  uploadCameraImageRef,
   onChangeImage,
   uploadVideoRef,
+  uploadCameraVideoRef,
   onChangeVideo,
   onClickUpdateTicket,
   onClickCheckIn,
   ticketUpdateLoading,
+  handleImageSourceSelect,
+  handleVideoSourceSelect,
+  showImageSourceModal,
+  setShowImageSourceModal,
+  showVideoSourceModal,
+  setShowVideoSourceModal,
 }) => {
   const videoId = get(videos, ["id"], "");
   const loading = get(videos, ["loading"], false);
@@ -108,145 +118,63 @@ const TechnicianMaintenanceScheduleInformation = ({
 
           <div className="pb-4">
             <CustomText textClassName="text-xs pb-1">
-              {"Upload Photo (max file size 2MB, up to 5 photo):"}
+              {"Upload Photo (max file size 5MB, up to 5 photo):"}
             </CustomText>
-            <div className="flex flex-row items-center gap-2 pb-3">
-              {map(images, (list, index) => {
-                const loading = get(list, ["loading"], false);
-                const status = get(list, ["status"], false);
-                const base64Image = get(list, ["base64"], "");
-                const path = get(list, ["path"], "");
-                const id = get(list, ["id"], "");
-
-                const isUploadedImage = isEmpty(path) ? false : true;
-
-                return (
-                  <div
-                    key={index}
-                    className={`relative flex h-28 w-28 items-center justify-center overflow-hidden border ${isEmpty(path) ? "" : status ? "border-available" : "border-error"} global-border-radius cursor-pointer`}
-                  >
-                    <CustomImage
-                      onClick={() => onClickPopupImage(index, "technician")}
-                      src={
-                        isEmpty(base64Image)
-                          ? Images.imageNotFound
-                          : base64Image
-                      }
-                      className={`${loading ? "opacity-50" : ""}`}
-                    />
-                    {loading ? (
-                      <span className="loading loading-spinner loading-lg absolute text-primary"></span>
-                    ) : (
-                      <div
-                        className="absolute right-1 top-1 cursor-pointer rounded-2xl bg-white"
-                        onClick={() =>
-                          onClickRemoveGallery(id, "image", isUploadedImage)
-                        }
-                      >
-                        <CustomImage
-                          src={Images.deleteIcon}
-                          className="h-5 w-5"
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-
-              {size(images) >= 5 ? (
-                false
-              ) : (
-                <div
-                  className="global-border-radius flex h-28 w-28 cursor-pointer items-center justify-center bg-primary-background"
-                  onClick={() =>
-                    uploadImageRef && uploadImageRef.current.click()
-                  }
-                >
-                  <CustomImage
-                    src={Images.addIconBlack}
-                    imageStyle={{ width: 20, height: 20 }}
-                  />
-
-                  <input
-                    capture="environment"
-                    accept="image/*"
-                    type="file"
-                    multiple
-                    hidden
-                    onChange={onChangeImage}
-                    ref={uploadImageRef}
-                  ></input>
-                </div>
-              )}
-            </div>
+            <MediaInput
+              type="image"
+              value={images}
+              loading={loading}
+              status={videoStatus}
+              onRemove={onClickRemoveGallery}
+              onPopup={onClickPopupImage}
+              onShowSourceModal={() => setShowImageSourceModal(true)}
+              uploadRef={uploadImageRef}
+              uploadCameraRef={uploadCameraImageRef}
+              onChange={onChangeImage}
+              maxCount={5}
+              currentCount={size(images)}
+              multiple={true}
+            />
           </div>
 
           <div className="pb-4">
             <CustomText textClassName="text-xs pb-1">
               {"Upload Video (max file size: 50MB, up to 1 video):"}
             </CustomText>
-            <div className="flex flex-row items-center gap-2 pb-3">
-              {isEmpty(videos) ? (
-                false
-              ) : (
-                <div
-                  className={`relative flex h-28 w-28 items-center justify-center border ${isEmpty(videoPath) ? "" : videoStatus ? "border-available" : "border-error"} global-border-radius`}
-                >
-                  {loading ? (
-                    false
-                  ) : (
-                    <CustomImage
-                      src={Images.playIcon}
-                      className="h-14 w-14 cursor-pointer"
-                      onClick={() => onClickPopupVideo("technician")}
-                    />
-                  )}
-
-                  {loading ? (
-                    <span className="loading loading-spinner loading-lg absolute text-primary"></span>
-                  ) : (
-                    <div
-                      className="absolute right-1 top-1 z-10 cursor-pointer"
-                      onClick={() =>
-                        onClickRemoveGallery(videoId, "video", isUploadedVideo)
-                      }
-                    >
-                      <CustomImage
-                        src={Images.deleteIcon}
-                        className="h-5 w-5"
-                      />
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {isEmpty(videos) ? (
-                <div
-                  className="global-border-radius flex h-28 w-28 cursor-pointer items-center justify-center bg-primary-background"
-                  onClick={() =>
-                    uploadVideoRef && uploadVideoRef.current.click()
-                  }
-                >
-                  <CustomImage
-                    src={Images.addIconBlack}
-                    imageStyle={{ width: 20, height: 20 }}
-                  />
-
-                  <input
-                    capture="environment"
-                    accept="video/mp4, video/quicktime"
-                    type="file"
-                    multiple
-                    hidden
-                    onChange={onChangeVideo}
-                    ref={uploadVideoRef}
-                  ></input>
-                </div>
-              ) : (
-                false
-              )}
-            </div>
+            <MediaInput
+              type="video"
+              value={[videos].filter(Boolean)}
+              loading={loading}
+              status={videoStatus}
+              onRemove={onClickRemoveGallery}
+              onPopup={onClickPopupVideo}
+              onShowSourceModal={() => setShowVideoSourceModal(true)}
+              uploadRef={uploadVideoRef}
+              uploadCameraRef={uploadCameraVideoRef}
+              onChange={onChangeVideo}
+              maxCount={1}
+              currentCount={isEmpty(videos) ? 0 : 1}
+              multiple={false}
+            />
           </div>
+
+          {/* Image Source Selection Modal */}
+          <MediaUploadModal
+            isOpen={showImageSourceModal}
+            onClose={() => setShowImageSourceModal(false)}
+            onSelectSource={handleImageSourceSelect}
+            title="Select Image Source"
+            type="image"
+          />
+
+          {/* Video Source Selection Modal */}
+          <MediaUploadModal
+            isOpen={showVideoSourceModal}
+            onClose={() => setShowVideoSourceModal(false)}
+            onSelectSource={handleVideoSourceSelect}
+            title="Select Video Source"
+            type="video"
+          />
         </>
       ) : (
         false
