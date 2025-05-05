@@ -9,7 +9,6 @@ import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
 import Helper from "@/src/utils/Helper";
 import MediaUploadModal from "@/components/MediaUploadModal";
-import { useRef, useState } from "react";
 
 const CommentComponent = ({
   onClickSendMessage,
@@ -26,8 +25,8 @@ const CommentComponent = ({
   onClickSelectedCommentImage,
   userType,
   handleCommentImageSourceSelect,
-  showImageSourceModal,
-  setShowImageSourceModal,
+  showCommentImageSourceModal,
+  setShowCommentImageSourceModal,
 }) => {
   const hasMorePage = maintenanceTicketSelector.getHasMorePages(pagination);
   const lastPage = maintenanceTicketSelector.getLastPage(pagination);
@@ -84,7 +83,7 @@ const CommentComponent = ({
         <div className="flex items-center justify-center gap-2 pt-2">
           <div
             className="flex cursor-pointer items-center justify-center"
-            onClick={() => setShowImageSourceModal(true)}
+            onClick={() => setShowCommentImageSourceModal(true)}
           >
             <CustomImage src={Images.imageIconDisable} className="h-10 w-10" />
           </div>
@@ -128,10 +127,10 @@ const CommentComponent = ({
       />
 
       <MediaUploadModal
-        isOpen={showImageSourceModal}
-        onClose={() => setShowImageSourceModal(false)}
+        isOpen={showCommentImageSourceModal}
+        onClose={() => setShowCommentImageSourceModal(false)}
         onSelectSource={handleCommentImageSourceSelect}
-        title="Select Image Source"
+        title="Select Comment Image Source"
         type="image"
       />
     </div>

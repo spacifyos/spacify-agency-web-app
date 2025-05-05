@@ -44,6 +44,8 @@ export default function RequestOverview() {
   const uploadCommentImageRef = useRef(null);
   const uploadCameraCommentImageRef = useRef(null);
 
+  const [showCommentImageSourceModal, setShowCommentImageSourceModal] =
+    useState(false);
   const [showImageSourceModal, setShowImageSourceModal] = useState(false);
   const [showVideoSourceModal, setShowVideoSourceModal] = useState(false);
 
@@ -899,7 +901,7 @@ export default function RequestOverview() {
   };
 
   const handleCommentImageSourceSelect = (source) => {
-    setShowImageSourceModal(false);
+    setShowCommentImageSourceModal(false);
     if (source === "camera") {
       uploadCameraCommentImageRef &&
         uploadCameraCommentImageRef.current.click();
@@ -978,8 +980,8 @@ export default function RequestOverview() {
         uploadCameraCommentImageRef={uploadCameraCommentImageRef}
         onClickSelectedCommentImage={onClickSelectedCommentImage}
         handleCommentImageSourceSelect={handleCommentImageSourceSelect}
-        showImageSourceModal={showImageSourceModal}
-        setShowImageSourceModal={setShowImageSourceModal}
+        showCommentImageSourceModal={showCommentImageSourceModal}
+        setShowCommentImageSourceModal={setShowCommentImageSourceModal}
       />
 
       <ImageModal

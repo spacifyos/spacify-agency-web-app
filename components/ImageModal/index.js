@@ -12,28 +12,16 @@ const ImageModal = ({
   onClickCloseImageModal,
   openImageModal,
 }) => {
-  const imageDataValidate = isEmpty(data) ? selectedImage : data;
-
   return openImageModal ? (
     <div
       className="fixed inset-0 z-10 flex h-full flex-1 flex-col items-center justify-center overflow-hidden"
       style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
     >
-      {size(data) <= 1 ? (
+      {isEmpty(data) ? (
         <div className="flex items-center justify-center overflow-hidden">
           <CustomImage
-            src={
-              isEmpty(imageDataValidate)
-                ? isEmpty(selectedImage)
-                  ? Images.imageNotFound
-                  : selectedImage
-                : isEmpty(get(head(imageDataValidate), ["image"], ""))
-                  ? isArray(imageDataValidate)
-                    ? head(imageDataValidate)
-                    : imageDataValidate
-                  : get(head(imageDataValidate), ["image"], "")
-            }
-            className="w-full"
+            src={isEmpty(selectedImage) ? Images.imageNotFound : selectedImage}
+            className="h-4/5 w-4/5"
           />
         </div>
       ) : (
@@ -44,7 +32,7 @@ const ImageModal = ({
           style={{ width: "100%", height: "100%" }}
           initialSlide={selectedImage}
         >
-          {map(imageDataValidate, (item, index) => {
+          {map(data, (item, index) => {
             const image = get(item, ["image"], "");
             const base64 = get(item, ["base64"], "");
 
