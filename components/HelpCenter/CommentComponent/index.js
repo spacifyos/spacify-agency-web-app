@@ -8,6 +8,8 @@ import * as maintenanceTicketSelector from "@/src/selectors/maintenance-ticket";
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
 import Helper from "@/src/utils/Helper";
+import MediaUploadModal from "@/components/MediaUploadModal";
+import { useRef, useState } from "react";
 
 const CommentComponent = ({
   onClickSendMessage,
@@ -20,8 +22,12 @@ const CommentComponent = ({
   onClickLoadMore,
   onChangeCommentImage,
   uploadCommentImageRef,
+  uploadCameraCommentImageRef,
   onClickSelectedCommentImage,
   userType,
+  handleCommentImageSourceSelect,
+  showImageSourceModal,
+  setShowImageSourceModal,
 }) => {
   const hasMorePage = maintenanceTicketSelector.getHasMorePages(pagination);
   const lastPage = maintenanceTicketSelector.getLastPage(pagination);
@@ -78,21 +84,9 @@ const CommentComponent = ({
         <div className="flex items-center justify-center gap-2 pt-2">
           <div
             className="flex cursor-pointer items-center justify-center"
-            onClick={() =>
-              uploadCommentImageRef && uploadCommentImageRef.current.click()
-            }
+            onClick={() => setShowImageSourceModal(true)}
           >
             <CustomImage src={Images.imageIconDisable} className="h-10 w-10" />
-
-            <input
-              capture="environment"
-              accept="image/*"
-              type="file"
-              multiple
-              hidden
-              onChange={onChangeCommentImage}
-              ref={uploadCommentImageRef}
-            ></input>
           </div>
           <BookingInput
             bgColor="bg-white border border-disable"
@@ -113,6 +107,33 @@ const CommentComponent = ({
       ) : (
         false
       )}
+
+      <input
+        accept="image/*"
+        type="file"
+        multiple
+        hidden
+        onChange={onChangeCommentImage}
+        ref={uploadCommentImageRef}
+      />
+
+      <input
+        capture="environment"
+        accept="image/*"
+        type="file"
+        multiple
+        hidden
+        onChange={onChangeCommentImage}
+        ref={uploadCameraCommentImageRef}
+      />
+
+      <MediaUploadModal
+        isOpen={showImageSourceModal}
+        onClose={() => setShowImageSourceModal(false)}
+        onSelectSource={handleCommentImageSourceSelect}
+        title="Select Image Source"
+        type="image"
+      />
     </div>
   );
 };

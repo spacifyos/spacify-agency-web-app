@@ -194,6 +194,7 @@ export default function RootLayout({ children }) {
   return (
     <div className="relative h-full w-full overflow-hidden bg-white">
       <LoadingOverlay loading={signOutLoading || userProfileDataLoading} />
+
       {error && (
         <div className="absolute right-4 top-4 z-50 rounded-md bg-red-100 p-4 text-red-700">
           {error}
@@ -208,6 +209,7 @@ export default function RootLayout({ children }) {
               src={Images.logoHorizontalColor}
               className="w-36"
               alt="Spacify Logo"
+              onClick={() => router.push("/my-account")}
             />
           </div>
           {navigationItems.map(renderNavigationItem)}

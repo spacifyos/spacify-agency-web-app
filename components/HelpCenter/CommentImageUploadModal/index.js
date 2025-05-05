@@ -18,8 +18,8 @@ const CommentImageUploadModal = ({
   const initBase64 = get(selectedImage, ["base64"], "");
 
   return open ? (
-    <div className="bg-black h-full fixed inset-0 z-10 flex-1 h-screen overflow-hidden flex flex-col gap-4 justify-center items-center">
-      <div className="bg-white w-4/5 h-4/5 relative flex">
+    <div className="fixed inset-0 z-10 flex h-screen flex-1 flex-col items-center justify-center gap-4 overflow-hidden bg-black">
+      <div className="relative flex h-3/5 w-4/5 bg-white">
         <Image
           loader={() => (isEmpty(initImage) ? initBase64 : initImage)}
           alt={isEmpty(initImage) ? initBase64 : initImage}
@@ -30,14 +30,14 @@ const CommentImageUploadModal = ({
         />
 
         {size(imageList) >= 2 ? (
-          <div className="flex-1 flex justify-center items-end gap-2">
+          <div className="flex flex-1 items-end justify-center gap-2">
             {map(imageList, (item, index) => {
               const image = get(item, ["image"], "");
               const base64 = get(item, ["base64"], "");
 
               return (
                 <div
-                  className="mb-4 overflow-hidden cursor-pointer relative"
+                  className="relative mb-4 cursor-pointer overflow-hidden"
                   style={{ width: 80, height: 60 }}
                   onClick={() => setSelectedCommentImage(item)}
                 >
@@ -50,13 +50,13 @@ const CommentImageUploadModal = ({
 
                   {isEqual(get(selectedImage, ["base64"], ""), base64) ? (
                     <div
-                      className="absolute z-10 inset-0 border border-error border-2 flex justify-center items-center"
+                      className="absolute inset-0 z-10 flex items-center justify-center border border-2 border-error"
                       style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
                       onClick={() => onClickRemoveCommentImage(item)}
                     >
                       <CustomImage
                         src={Images.deleteIcon}
-                        className="w-10 h-10"
+                        className="h-10 w-10"
                       />
                     </div>
                   ) : (
@@ -80,7 +80,7 @@ const CommentImageUploadModal = ({
       </div>
 
       <div
-        className="absolute top-3 right-3 z-10 w-10 h-10 flex items-center justify-center rounded-3xl cursor-pointer"
+        className="absolute right-3 top-3 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-3xl"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
         onClick={onClickCloseModal}
       >

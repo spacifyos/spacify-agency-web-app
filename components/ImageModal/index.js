@@ -19,54 +19,73 @@ const ImageModal = ({
       className="fixed inset-0 z-10 flex h-full flex-1 flex-col items-center justify-center overflow-hidden"
       style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
     >
-      <Swiper
-        navigation={true}
-        modules={[Navigation]}
-        className="mySwiper image-modal-swiper"
-        style={{ width: "100%", height: "100%" }}
-        initialSlide={selectedImage}
-      >
-        {map(imageDataValidate, (item, index) => {
-          const image = get(item, ["image"], "");
-          const base64 = get(item, ["base64"], "");
+      {size(data) <= 1 ? (
+        <div className="flex items-center justify-center overflow-hidden">
+          <CustomImage
+            src={
+              isEmpty(imageDataValidate)
+                ? isEmpty(selectedImage)
+                  ? Images.imageNotFound
+                  : selectedImage
+                : isEmpty(get(head(imageDataValidate), ["image"], ""))
+                  ? isArray(imageDataValidate)
+                    ? head(imageDataValidate)
+                    : imageDataValidate
+                  : get(head(imageDataValidate), ["image"], "")
+            }
+            className="w-full"
+          />
+        </div>
+      ) : (
+        <Swiper
+          navigation={true}
+          modules={[Navigation]}
+          className="mySwiper image-modal-swiper"
+          style={{ width: "100%", height: "100%" }}
+          initialSlide={selectedImage}
+        >
+          {map(imageDataValidate, (item, index) => {
+            const image = get(item, ["image"], "");
+            const base64 = get(item, ["base64"], "");
 
-          return (
-            <SwiperSlide
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <div
-                className="relative"
+            return (
+              <SwiperSlide
                 style={{
-                  width: "100%",
-                  height: "80%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                <Image
-                  loader={() =>
-                    isEmpty(image) ? (isEmpty(base64) ? item : base64) : image
-                  }
-                  alt={
-                    isEmpty(image) ? (isEmpty(base64) ? item : base64) : image
-                  }
-                  src={
-                    isEmpty(image) ? (isEmpty(base64) ? item : base64) : image
-                  }
-                  style={{ objectFit: "contain" }}
-                  sizes="100vw"
-                  fill
-                />
-              </div>
+                <div
+                  className="relative"
+                  style={{
+                    width: "100%",
+                    height: "80%",
+                  }}
+                >
+                  <Image
+                    loader={() =>
+                      isEmpty(image) ? (isEmpty(base64) ? item : base64) : image
+                    }
+                    alt={
+                      isEmpty(image) ? (isEmpty(base64) ? item : base64) : image
+                    }
+                    src={
+                      isEmpty(image) ? (isEmpty(base64) ? item : base64) : image
+                    }
+                    style={{ objectFit: "contain" }}
+                    sizes="100vw"
+                    fill
+                  />
+                </div>
 
-              <CustomText textClassName="text-white pt-2">{`${index + 1}/${size(data)}`}</CustomText>
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
+                <CustomText textClassName="text-white pt-2">{`${index + 1}/${size(data)}`}</CustomText>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      )}
 
       <div></div>
 

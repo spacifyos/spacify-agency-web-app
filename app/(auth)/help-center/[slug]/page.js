@@ -42,6 +42,7 @@ export default function RequestOverview() {
   const uploadVideoRef = useRef(null);
   const uploadCameraVideoRef = useRef(null);
   const uploadCommentImageRef = useRef(null);
+  const uploadCameraCommentImageRef = useRef(null);
 
   const [showImageSourceModal, setShowImageSourceModal] = useState(false);
   const [showVideoSourceModal, setShowVideoSourceModal] = useState(false);
@@ -56,6 +57,9 @@ export default function RequestOverview() {
   const [galleryDeleteLoading, setGalleryDeleteLoading] = useState(false);
   const [postCommentLoading, setPostCommentLoading] = useState(false);
   const [getCommentLoading, setGetCommentLoading] = useState(false);
+
+  const [getGalleryLinkLoading, setGetGalleryLinkLoading] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
 
   const [commentData, setCommentData] = useState([]);
   const [commentDataPagination, setCommentDataPagination] = useState("");
@@ -429,6 +433,8 @@ export default function RequestOverview() {
   };
 
   const fetchGalleryLink = (image) => {
+    setGetGalleryLinkLoading(true);
+
     apiInstance
       .get("/gallery")
       .then((res) => {
@@ -438,7 +444,10 @@ export default function RequestOverview() {
         Toast.success("Get gallery link success.");
         getGalleryLinkSuccess(url, image, path);
       })
-      .catch((err) => Toast.error("Get gallery link failure."));
+      .catch((err) => {
+        Toast.error("Get gallery link failure.");
+      })
+      .finally(() => setGetGalleryLinkLoading(false));
   };
 
   const getGalleryLinkSuccess = (url, image, path) => {
@@ -456,6 +465,8 @@ export default function RequestOverview() {
   };
 
   const postUploadImage = (url, image) => {
+    setImageUploading(true);
+
     axios
       .put(url, get(image, ["image"], ""))
       .then((result) => {
@@ -472,6 +483,7 @@ export default function RequestOverview() {
       })
       .catch((err) => {
         Toast.error("Image upload failure.");
+
         setTechnicianImageList((prevState) => {
           return map(prevState, (state) => {
             if (isEqual(get(state, ["name"], ""), get(image, ["name"], ""))) {
@@ -481,7 +493,8 @@ export default function RequestOverview() {
             }
           });
         });
-      });
+      })
+      .finally(() => setImageUploading(false));
   };
 
   const onChangeImage = (e) => {
@@ -770,6 +783,8 @@ export default function RequestOverview() {
   };
 
   const fetchCommentImageGalleryLink = (image) => {
+    setGetGalleryLinkLoading(true);
+
     apiInstance
       .get("/gallery")
       .then((res) => {
@@ -779,7 +794,8 @@ export default function RequestOverview() {
         Toast.success("Get gallery link success.");
         getCommentImageGalleryLinkSuccess(url, image, path);
       })
-      .catch((err) => Toast.error("Get gallery link failure."));
+      .catch((err) => Toast.error("Get gallery link failure."))
+      .finally(() => setGetGalleryLinkLoading(false));
   };
 
   const getCommentImageGalleryLinkSuccess = (url, image, path) => {
@@ -797,6 +813,8 @@ export default function RequestOverview() {
   };
 
   const postUploadCommentImage = (url, image) => {
+    setImageLoading(true);
+
     axios
       .put(url, get(image, ["image"], ""))
       .then((result) => {
@@ -825,7 +843,8 @@ export default function RequestOverview() {
             }
           });
         });
-      });
+      })
+      .finally(() => setImageLoading(false));
   };
 
   const handleCommentImageUploadModalOpen = () => {
@@ -879,10 +898,22 @@ export default function RequestOverview() {
     }
   };
 
+  const handleCommentImageSourceSelect = (source) => {
+    setShowImageSourceModal(false);
+    if (source === "camera") {
+      uploadCameraCommentImageRef &&
+        uploadCameraCommentImageRef.current.click();
+    } else {
+      uploadCommentImageRef && uploadCommentImageRef.current.click();
+    }
+  };
+
   return (
     <div className="hide-scroll-bar relative flex h-full flex-col gap-6 overflow-hidden overflow-y-scroll rounded-3xl">
       <LoadingOverlay
         loading={
+          // getGalleryLinkLoading ||
+          // imageUploading ||
           ticketUpdateLoading ||
           (maintenanceTicketOverviewDataLoading &&
             !isEmpty(maintenanceTicketOverviewData))
@@ -944,7 +975,11 @@ export default function RequestOverview() {
         onClickLoadMore={onClickLoadMore}
         onChangeCommentImage={onChangeCommentImage}
         uploadCommentImageRef={uploadCommentImageRef}
+        uploadCameraCommentImageRef={uploadCameraCommentImageRef}
         onClickSelectedCommentImage={onClickSelectedCommentImage}
+        handleCommentImageSourceSelect={handleCommentImageSourceSelect}
+        showImageSourceModal={showImageSourceModal}
+        setShowImageSourceModal={setShowImageSourceModal}
       />
 
       <ImageModal

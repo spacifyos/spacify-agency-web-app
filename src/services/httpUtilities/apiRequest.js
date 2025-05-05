@@ -282,12 +282,12 @@ const getMaintenanceTicketOptionRequest = async (
 const getMaintenanceTicketListingRequest = async (
   perPage,
   page,
-  status,
+  postData,
   setLoading,
   successCallback,
 ) => {
   await apiRequest(
-    api.getMaintenanceTicket(perPage, page, status),
+    api.getMaintenanceTicket(perPage, page, postData),
     setLoading,
     successCallback,
   );
@@ -412,11 +412,6 @@ const getUserProfileRequest = async (setLoading, successCallback) => {
   );
 };
 
-/**
- * Handles user sign out with proper cleanup
- * @param {Object} router - Next.js router instance
- * @returns {Promise<void>}
- */
 const signOutAccountRequest = async (router) => {
   try {
     await AuthManager.removeLoginType();
@@ -441,6 +436,10 @@ const getMaintenanceTicketOverviewRequest = async (
     "",
     true,
   );
+};
+
+const getPropertyOptionsRequest = async (setLoading, successCallback) => {
+  await apiRequest(api.getPropertyOptionV2(), setLoading, successCallback);
 };
 
 export default {
@@ -474,4 +473,5 @@ export default {
   getUserProfileRequest,
   signOutAccountRequest,
   getMaintenanceTicketOverviewRequest,
+  getPropertyOptionsRequest,
 };

@@ -2,7 +2,7 @@ import apiInstance, {
   AUTH_TOKEN_HEADER,
   AUTH_AGENT_TOKEN_HEADER,
 } from "./httpManager";
-import { includes, isEmpty, isEqual, size } from "lodash";
+import { includes, isEmpty, isEqual, map } from "lodash";
 import moment from "moment/moment";
 import Constant from "@/src/utils/Constant";
 
@@ -227,10 +227,12 @@ const postResetPasswordVerify = (postData) =>
 const postResetPassword = (postData) =>
   apiInstance.post(`/reset-password`, postData);
 
-const getMaintenanceTicket = (per_page, page, status) =>
-  apiInstance.get(
-    `/maintenance-ticket?per_page=${per_page}&page=${page}&status=${status}`,
+const getMaintenanceTicket = (per_page, page, postData = {}) => {
+  const params = map(postData, (value, key) => `${key}=${value}`).join("&");
+  return apiInstance.get(
+    `/maintenance-ticket?per_page=${per_page}&page=${page}${isEmpty(params) ? "" : "&" + params}`,
   );
+};
 
 const getMaintenanceTicketOption = () =>
   apiInstance.get(`/maintenance-ticket/create`);
@@ -259,6 +261,8 @@ const postMaintenanceTicketCheckIn = (id, postData) =>
 
 const postMaintenanceTicketCheckOut = (id, postData) =>
   apiInstance.post(`/maintenance-ticket/check-out/${id}`, postData);
+
+const getPropertyOptionV2 = () => apiInstance.get(`/property/options/v2`);
 
 export default {
   signUpAccount,
@@ -325,4 +329,5 @@ export default {
   postMaintenanceTicketComment,
   postMaintenanceTicketCheckIn,
   postMaintenanceTicketCheckOut,
+  getPropertyOptionV2,
 };

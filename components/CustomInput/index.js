@@ -32,7 +32,7 @@ const CustomInput = ({
 
   return (
     <label
-      className={`flex flex-col global-border-radius ${hideShadow ? "" : "global-box-shadow"} ${className}`}
+      className={`global-border-radius flex flex-col ${hideShadow ? "" : "global-box-shadow"} ${className}`}
     >
       <div className="flex">
         {required ? (
@@ -48,13 +48,13 @@ const CustomInput = ({
       </div>
 
       <div
-        className={`input input-bordered flex items-center gap-2 default-input`}
+        className={`default-input input-bordered input flex items-center gap-2 text-sm`}
       >
         {!_.isEmpty(leftIcon) ? leftIcon : false}
         <input
           ref={inputRef}
           type={inputType}
-          className={`grow input-primary bg-white ${inputClassName}`}
+          className={`input-primary grow bg-white ${inputClassName}`}
           placeholder={placeholder}
           autoFocus={autoFocus}
           value={value}

@@ -34,10 +34,12 @@ const CustomSelect = ({
           const name = get(item, ["name"], "");
           const label = get(item, ["label"], "");
           const value = get(item, ["value"], "");
+          const id = get(item, ["id"], "");
+          const number = get(item, ["number"], "");
 
           return (
-            <option key={index} value={value}>
-              {isEmpty(name) ? label : name}
+            <option key={index} value={isEmpty(value) ? id : value}>
+              {isEmpty(number) ? (isEmpty(name) ? label : name) : number}
             </option>
           );
         })}
