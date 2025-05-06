@@ -187,12 +187,10 @@ export default function CardListing({ params }) {
   };
 
   const onChangeGenderValue = (e) => {
-    if (!isEmpty(propertyValue)) {
-      setUnitFilterParams({
-        ...unitFilterParams,
-        ...(genderValue && { gender: genderValue }),
-      });
-    }
+    setUnitFilterParams({
+      ...unitFilterParams,
+      ...{ gender: e.target.value },
+    });
 
     setGenderValue(e.target.value);
   };
