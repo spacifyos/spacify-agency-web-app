@@ -1,6 +1,5 @@
 import "@/app/styles/globals.scss";
-import "@/src/lib/swiper/swiper.css";
-import "@/src/lib/swiper/modules/effect-cards.css";
+import 'swiper/css';
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Toaster } from "react-hot-toast";

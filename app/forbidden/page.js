@@ -41,7 +41,7 @@ export default function Forbidden() {
       </CustomText>
 
       <CustomText textClassName="text-center text-sm pb-6">
-        You don't have permission to access this page.
+        You don&apos;t have permission to access this page.
       </CustomText>
 
       <CustomButton
