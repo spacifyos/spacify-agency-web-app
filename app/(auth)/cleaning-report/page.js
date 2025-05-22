@@ -185,36 +185,52 @@ export default function () {
         <table className="table">
           <thead></thead>
           <tbody className="">
-            <tr className="bg-white">
+            <tr className="bg-white" style={{ paddingTop: 16 }}>
               {dataArray.map((item, idx) => (
-                <th key={idx}>
-                  <CustomText textClassName={`font-bold text-xs`}>
+                <td key={idx} className="h-8">
+                  <CustomText
+                    textClassName={`font-bold text-xs h-full flex items-center`}
+                  >
                     {item.label}
                   </CustomText>
-                </th>
+                </td>
               ))}
             </tr>
+
             <tr className="bg-white">
               {dataArray.map((item, idx) => (
-                <td key={idx}>{item.value}</td>
+                <td key={idx}>
+                  <div
+                    className="divider-primary-background divider"
+                    style={{ margin: 0 }}
+                  ></div>
+                </td>
               ))}
             </tr>
+
+            <tr className="bg-white">
+              {dataArray.map((item, idx) => (
+                <td key={idx} className="h-8">
+                  <CustomText
+                    textClassName={`text-xs h-full flex items-center`}
+                  >
+                    {item.value}
+                  </CustomText>
+                </td>
+              ))}
+            </tr>
+
             {propertyArray.map((item, idx) => (
-              <tr
-                key={idx}
-                className="mb-4 bg-white"
-                style={{ marginBottom: 100 }}
-              >
-                <td className="font-semibold text-red-600">{item.property}</td>
-                <td>{item.unit}</td>
-                <td>{item.total_created}</td>
-                <td>{item.total_completed}</td>
-                <td>{item.total_pending}</td>
-                <td>{item.total_cancelled}</td>
-                <td>{item.cancelled_by_platform}</td>
-                <td>{item.cancelled_by_client}</td>
-                <td>{item.unit_charges_price_rm}</td>
-                <td>{item.unit_chargable_rm}</td>
+              <tr key={idx} className="mb-4 bg-white" style={{ marginBottom: 100 }}>
+                {Object.entries(item).map(([key, value], cellIdx) => (
+                  <td key={cellIdx} className="h-8">
+                    <CustomText
+                      textClassName={`${key === 'property' ? 'text-primary' : ''} text-xs h-full flex items-center`}
+                    >
+                      {value}
+                    </CustomText>
+                  </td>
+                ))}
               </tr>
             ))}
           </tbody>

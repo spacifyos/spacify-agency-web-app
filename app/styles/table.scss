@@ -1,3 +1,69 @@
-.table :where(thead, tbody) :where(tr:not(:first-child):not(:last-child))  {
+.table
+  :where(thead, tbody)
+  :where(tr:not(:first-child):not(:last-child):not(:nth-child(2))) {
   @apply border-b-[12px] border-b-primary-background;
+}
+
+.table :where(thead, tbody) :where(tr:nth-child(1), tr:nth-child(2)) {
+  @apply border-b-[12px] border-b-white;
+}
+
+.table tr:not(:nth-child(2)) td:first-child {
+  @apply rounded-l-3xl;
+}
+
+.table tr:first-child td:first-child {
+  @apply rounded-bl-none;
+}
+
+.table tr:nth-child(3) td:first-child {
+  @apply rounded-tl-none;
+}
+
+.table tr:not(:nth-child(2)) td:last-child {
+  @apply rounded-r-3xl;
+}
+
+.table tr:first-child td:last-child {
+  @apply rounded-br-none;
+}
+
+.table tr:nth-child(3) td:last-child {
+  @apply rounded-tr-none;
+}
+
+.table :where(thead, tbody) :where(tr:nth-child(1), tr:nth-child(2)) {
+  border-bottom-width: 0;
+}
+
+.table tr:nth-child(2) td {
+  padding: 0;
+}
+
+.table tr:nth-child(2) td:first-child {
+  padding-left: 16px;
+}
+
+.table tr:nth-child(2) td:last-child {
+  padding-right: 16px;
+}
+
+.table tr td:not(:last-child) p {
+  @apply border-r-2 border-r-primary-background;
+}
+
+.table tr:first-child td {
+  padding: 12px 0 0 0;
+}
+
+.table tr:not(:nth-child(2)) td p {
+  @apply px-4;
+}
+
+.table tr:nth-child(3) td {
+  padding: 0 0 12px 0;
+}
+
+.table tr:not(:nth-child(2)):not(:nth-child(2)):not(:first-child) td {
+  padding: 12px 0;
 }
