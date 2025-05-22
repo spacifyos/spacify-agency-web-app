@@ -33,6 +33,7 @@ const navigationItems = [
       inactive: Images.helpCenterIconDisable,
     },
     width: "w-5",
+    roles: ["master_agency", "agency", "super_admin", "technician"],
   },
   {
     path: "/property",
@@ -43,6 +44,26 @@ const navigationItems = [
     },
     width: "w-5",
     roles: ["master_agency", "agency", "super_admin"],
+  },
+  {
+    path: "/cleaning-task",
+    label: "Cleaning Task",
+    icon: {
+      active: Images.cleaningIcon2Active,
+      inactive: Images.cleaningIcon2Disable,
+    },
+    width: "w-5",
+    roles: ["super_admin", "master_agency", "cleaner"],
+  },
+  {
+    path: "/cleaning-report",
+    label: "Cleaning Report",
+    icon: {
+      active: Images.cleaningIcon2Active,
+      inactive: Images.cleaningIcon2Disable,
+    },
+    width: "w-5",
+    roles: ["master_agency", "super_admin"],
   },
   {
     path: "https://tms.spacify.asia/privacy-policy",
@@ -67,6 +88,10 @@ const checkUserRole = (userRole, requiredRoles) => {
         return Helper.isAgency(userRole);
       case "super_admin":
         return Helper.isSuperAdmin(userRole);
+      case "technician":
+        return Helper.isTechnician(userRole);
+      case "cleaner":
+        return Helper.isCleaner(userRole);
       default:
         return false;
     }

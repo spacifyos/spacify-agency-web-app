@@ -130,6 +130,10 @@ const isTechnician = (role) => {
   return includes(role, Constant.TECHNICIAN_ROLE);
 };
 
+const isCleaner = (role) => {
+  return includes(role, Constant.CLEANER_ROLE);
+};
+
 const isTenant = (role) => {
   return includes(role, Constant.TENANT_ROLE);
 };
@@ -151,6 +155,7 @@ export default {
   isMasterAgency,
   isAgency,
   isTechnician,
+  isCleaner,
   isTenant,
   isOwner,
 };

@@ -1,5 +1,5 @@
 .btn {
-  @apply font-normal border-none global-border-radius;
+  @apply global-border-radius border-none font-normal;
 }
 
 .btn-primary {
@@ -15,7 +15,7 @@
 }
 
 .btn-white {
-  @apply bg-white global-box-shadow;
+  @apply global-box-shadow bg-white;
 }
 
 .btn-white:hover {
@@ -23,11 +23,11 @@
 }
 
 .btn-primary-outline {
-  @apply bg-white border-primary border border-solid text-primary;
+  @apply border border-solid border-primary bg-white text-primary;
 }
 
 .btn-primary-outline:hover {
-  @apply bg-white global-box-shadow;
+  @apply global-box-shadow bg-white;
 }
 
 .btn-secondary {
@@ -35,7 +35,11 @@
 }
 
 .btn-disable {
-  @apply bg-disable text-black border;
+  @apply border bg-disable text-black;
+}
+
+.btn-disable:hover {
+  @apply border text-black;
 }
 
 .default-btn:focus-visible,
