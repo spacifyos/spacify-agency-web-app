@@ -47,8 +47,6 @@ export default function () {
   const [endDateValue, setEndDateValue] = useState(defaultDate);
   const [openCollapse, setOpenCollapse] = useState([]);
 
-  console.log(startDateValue);
-
   useEffect(() => {
     fetchSchedulerData();
   }, []);

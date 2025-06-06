@@ -454,8 +454,21 @@ const getSchedulerListingRequest = async (
   );
 };
 
-const getSchedulerDetailRequest = async (setLoading, successCallback) => {
-  await apiRequest(api.getPropertyOptionV2(), setLoading, successCallback);
+const getSchedulerDetailRequest = async (id, setLoading, successCallback) => {
+  await apiRequest(api.getSchedulerDetail(id), setLoading, successCallback);
+};
+
+const patchSchedulerDetailRequest = async (
+  id,
+  postData,
+  setLoading,
+  successCallback,
+) => {
+  await apiRequest(
+    api.patchSchedulerDetail(id, postData),
+    setLoading,
+    successCallback,
+  );
 };
 
 export default {
@@ -492,4 +505,5 @@ export default {
   getPropertyOptionsRequest,
   getSchedulerListingRequest,
   getSchedulerDetailRequest,
+  patchSchedulerDetailRequest,
 };

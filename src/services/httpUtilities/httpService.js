@@ -274,6 +274,9 @@ const getSchedulerListing = (postData) => {
 };
 const getSchedulerDetail = (id) => apiInstance.get(`/scheduler/${id}`);
 
+const patchSchedulerDetail = (id, postData) =>
+  apiInstance.patch(`/scheduler/${id}`, postData);
+
 export default {
   signUpAccount,
   setHeaderLanguage,
@@ -342,4 +345,5 @@ export default {
   getPropertyOptionV2,
   getSchedulerListing,
   getSchedulerDetail,
+  patchSchedulerDetail,
 };
