@@ -442,6 +442,22 @@ const getPropertyOptionsRequest = async (setLoading, successCallback) => {
   await apiRequest(api.getPropertyOptionV2(), setLoading, successCallback);
 };
 
+const getSchedulerListingRequest = async (
+  postData,
+  setLoading,
+  successCallback,
+) => {
+  await apiRequest(
+    api.getSchedulerListing(postData),
+    setLoading,
+    successCallback,
+  );
+};
+
+const getSchedulerDetailRequest = async (setLoading, successCallback) => {
+  await apiRequest(api.getPropertyOptionV2(), setLoading, successCallback);
+};
+
 export default {
   signInRequest,
   signUpRequest,
@@ -474,4 +490,6 @@ export default {
   signOutAccountRequest,
   getMaintenanceTicketOverviewRequest,
   getPropertyOptionsRequest,
+  getSchedulerListingRequest,
+  getSchedulerDetailRequest,
 };

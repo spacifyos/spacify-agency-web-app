@@ -1,7 +1,7 @@
 import CustomText from "@/components/CustomText";
 import { upperCase } from "lodash";
 
-const StatusLabel = ({ status }) => {
+const StatusLabel = ({ status, square = false }) => {
   const statusColor = (status) => {
     const statusUpperCase = upperCase(status);
 
@@ -44,7 +44,7 @@ const StatusLabel = ({ status }) => {
   return (
     <div className="flex">
       <CustomText
-        textClassName={`text-white text-center text-xs ${statusColor(status)} px-3 py-0.5 rounded-2xl`}
+        textClassName={`text-white text-center text-xs ${statusColor(status)} px-3 py-0.5 ${square ? "rounded" : "rounded-2xl"}`}
       >
         {status}
       </CustomText>
