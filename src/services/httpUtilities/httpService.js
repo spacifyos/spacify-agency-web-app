@@ -277,6 +277,9 @@ const getSchedulerDetail = (id) => apiInstance.get(`/scheduler/${id}`);
 const patchSchedulerDetail = (id, postData) =>
   apiInstance.patch(`/scheduler/${id}`, postData);
 
+const patchSchedulerDetailStatus = (id) =>
+  apiInstance.patch(`/scheduler/${id}/status`, { status: "completed" });
+
 export default {
   signUpAccount,
   setHeaderLanguage,
@@ -346,4 +349,5 @@ export default {
   getSchedulerListing,
   getSchedulerDetail,
   patchSchedulerDetail,
+  patchSchedulerDetailStatus,
 };

@@ -4,8 +4,19 @@ import CustomText from "@/components/CustomText";
 import CustomLabelValue from "@/components/CustomLabelValue";
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
-import { map, size, get, isEmpty, isEqual, split, some, forEach } from "lodash";
-import { useEffect, useState } from "react";
+import {
+  map,
+  size,
+  get,
+  isEmpty,
+  isEqual,
+  split,
+  some,
+  forEach,
+  set,
+  filter,
+} from "lodash";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import apiRequest from "@/src/services/httpUtilities/apiRequest";
 import Helper from "@/src/utils/Helper";
@@ -14,6 +25,7 @@ import axios from "axios";
 import CustomButton from "@/components/CustomButton";
 import apiInstance from "@/src/services/httpUtilities/httpManager";
 import Toast from "@/src/utils/Toast";
+import DesktopModal from "@/components/DesktopModal";
 
 export default function () {
   const router = useRouter();
@@ -29,13 +41,18 @@ export default function () {
   const propertyName = get(schedulerDetail, "property_name", "-");
   const unitName = get(schedulerDetail, "unit_name", "-");
   const scheduleDate = get(schedulerDetail, "schedule_date", "-");
-
-  const [base64Images, setBase64Images] = useState({});
-  const [openCollapse, setOpenCollapse] = useState(null);
-  const [popupImage, setPopupImage] = useState(null);
+  const scheduleStatus = get(schedulerDetail, ["status", "value"], "-");
 
   const [imageList, setImageList] = useState([]);
   const [imageUploading, setImageUploading] = useState(false);
+  const [popupImage, setPopupImage] = useState(null);
+  const [openCollapse, setOpenCollapse] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const [currentImageContext, setCurrentImageContext] = useState({});
+
+  const [detailUploading, setDetailUploading] = useState(false);
+  const [updateDetailUploading, setUpdateDetailUploading] = useState(false);
 
   useEffect(() => {
     handleImageSecretData();
@@ -61,8 +78,13 @@ export default function () {
     [],
   );
 
-  const updateSchedulerDetail = async () => {
-    await apiRequest.patchSchedulerDetailRequest(id, postData);
+  const updateSchedulerDetail = async (postData) => {
+    await apiRequest.patchSchedulerDetailRequest(
+      id,
+      postData,
+      setDetailUploading,
+      () => Toast.success("Update Successful"),
+    );
   };
 
   const fetchImageAsBase64 = async (url, secret) => {
@@ -85,7 +107,7 @@ export default function () {
       if (!schedulerDetail || !secret) return;
 
       const forms = get(schedulerDetail, ["scheduler_template", "form"], []);
-      let newBase64Images = {};
+      let newImageList = [];
 
       for (const form of forms) {
         const formList = get(form, "list", {});
@@ -96,20 +118,61 @@ export default function () {
             const url = `${imagesUrl[i]}/based64`;
             try {
               const base64 = await fetchImageAsBase64(url, secret);
-              newBase64Images[imagesUrl[i]] = base64;
+              newImageList.push({
+                url: imagesUrl[i],
+                base64,
+                name: get(item, "label", ""),
+                sub_type: get(item, "image_sub_type_key", ""),
+              });
             } catch (e) {
-              newBase64Images[imagesUrl[i]] = imagesUrl[i];
+              newImageList.push({
+                url: imagesUrl[i],
+                base64: null,
+                name: get(item, "label", ""),
+                sub_type: get(item, "image_sub_type_key", ""),
+              });
             }
           }
         }
       }
-      setBase64Images(newBase64Images);
+      setImageList(newImageList);
     };
 
     fetchAllImages();
   }, [schedulerDetail, secret]);
 
-  const checkImageSize = async (image) => {
+  const convertToBase64 = (image) => {
+    return new Promise((resolve, reject) => {
+      if (image) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target.result;
+          resolve(result);
+        };
+        reader.onerror = (err) => reject(err);
+        reader.readAsDataURL(image);
+      } else {
+        resolve("");
+      }
+    });
+  };
+
+  const onChangeImage = (e, context = {}) => {
+    const images = e.target.files;
+
+    if (size(images) + size(imageList) >= 6) {
+      Toast.error(`Your image limit is up to 5.`);
+      return;
+    }
+
+    forEach(images, (image, index) =>
+      checkImageSizeWithContext(image, context, index + 1),
+    );
+
+    e.target.value = "";
+  };
+
+  const checkImageSizeWithContext = async (image, context, idx) => {
     const isLt5M = image && image.size / 1024 / 1024 < 5;
     if (!isLt5M) {
       Toast.error(`Your some image is larger than 5MB`);
@@ -129,7 +192,7 @@ export default function () {
       try {
         const base64 = await convertToBase64(image);
         const newImage = {
-          type: 24,
+          type: 34,
           name: name,
           extension: extension[1],
           mime_type: mimeType,
@@ -137,6 +200,7 @@ export default function () {
           loading: true,
           base64: base64,
           image: image,
+          sub_type: get(context, "sub_type", ""),
         };
 
         setImageList((prevState) => [...prevState, newImage]);
@@ -146,35 +210,6 @@ export default function () {
         Toast.error("Error converting image to base64:", error);
       }
     }
-  };
-
-  const convertToBase64 = (image) => {
-    return new Promise((resolve, reject) => {
-      if (image) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const result = e.target.result;
-          resolve(result);
-        };
-        reader.onerror = (err) => reject(err);
-        reader.readAsDataURL(image);
-      } else {
-        resolve("");
-      }
-    });
-  };
-
-  const onChangeImage = (e) => {
-    const images = e.target.files;
-
-    if (size(images) + size(imageList) >= 6) {
-      Toast.error(`Your image limit is up to 5.`);
-      return;
-    }
-
-    forEach(images, (image, index) => checkImageSize(image, index + 1));
-
-    e.target.value = "";
   };
 
   const fetchGalleryLink = (image) => {
@@ -216,7 +251,11 @@ export default function () {
         setImageList((prevState) => {
           return map(prevState, (state) => {
             if (isEqual(get(state, ["name"], ""), get(image, ["name"], ""))) {
-              return { ...state, status: true, loading: false };
+              return {
+                ...state,
+                status: true,
+                loading: false,
+              };
             } else {
               return state;
             }
@@ -237,6 +276,75 @@ export default function () {
         });
       })
       .finally(() => setImageUploading(false));
+  };
+
+  const handleCheckboxChange = (formIndex, itemKey, newValue) => {
+    setSchedulerDetail((prev) => {
+      const updated = { ...prev };
+      const forms = [...get(updated, ["scheduler_template", "form"], [])];
+      const form = { ...forms[formIndex] };
+      const list = { ...form.list };
+      const item = { ...list[itemKey], value: newValue };
+      list[itemKey] = item;
+      form.list = list;
+      forms[formIndex] = form;
+      updated.scheduler_template = {
+        ...updated.scheduler_template,
+        form: forms,
+      };
+      return updated;
+    });
+  };
+
+  const updatePostData = () => {
+    const checklist = {};
+    const checklist_images = map(
+      filter(imageList, (img) => !!get(img, "mime_type")),
+      (img) => ({
+        type: get(img, "type", 34),
+        name: get(img, "name", ""),
+        extension: get(img, "extension", ""),
+        mime_type: get(img, "mime_type", ""),
+        path: get(img, "id", ""),
+        sub_type: get(img, "sub_type", ""),
+      }),
+    );
+
+    forEach(schedulerTemplateForms, (form) => {
+      const formValue = get(form, "value", "");
+      const formList = get(form, "list", {});
+      checklist[formValue] = {};
+      forEach(formList, (item, itemKey) => {
+        set(checklist[formValue], itemKey, get(item, "value", 3));
+      });
+    });
+
+    setPostData({
+      checklist,
+      checklist_images,
+    });
+  };
+
+  useEffect(() => {
+    if (!isEmpty(schedulerDetail)) {
+      updateSchedulerDetail(postData);
+    }
+  }, [postData]);
+
+  const onClickSubmit = async () => {
+    await apiRequest.patchSchedulerDetailStatusRequest(
+      id,
+      setUpdateDetailUploading,
+      updateStatusSuccessCallback,
+    );
+  };
+
+  const updateStatusSuccessCallback = () => {
+    router.push(`/cleaning-task/${id}/successful`);
+  };
+
+  const onClickHandleSubmit = () => {
+    Helper.documentGetElementById("schedule_submit_alert").showModal();
   };
 
   return (
@@ -313,7 +421,7 @@ export default function () {
                     const label = get(item, "label", "");
                     const imageSubTypeKey = get(item, "image_sub_type_key", "");
                     const hasImage = !isEmpty(imageSubTypeKey);
-                    const imagesUrl = get(item, "images_url", []);
+                    const value = get(item, "value", 3);
 
                     return (
                       <div
@@ -329,19 +437,40 @@ export default function () {
                             <div className="divider-white divider divider-horizontal"></div>
 
                             <div className="flex w-12 justify-center">
-                              <input type="checkbox" className="checkbox" />
+                              <input
+                                type="checkbox"
+                                className="checkbox-primary checkbox border-black"
+                                checked={value === 1}
+                                onChange={() =>
+                                  handleCheckboxChange(index, key, 1)
+                                }
+                              />
                             </div>
 
                             <div className="divider-white divider divider-horizontal"></div>
 
                             <div className="flex w-12 justify-center">
-                              <input type="checkbox" className="checkbox" />
+                              <input
+                                type="checkbox"
+                                className="checkbox-primary checkbox border-black"
+                                checked={value === 2}
+                                onChange={() =>
+                                  handleCheckboxChange(index, key, 2)
+                                }
+                              />
                             </div>
 
                             <div className="divider-white divider divider-horizontal"></div>
 
                             <div className="flex w-12 justify-center">
-                              <input type="checkbox" className="checkbox" />
+                              <input
+                                type="checkbox"
+                                className="checkbox-primary checkbox border-black"
+                                checked={value === 3}
+                                onChange={() =>
+                                  handleCheckboxChange(index, key, 3)
+                                }
+                              />
                             </div>
                           </div>
                         </div>
@@ -350,59 +479,98 @@ export default function () {
                           <div>
                             <div className="divider-white divider"></div>
 
-                            <div>
-                              <CustomText textClassName="text-sm pb-2">
-                                Gambar{" "}
-                                <span className="text-disable">
-                                  (3–5 gambar, maks 1MB setiap satu)
-                                </span>
-                              </CustomText>
 
-                              <div className="flex flex-wrap items-center gap-4">
-                                {map(imagesUrl, (imageUrl, index) => (
-                                  <div key={index} className="overflow-hidden">
-                                    <CustomImage
-                                      src={base64Images[imageUrl] || imageUrl}
-                                      className="h-20 w-20 cursor-pointer rounded-2xl border"
-                                      onClick={() =>
-                                        setPopupImage(
-                                          base64Images[imageUrl] || imageUrl,
-                                        )
-                                      }
-                                    />
-                                  </div>
-                                ))}
+                                <div>
+                                  <CustomText textClassName="text-sm pb-2">
+                                    Gambar{" "}
+                                    <span className="text-disable">
+                                    (3–5 gambar, maks 1MB setiap satu)
+                                  </span>
+                                  </CustomText>
 
-                                {size(imagesUrl) < 5 && (
-                                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white">
-                                    <CustomImage
-                                      src={Images.addIconDisable}
-                                      className="h-5 w-5 cursor-pointer"
-                                    />
+                                  <div className="flex flex-wrap items-center gap-4">
+                                    {map(
+                                        imageList.filter(
+                                            (img) => img.sub_type === imageSubTypeKey,
+                                        ),
+                                        (img, idx) => (
+                                            <div
+                                                key={idx}
+                                                className="overflow-hidden"
+                                            >
+                                              <CustomImage
+                                                  src={img.base64 || img.url}
+                                                  className="h-20 w-20 cursor-pointer rounded-2xl border"
+                                                  onClick={() =>
+                                                      setPopupImage(img.base64 || img.url)
+                                                  }
+                                              />
+                                            </div>
+                                        ),
+                                    )}
+
+                                    {isEqual(scheduleStatus, "pending")
+                                        ? imageList.filter(
+                                        (img) =>
+                                            img.sub_type === imageSubTypeKey,
+                                    ).length < 5 && (
+                                        <div
+                                            className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white"
+                                            onClick={() => {
+                                              setCurrentImageContext({
+                                                formIndex: index,
+                                                itemKey: key,
+                                                sub_type: imageSubTypeKey,
+                                              });
+                                              if (fileInputRef.current)
+                                                fileInputRef.current.click();
+                                            }}
+                                        >
+                                          <CustomImage
+                                              src={Images.addIconDisable}
+                                              className="h-5 w-5 cursor-pointer"
+                                          />
+                                        </div>
+                                    )
+                                        : null}
                                   </div>
-                                )}
-                              </div>
-                            </div>
+                                </div>
+
                           </div>
                         )}
                       </div>
                     );
                   })}
 
-                  <div className="flex justify-end pt-4">
-                    <CustomButton
-                      buttonClassName="btn-primary btn-sm"
-                      buttonText="Kemaskini"
-                      onClick={updateSchedulerDetail}
-                    />
-                  </div>
+                  {isEqual(scheduleStatus, "pending") ? (
+                    <div className="flex justify-end pt-4">
+                      <CustomButton
+                        buttonClassName="btn-primary btn-sm"
+                        buttonText="Kemaskini"
+                        onClick={() => {
+                          updatePostData();
+                        }}
+                      />
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>
           );
         })}
+
+        {!isEmpty(schedulerDetail) && isEqual(scheduleStatus, "pending") ? (
+          <div className="flex w-full justify-center">
+            <CustomButton
+              buttonClassName="btn-primary min-h-9 h-9 w-32"
+              buttonText="Hantar"
+              textClassName="text-xs"
+              onClick={onClickHandleSubmit}
+            />
+          </div>
+        ) : null}
       </div>
-      {/* Image Popup Modal */}
+
       {popupImage && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
@@ -425,6 +593,53 @@ export default function () {
           </div>
         </div>
       )}
+
+      <DesktopModal id="schedule_submit_alert">
+        <div className="p-6">
+          <div className="flex items-center">
+            <CustomText textClassName="flex-1 text-center text-base font-bold">
+              Pengesahan
+            </CustomText>
+            <form method="dialog" className={`flex justify-end`}>
+              <button className="btn-ghost btn btn-sm btn-circle right-2">
+                <CustomImage
+                  className="w-3 sm:w-3 md:w-4 lg:w-4 xl:w-4"
+                  src={Images.closeIconBlack}
+                />
+              </button>
+            </form>
+          </div>
+
+          <div className="divider-line"></div>
+          <CustomText>
+            Adakah anda pasti untuk menyerahkan, selepas diserahkan tidak boleh
+            berubah
+          </CustomText>
+
+          <div className="flex justify-end gap-4 pt-4">
+            <CustomButton
+              buttonClassName="btn-primary-outline"
+              buttonText="Tidak"
+              onClick={() => {
+                Helper.documentGetElementById("schedule_submit_alert").close();
+              }}
+            />
+            <CustomButton
+              buttonClassName="btn-primary"
+              buttonText="Ya"
+              onClick={onClickSubmit}
+            />
+          </div>
+        </div>
+      </DesktopModal>
+
+      <input
+        type="file"
+        accept="image/*"
+        style={{ display: "none" }}
+        ref={fileInputRef}
+        onChange={(e) => onChangeImage(e, currentImageContext)}
+      />
     </div>
   );
 }

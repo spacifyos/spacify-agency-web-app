@@ -471,6 +471,18 @@ const patchSchedulerDetailRequest = async (
   );
 };
 
+const patchSchedulerDetailStatusRequest = async (
+  id,
+  setLoading,
+  successCallback,
+) => {
+  await apiRequest(
+    api.patchSchedulerDetailStatus(id),
+    setLoading,
+    successCallback,
+  );
+};
+
 export default {
   signInRequest,
   signUpRequest,
@@ -506,4 +518,5 @@ export default {
   getSchedulerListingRequest,
   getSchedulerDetailRequest,
   patchSchedulerDetailRequest,
+  patchSchedulerDetailStatusRequest,
 };
