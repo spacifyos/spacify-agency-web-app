@@ -53,6 +53,7 @@ export default function () {
 
   const [detailUploading, setDetailUploading] = useState(false);
   const [updateDetailUploading, setUpdateDetailUploading] = useState(false);
+  const [galleryDeleteLoading, setGalleryDeleteLoading] = useState(false);
 
   useEffect(() => {
     handleImageSecretData();
@@ -107,34 +108,42 @@ export default function () {
       if (!schedulerDetail || !secret) return;
 
       const forms = get(schedulerDetail, ["scheduler_template", "form"], []);
-      let newImageList = [];
+      const newImageList = [];
 
-      for (const form of forms) {
-        const formList = get(form, "list", {});
-        for (const key in formList) {
-          const item = formList[key];
-          const imagesUrl = get(item, "images_url", []);
-          for (let i = 0; i < imagesUrl.length; i++) {
-            const url = `${imagesUrl[i]}/based64`;
-            try {
-              const base64 = await fetchImageAsBase64(url, secret);
-              newImageList.push({
-                url: imagesUrl[i],
-                base64,
-                name: get(item, "label", ""),
-                sub_type: get(item, "image_sub_type_key", ""),
-              });
-            } catch (e) {
-              newImageList.push({
-                url: imagesUrl[i],
-                base64: null,
-                name: get(item, "label", ""),
-                sub_type: get(item, "image_sub_type_key", ""),
-              });
-            }
-          }
-        }
-      }
+      await Promise.all(
+        map(forms, async (form) => {
+          const formList = get(form, "list", {});
+          await Promise.all(
+            map(formList, async (item, key) => {
+              const imagesUrl = get(item, "images", []);
+              await Promise.all(
+                map(imagesUrl, async (imageUrl) => {
+                  const url = `${imageUrl.url}/based64`;
+                  try {
+                    const base64 = await fetchImageAsBase64(url, secret);
+                    newImageList.push({
+                      id: imageUrl.id,
+                      url: imageUrl.url,
+                      base64,
+                      name: get(item, "label", ""),
+                      sub_type: get(item, "image_sub_type_key", ""),
+                    });
+                  } catch (e) {
+                    newImageList.push({
+                      id: imageUrl.id,
+                      url: imageUrl.url,
+                      base64: null,
+                      name: get(item, "label", ""),
+                      sub_type: get(item, "image_sub_type_key", ""),
+                    });
+                  }
+                }),
+              );
+            }),
+          );
+        }),
+      );
+
       setImageList(newImageList);
     };
 
@@ -160,8 +169,13 @@ export default function () {
   const onChangeImage = (e, context = {}) => {
     const images = e.target.files;
 
-    if (size(images) + size(imageList) >= 6) {
-      Toast.error(`Your image limit is up to 5.`);
+    const subType = get(context, "sub_type", "");
+    const currentSubTypeCount = size(
+      filter(imageList, (img) => img.sub_type === subType),
+    );
+
+    if (size(images) + currentSubTypeCount > 5) {
+      Toast.error(`You can only upload up to 5 images for this section.`);
       return;
     }
 
@@ -280,19 +294,20 @@ export default function () {
 
   const handleCheckboxChange = (formIndex, itemKey, newValue) => {
     setSchedulerDetail((prev) => {
-      const updated = { ...prev };
-      const forms = [...get(updated, ["scheduler_template", "form"], [])];
-      const form = { ...forms[formIndex] };
-      const list = { ...form.list };
-      const item = { ...list[itemKey], value: newValue };
-      list[itemKey] = item;
-      form.list = list;
-      forms[formIndex] = form;
-      updated.scheduler_template = {
-        ...updated.scheduler_template,
-        form: forms,
-      };
-      return updated;
+      const forms = get(prev, ["scheduler_template", "form"], []);
+      const updatedForms = map(forms, (form, idx) => {
+        if (idx === formIndex) {
+          const list = get(form, "list", {});
+          const updatedList = set({ ...list }, itemKey, {
+            ...list[itemKey],
+            value: newValue,
+          });
+          return { ...form, list: updatedList };
+        }
+        return form;
+      });
+
+      return set({ ...prev }, ["scheduler_template", "form"], updatedForms);
     });
   };
 
@@ -345,6 +360,43 @@ export default function () {
 
   const onClickHandleSubmit = () => {
     Helper.documentGetElementById("schedule_submit_alert").showModal();
+  };
+
+  const onClickRemoveImage = (target) => {
+    setImageList((prevState) =>
+      filter(prevState, (img) => {
+        if (target && typeof target === "object") {
+          // If passed the whole image object
+          if (get(target, "path", "")) {
+            return get(img, "path", "") !== get(target, "path", "");
+          } else if (get(target, "id", "")) {
+            return get(img, "id", "") !== get(target, "id", "");
+          }
+        } else {
+          // If passed just a string (path or id)
+          return (
+            get(img, "path", "") !== target && get(img, "id", "") !== target
+          );
+        }
+        return true;
+      }),
+    );
+  };
+
+  const onClickRemoveGallery = async (img) => {
+    if (get(img, "mime_type") || get(img, "isUploaded")) {
+      onClickRemoveImage(img);
+    } else if (get(img, "id")) {
+      await apiRequest.deleteGalleryRequest(
+        get(img, "id"),
+        setGalleryDeleteLoading,
+        () => {
+          onClickRemoveImage(img);
+        },
+      );
+    } else {
+      onClickRemoveImage(img);
+    }
   };
 
   return (
@@ -416,12 +468,18 @@ export default function () {
                       </CustomText>
                     </div>
                   </div>
-
                   {map(formList, (item, key) => {
                     const label = get(item, "label", "");
                     const imageSubTypeKey = get(item, "image_sub_type_key", "");
                     const hasImage = !isEmpty(imageSubTypeKey);
                     const value = get(item, "value", 3);
+                    const filteredImages = filter(
+                      imageList,
+                      (img) => get(img, "sub_type", "") === imageSubTypeKey,
+                    );
+                    const canAddMoreImages =
+                      isEqual(scheduleStatus, "pending") &&
+                      size(filteredImages) < 5;
 
                     return (
                       <div
@@ -434,108 +492,107 @@ export default function () {
                           </CustomText>
 
                           <div className="flex items-center justify-center gap-2">
-                            <div className="divider-white divider divider-horizontal"></div>
-
-                            <div className="flex w-12 justify-center">
-                              <input
-                                type="checkbox"
-                                className="checkbox-primary checkbox border-black"
-                                checked={value === 1}
-                                onChange={() =>
-                                  handleCheckboxChange(index, key, 1)
-                                }
-                              />
-                            </div>
-
-                            <div className="divider-white divider divider-horizontal"></div>
-
-                            <div className="flex w-12 justify-center">
-                              <input
-                                type="checkbox"
-                                className="checkbox-primary checkbox border-black"
-                                checked={value === 2}
-                                onChange={() =>
-                                  handleCheckboxChange(index, key, 2)
-                                }
-                              />
-                            </div>
-
-                            <div className="divider-white divider divider-horizontal"></div>
-
-                            <div className="flex w-12 justify-center">
-                              <input
-                                type="checkbox"
-                                className="checkbox-primary checkbox border-black"
-                                checked={value === 3}
-                                onChange={() =>
-                                  handleCheckboxChange(index, key, 3)
-                                }
-                              />
-                            </div>
+                            {map([1, 2, 3], (checkboxValue) => (
+                              <div
+                                key={checkboxValue}
+                                className="flex items-center"
+                              >
+                                <div className="divider-white divider divider-horizontal" />
+                                <div className="flex w-12 justify-center">
+                                  <input
+                                    type="checkbox"
+                                    className="checkbox-primary checkbox border-black"
+                                    checked={value === checkboxValue}
+                                    onChange={() =>
+                                      handleCheckboxChange(
+                                        index,
+                                        key,
+                                        checkboxValue,
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
 
                         {hasImage && (
                           <div>
-                            <div className="divider-white divider"></div>
+                            <div className="divider-white divider" />
+                            <div>
+                              <CustomText textClassName="text-sm pb-2">
+                                Gambar{" "}
+                                <span className="text-disable">
+                                  (3–5 gambar, maks 1MB setiap satu)
+                                </span>
+                              </CustomText>
 
+                              <div className="flex flex-wrap items-center gap-4">
+                                {map(filteredImages, (img, idx) => (
+                                  <div
+                                    key={idx}
+                                    className={`relative flex items-center justify-center overflow-hidden rounded-2xl border ${
+                                      isEmpty(get(img, "path", ""))
+                                        ? ""
+                                        : get(img, "status", "")
+                                          ? "border-available"
+                                          : "border-error"
+                                    }`}
+                                  >
+                                    <CustomImage
+                                      src={
+                                        get(img, "base64", "") ||
+                                        get(img, "url", "")
+                                      }
+                                      className="h-20 w-20 cursor-pointer"
+                                      onClick={() =>
+                                        setPopupImage(
+                                          get(img, "base64", "") ||
+                                            get(img, "url", ""),
+                                        )
+                                      }
+                                    />
 
-                                <div>
-                                  <CustomText textClassName="text-sm pb-2">
-                                    Gambar{" "}
-                                    <span className="text-disable">
-                                    (3–5 gambar, maks 1MB setiap satu)
-                                  </span>
-                                  </CustomText>
-
-                                  <div className="flex flex-wrap items-center gap-4">
-                                    {map(
-                                        imageList.filter(
-                                            (img) => img.sub_type === imageSubTypeKey,
-                                        ),
-                                        (img, idx) => (
-                                            <div
-                                                key={idx}
-                                                className="overflow-hidden"
-                                            >
-                                              <CustomImage
-                                                  src={img.base64 || img.url}
-                                                  className="h-20 w-20 cursor-pointer rounded-2xl border"
-                                                  onClick={() =>
-                                                      setPopupImage(img.base64 || img.url)
-                                                  }
-                                              />
-                                            </div>
-                                        ),
+                                    {get(img, "loading", "") ? (
+                                      <span className="loading loading-spinner loading-lg absolute text-primary" />
+                                    ) : (
+                                      <div
+                                        className="absolute right-1 top-1 z-10 cursor-pointer"
+                                        onClick={() =>
+                                          onClickRemoveGallery(img)
+                                        }
+                                      >
+                                        <CustomImage
+                                          src={Images.deleteIcon}
+                                          className="h-5 w-5"
+                                        />
+                                      </div>
                                     )}
-
-                                    {isEqual(scheduleStatus, "pending")
-                                        ? imageList.filter(
-                                        (img) =>
-                                            img.sub_type === imageSubTypeKey,
-                                    ).length < 5 && (
-                                        <div
-                                            className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white"
-                                            onClick={() => {
-                                              setCurrentImageContext({
-                                                formIndex: index,
-                                                itemKey: key,
-                                                sub_type: imageSubTypeKey,
-                                              });
-                                              if (fileInputRef.current)
-                                                fileInputRef.current.click();
-                                            }}
-                                        >
-                                          <CustomImage
-                                              src={Images.addIconDisable}
-                                              className="h-5 w-5 cursor-pointer"
-                                          />
-                                        </div>
-                                    )
-                                        : null}
                                   </div>
-                                </div>
+                                ))}
 
+                                {canAddMoreImages && (
+                                  <div
+                                    className="flex h-20 w-20 cursor-pointer items-center justify-center rounded-2xl bg-white"
+                                    onClick={() => {
+                                      setCurrentImageContext({
+                                        formIndex: index,
+                                        itemKey: key,
+                                        sub_type: imageSubTypeKey,
+                                      });
+                                      if (fileInputRef.current)
+                                        fileInputRef.current.click();
+                                    }}
+                                  >
+                                    <CustomImage
+                                      src={Images.addIconDisable}
+                                      className="h-5 w-5"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
                           </div>
                         )}
                       </div>

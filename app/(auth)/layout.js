@@ -55,16 +55,16 @@ const navigationItems = [
     width: "w-5",
     roles: ["super_admin", "master_agency", "cleaner"],
   },
-  {
-    path: "/cleaning-report",
-    label: "Cleaning Report",
-    icon: {
-      active: Images.cleaningIcon2Active,
-      inactive: Images.cleaningIcon2Disable,
-    },
-    width: "w-5",
-    roles: ["master_agency", "super_admin"],
-  },
+  // {
+  //   path: "/cleaning-report",
+  //   label: "Cleaning Report",
+  //   icon: {
+  //     active: Images.cleaningIcon2Active,
+  //     inactive: Images.cleaningIcon2Disable,
+  //   },
+  //   width: "w-5",
+  //   roles: ["master_agency", "super_admin"],
+  // },
   {
     path: "https://tms.spacify.asia/privacy-policy",
     label: "Terms and Conditions",
