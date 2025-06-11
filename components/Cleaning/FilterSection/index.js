@@ -49,15 +49,21 @@ const FilterSection = ({
         />
 
         <div
-          className="global-box-shadow global-border-radius col-span-2 flex h-12 cursor-pointer items-center justify-center bg-white sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1"
+          className="global-box-shadow global-border-radius col-span-2 flex h-12 cursor-pointer items-center justify-center bg-white sm:col-span-2 sm:flex md:col-span-1 md:hidden lg:col-span-1 lg:hidden xl:col-span-1 xl:hidden"
           onClick={() => setIsOpenFilter(!isOpenFilter)}
         >
           <CustomImage src={Images.filterIconBlack} className="h-6 w-6" />
         </div>
+
+        <CustomButton
+          buttonClassName="btn-primary sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 col-span-2 md:flex lg:flex xl:flex sm:hidden hidden"
+          buttonText="Reset"
+          onClick={onClickReset}
+        />
       </div>
 
       {isOpenFilter ? (
-        <div className="grid grid-cols-11 gap-2 pt-2">
+        <div className="grid grid-cols-12 gap-2 pt-2">
           <CustomInput
             className="col-span-5 sm:col-span-5 md:col-span-5 lg:col-span-5 xl:col-span-5"
             placeholder={"Start Date"}
@@ -75,7 +81,7 @@ const FilterSection = ({
           />
 
           <CustomButton
-            buttonClassName="btn-primary xl:col-span-1 lg:col-span-1 md:col-span-1 sm:col-span-2 col-span-2"
+            buttonClassName="btn-primary xl:col-span-1 lg:col-span-1 md:col-span-1 sm:col-span-2 col-span-2 block sm:block md:hidden lg:hidden xl:hidden"
             buttonText="Reset"
             onClick={onClickReset}
           />

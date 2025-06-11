@@ -483,6 +483,10 @@ const patchSchedulerDetailStatusRequest = async (
   );
 };
 
+const getPropertyOptionsV3Request = async (setLoading, successCallback) => {
+  await apiRequest(api.getPropertyOptionV3(), setLoading, successCallback);
+};
+
 export default {
   signInRequest,
   signUpRequest,
@@ -519,4 +523,5 @@ export default {
   getSchedulerDetailRequest,
   patchSchedulerDetailRequest,
   patchSchedulerDetailStatusRequest,
+  getPropertyOptionsV3Request,
 };

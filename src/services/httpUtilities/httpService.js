@@ -267,9 +267,10 @@ const getPropertyOptionV2 = () => apiInstance.get(`/property/options/v2`);
 const getSchedulerListing = (postData) => {
   const startDate = get(postData, "startDate", moment().format("YYYY-MM-DD"));
   const endDate = get(postData, "endDate", moment().format("YYYY-MM-DD"));
+  const propertyId = get(postData, "property_id", "");
 
   return apiInstance.get(
-    `/scheduler?start_schedule_date=${startDate}&end_schedule_date=${endDate}`,
+    `/scheduler?start_schedule_date=${startDate}&end_schedule_date=${endDate}&property_id=${propertyId}`,
   );
 };
 const getSchedulerDetail = (id) => apiInstance.get(`/scheduler/${id}`);
@@ -279,6 +280,8 @@ const patchSchedulerDetail = (id, postData) =>
 
 const patchSchedulerDetailStatus = (id) =>
   apiInstance.patch(`/scheduler/${id}/status`, { status: "completed" });
+
+const getPropertyOptionV3 = () => apiInstance.get(`/property/options/v3`);
 
 export default {
   signUpAccount,
@@ -350,4 +353,5 @@ export default {
   getSchedulerDetail,
   patchSchedulerDetail,
   patchSchedulerDetailStatus,
+  getPropertyOptionV3,
 };

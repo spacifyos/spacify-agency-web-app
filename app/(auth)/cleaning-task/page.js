@@ -1,6 +1,6 @@
 "use client";
 
-import { get, isEqual, map } from "lodash";
+import { get, isEmpty, isEqual, map } from "lodash";
 import CustomButton from "@/components/CustomButton";
 import Constant from "@/src/utils/Constant";
 import { useCallback, useState, useEffect } from "react";
@@ -12,6 +12,7 @@ import apiRequest from "@/src/services/httpUtilities/apiRequest";
 import StatusLabel from "@/components/StatusLabel";
 import FilterSection from "@/components/Cleaning/FilterSection";
 import moment from "moment";
+import CustomEmptyBox from "@/components/CustomEmptyBox";
 
 const btnLists = [
   {
@@ -30,35 +31,46 @@ const btnLists = [
 
 export default function () {
   const router = useRouter();
-  const defaultDate = moment().format("YYYY-MM-DD");
+  const defaultStartDate = moment().format("YYYY-MM-DD");
+  const defaultEndDate = moment().add(1, "day").format("YYYY-MM-DD");
   const [selectedStatus, setSelectedStatus] = useState("");
 
+  const [propertyOptions, setPropertyOptions] = useState({});
+  const [propertyOptionsLoading, setPropertyOptionsLoading] = useState(false);
+
   const [schedulerData, setSchedulerData] = useState([]);
-  const [schedulerDataPagination, setSchedulerDataPagination] = useState(null);
   const [schedulerLoading, setSchedulerLoading] = useState(false);
   const [postData, setPostData] = useState({
-    startDate: "2025-05-30",
-    endDate: "2025-06-01",
+    startDate: defaultStartDate,
+    endDate: defaultEndDate,
   });
 
   const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [propertyValue, setPropertyValue] = useState("");
-  const [startDateValue, setStartDateValue] = useState(defaultDate);
-  const [endDateValue, setEndDateValue] = useState(defaultDate);
+  const [startDateValue, setStartDateValue] = useState(defaultStartDate);
+  const [endDateValue, setEndDateValue] = useState(defaultEndDate);
   const [openCollapse, setOpenCollapse] = useState([]);
 
   useEffect(() => {
     fetchSchedulerData();
+  }, [postData]);
+
+  useEffect(() => {
+    fetchPropertyOptionsV3();
   }, []);
 
   const fetchSchedulerData = async () => {
     await apiRequest.getSchedulerListingRequest(
       postData,
       setSchedulerLoading,
-      (res, pagination) => {
-        setSchedulerData(res);
-        setSchedulerDataPagination(pagination);
-      },
+      (res) => setSchedulerData(res),
+    );
+  };
+
+  const fetchPropertyOptionsV3 = async () => {
+    await apiRequest.getPropertyOptionsV3Request(
+      setPropertyOptionsLoading,
+      (res) => setPropertyOptions(res),
     );
   };
 
@@ -95,10 +107,10 @@ export default function () {
   };
 
   const onClickReset = () => {
-    setPostData({ startDate: "2025-05-30", endDate: "2025-06-01" });
+    setPostData({ startDate: defaultStartDate, endDate: defaultEndDate });
     setPropertyValue("");
-    setStartDateValue(defaultDate);
-    setEndDateValue(defaultDate);
+    setStartDateValue(defaultStartDate);
+    setEndDateValue(defaultEndDate);
   };
 
   return (
@@ -107,7 +119,7 @@ export default function () {
         <FilterSection
           isOpenFilter={isOpenFilter}
           setIsOpenFilter={setIsOpenFilter}
-          propertyOption={[]}
+          propertyOption={propertyOptions}
           onChangePropertyValue={onChangePropertyValue}
           propertyValue={propertyValue}
           onClickReset={onClickReset}
@@ -134,105 +146,119 @@ export default function () {
         {/*  })}*/}
         {/*</div>*/}
 
-        <div className="flex flex-col gap-6 pt-6">
-          {map(schedulerData, (propertyGroups, date) => (
-            <div key={date}>
-              <CustomText textClassName="text-xs font-bold pb-2">
-                {date}
-              </CustomText>
-              {map(propertyGroups, (units, propertyName) => {
-                const collapseKey = date + "|" + propertyName;
-                const isOpen = openCollapse.includes(collapseKey);
-                return (
-                  <div
-                    key={collapseKey}
-                    className={`collapse bg-white ${isOpen ? "collapse-open" : ""}`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isOpen}
-                      onChange={() => {
-                        setOpenCollapse(
-                          isOpen
-                            ? openCollapse.filter((key) => key !== collapseKey)
-                            : [...openCollapse, collapseKey],
-                        );
-                      }}
-                      style={{ display: "none" }}
-                    />
+        <div className="flex h-full flex-col gap-6 pt-6">
+          {isEmpty(schedulerData) ? (
+            <div className="flex h-full items-center justify-center">
+              <CustomEmptyBox />
+            </div>
+          ) : (
+            map(schedulerData, (propertyGroups, date) => (
+              <div key={date}>
+                <CustomText textClassName="text-xs font-bold pb-2">
+                  {date}
+                </CustomText>
+                {map(propertyGroups, (units, propertyName) => {
+                  const collapseKey = date + "|" + propertyName;
+                  const isOpen = openCollapse.includes(collapseKey);
+                  return (
                     <div
-                      className="collapse-title cursor-pointer px-4 sm:px-4 md:px-4 lg:px-8 xl:px-8"
-                      onClick={() => {
-                        setOpenCollapse(
-                          isOpen
-                            ? openCollapse.filter((key) => key !== collapseKey)
-                            : [...openCollapse, collapseKey],
-                        );
-                      }}
+                      key={collapseKey}
+                      className={`collapse bg-white ${isOpen ? "collapse-open" : ""}`}
                     >
-                      <div className="flex items-center justify-between">
-                        <CustomText textClassName="font-bold">
-                          {propertyName}
-                        </CustomText>
-                        <CustomImage
-                          src={
-                            isOpen ? Images.upIconBlack : Images.downIconBlack
-                          }
-                          className="w-4"
-                        />
+                      <input
+                        type="checkbox"
+                        checked={isOpen}
+                        onChange={() => {
+                          setOpenCollapse(
+                            isOpen
+                              ? openCollapse.filter(
+                                  (key) => key !== collapseKey,
+                                )
+                              : [...openCollapse, collapseKey],
+                          );
+                        }}
+                        style={{ display: "none" }}
+                      />
+                      <div
+                        className="collapse-title cursor-pointer px-4 sm:px-4 md:px-4 lg:px-8 xl:px-8"
+                        onClick={() => {
+                          setOpenCollapse(
+                            isOpen
+                              ? openCollapse.filter(
+                                  (key) => key !== collapseKey,
+                                )
+                              : [...openCollapse, collapseKey],
+                          );
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <CustomText textClassName="font-bold">
+                            {propertyName}
+                          </CustomText>
+                          <CustomImage
+                            src={
+                              isOpen ? Images.upIconBlack : Images.downIconBlack
+                            }
+                            className="w-4"
+                          />
+                        </div>
+                        <div className="flex items-end justify-start gap-4">
+                          <CustomText textClassName="text-disable text-sm">
+                            {date}
+                          </CustomText>
+                          <CustomText textClassName="text-xs">
+                            <span className="text-base font-bold text-primary">
+                              {units.length}
+                            </span>{" "}
+                            units
+                          </CustomText>
+                        </div>
                       </div>
-                      <div className="flex items-end justify-start gap-4">
-                        <CustomText textClassName="text-disable text-sm">
-                          {date}
-                        </CustomText>
-                        <CustomText textClassName="text-xs">
-                          <span className="text-base font-bold text-primary">
-                            {units.length}
-                          </span>{" "}
-                          units
-                        </CustomText>
-                      </div>
-                    </div>
 
-                    <div
-                      className="collapse-content bg-[#E9F1FE] px-4 sm:px-4 md:px-4 lg:px-8 xl:px-8"
-                      style={{ paddingBottom: 0 }}
-                    >
-                      {map(units, (unit, index) => {
-                        const name = get(unit, "unit_name", "-");
-                        const id = get(unit, "id", "-");
-                        const statusLabel = get(unit, ["status", "label"], "-");
+                      <div
+                        className="collapse-content bg-[#E9F1FE] px-4 sm:px-4 md:px-4 lg:px-8 xl:px-8"
+                        style={{ paddingBottom: 0 }}
+                      >
+                        {map(units, (unit, index) => {
+                          const name = get(unit, "unit_name", "-");
+                          const id = get(unit, "id", "-");
+                          const statusLabel = get(
+                            unit,
+                            ["status", "label"],
+                            "-",
+                          );
 
-                        return (
-                          <div
-                            key={id}
-                            className={`${index === 0 ? "pt-4" : ""}`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-4">
-                                <CustomText textClassName="text-sm">
-                                  {name}
-                                </CustomText>
-                                <StatusLabel status={statusLabel} />
+                          return (
+                            <div
+                              key={id}
+                              className={`${index === 0 ? "pt-4" : ""}`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                  <CustomText textClassName="text-sm">
+                                    {name}
+                                  </CustomText>
+                                  <StatusLabel status={statusLabel} />
+                                </div>
+
+                                <CustomButton
+                                  buttonClassName="btn-primary btn-sm"
+                                  buttonText="Hantar Laporan"
+                                  onClick={() => onClickToDetail(id)}
+                                />
                               </div>
 
-                              <CustomButton
-                                buttonClassName="btn-primary btn-sm"
-                                buttonText="Hantar Laporan"
-                                onClick={() => onClickToDetail(id)}
-                              />
+                              <div className="divider-white divider"></div>
                             </div>
-
-                            <div className="divider-white divider"></div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          ))}
+                  );
+                })}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
