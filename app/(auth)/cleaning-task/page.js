@@ -29,7 +29,7 @@ const btnLists = [
   },
 ];
 
-export default function () {
+const CleaningTaskPage = () => {
   const router = useRouter();
   const defaultStartDate = moment().format("YYYY-MM-DD");
   const defaultEndDate = moment().add(1, "day").format("YYYY-MM-DD");
@@ -263,4 +263,6 @@ export default function () {
       </div>
     </div>
   );
-}
+};
+
+export default CleaningTaskPage;

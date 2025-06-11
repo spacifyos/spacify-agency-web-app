@@ -143,7 +143,7 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-export default function () {
+const CleaningReportPage = () => {
   const [selectedMonth, setSelectedMonth] = useState(5);
   const [selectedStatus, setSelectedStatus] = useState("");
 
@@ -238,4 +238,6 @@ export default function () {
       </div>
     </div>
   );
-}
+};
+
+export default CleaningReportPage;

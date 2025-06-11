@@ -6,7 +6,7 @@ import { get, map } from "lodash";
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
 
-export default function () {
+const CleaningReportDetailPage = () => {
   return (
     <div className="relative h-full overflow-y-scroll hide-scroll-bar">
       <CustomText textClassName="font-bold">Cleaning Details</CustomText>
@@ -48,4 +48,6 @@ export default function () {
       </div>
     </div>
   );
-}
+};
+
+export default CleaningReportDetailPage;

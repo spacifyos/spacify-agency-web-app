@@ -27,7 +27,7 @@ import apiInstance from "@/src/services/httpUtilities/httpManager";
 import Toast from "@/src/utils/Toast";
 import DesktopModal from "@/components/DesktopModal";
 
-export default function () {
+const CleaningTaskDetailPage = () => {
   const router = useRouter();
   const id = get(useParams(router), ["slug"], "");
 
@@ -699,4 +699,6 @@ export default function () {
       />
     </div>
   );
-}
+};
+
+export default CleaningTaskDetailPage;
