@@ -15,6 +15,7 @@ import {
   forEach,
   set,
   filter,
+  toLower,
 } from "lodash";
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -26,6 +27,8 @@ import CustomButton from "@/components/CustomButton";
 import apiInstance from "@/src/services/httpUtilities/httpManager";
 import Toast from "@/src/utils/Toast";
 import DesktopModal from "@/components/DesktopModal";
+import StatusLabel from "@/components/StatusLabel";
+import statusLabel from "@/components/StatusLabel";
 
 const CleaningTaskDetailPage = () => {
   const router = useRouter();
@@ -403,9 +406,13 @@ const CleaningTaskDetailPage = () => {
     <div className="hide-scroll-bar relative h-full overflow-y-scroll">
       <div className="flex flex-col gap-4">
         <div className="rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
-          <CustomText textClassName="font-bold text-primary pb-4">
-            Maklumat Umum
-          </CustomText>
+          <div className="flex items-center justify-between pb-4">
+            <CustomText textClassName="font-bold text-primary">
+              Maklumat Umum
+            </CustomText>
+
+            <StatusLabel status={scheduleStatus} />
+          </div>
 
           <CustomLabelValue label="Name" value={name} />
           <CustomLabelValue label="Hartanah" value={propertyName} />
@@ -424,7 +431,7 @@ const CleaningTaskDetailPage = () => {
           return (
             <div
               key={index}
-              className={`collapse bg-white ${isOpen ? "collapse-open" : ""}`}
+              className={`collapse bg-white ${isOpen ? "collapse-open" : ""} overflow-hidden`}
             >
               <input
                 type="checkbox"
@@ -453,21 +460,18 @@ const CleaningTaskDetailPage = () => {
                       Senarai Semak
                     </CustomText>
 
-                    <div className="flex items-center justify-center gap-2">
-                      <div className="divider-white divider divider-horizontal"></div>
-                      <CustomText textClassName="text-xs w-12 text-center">
-                        Baik
-                      </CustomText>
-                      <div className="divider-white divider divider-horizontal"></div>
-                      <CustomText textClassName="text-xs w-12 text-center">
-                        Tak Baik
-                      </CustomText>
-                      <div className="divider-white divider divider-horizontal"></div>
-                      <CustomText textClassName="text-xs w-12 text-center">
-                        N/A
-                      </CustomText>
+                    <div className="flex items-center justify-center">
+                      {map(["Baik", "Tak Baik", "N/A"], (label) => (
+                        <div key={label} className="flex items-center">
+                          <div className="divider-white divider divider-horizontal"></div>
+                          <CustomText textClassName="text-xs w-[50px] text-center">
+                            {label}
+                          </CustomText>
+                        </div>
+                      ))}
                     </div>
                   </div>
+
                   {map(formList, (item, key) => {
                     const label = get(item, "label", "");
                     const imageSubTypeKey = get(item, "image_sub_type_key", "");
@@ -491,26 +495,38 @@ const CleaningTaskDetailPage = () => {
                             {label}
                           </CustomText>
 
-                          <div className="flex items-center justify-center gap-2">
+                          <div className="flex items-center justify-center">
                             {map([1, 2, 3], (checkboxValue) => (
                               <div
                                 key={checkboxValue}
                                 className="flex items-center"
                               >
                                 <div className="divider-white divider divider-horizontal" />
-                                <div className="flex w-12 justify-center">
-                                  <input
-                                    type="checkbox"
-                                    className="checkbox-primary checkbox border-black"
-                                    checked={value === checkboxValue}
-                                    onChange={() =>
-                                      handleCheckboxChange(
-                                        index,
-                                        key,
-                                        checkboxValue,
-                                      )
-                                    }
-                                  />
+                                <div className="flex h-6 w-[50px] items-center justify-center">
+                                  {isEqual(
+                                    toLower(scheduleStatus),
+                                    "pending",
+                                  ) ? (
+                                    <input
+                                      type="checkbox"
+                                      className="checkbox-primary checkbox border-black transition-colors duration-200 hover:border-primary"
+                                      checked={value === checkboxValue}
+                                      onChange={() =>
+                                        handleCheckboxChange(
+                                          index,
+                                          key,
+                                          checkboxValue,
+                                        )
+                                      }
+                                      aria-label={`Select ${label} as ${checkboxValue === 1 ? "Baik" : checkboxValue === 2 ? "Tak Baik" : "N/A"}`}
+                                    />
+                                  ) : value === checkboxValue ? (
+                                    <CustomImage
+                                      src={Images.checkIconActive}
+                                      className="h-5 w-5"
+                                      alt={`Selected ${label} as ${checkboxValue === 1 ? "Baik" : checkboxValue === 2 ? "Tak Baik" : "N/A"}`}
+                                    />
+                                  ) : null}
                                 </div>
                               </div>
                             ))}
@@ -528,7 +544,7 @@ const CleaningTaskDetailPage = () => {
                                 </span>
                               </CustomText>
 
-                              <div className="flex flex-wrap items-center gap-4">
+                              <div className="flex flex-wrap items-center gap-2">
                                 {map(filteredImages, (img, idx) => (
                                   <div
                                     key={idx}
@@ -556,7 +572,10 @@ const CleaningTaskDetailPage = () => {
 
                                     {get(img, "loading", "") ? (
                                       <span className="loading loading-spinner loading-lg absolute text-primary" />
-                                    ) : (
+                                    ) : isEqual(
+                                        toLower(scheduleStatus),
+                                        "pending",
+                                      ) ? (
                                       <div
                                         className="absolute right-1 top-1 z-10 cursor-pointer"
                                         onClick={() =>
@@ -568,7 +587,7 @@ const CleaningTaskDetailPage = () => {
                                           className="h-5 w-5"
                                         />
                                       </div>
-                                    )}
+                                    ) : null}
                                   </div>
                                 ))}
 

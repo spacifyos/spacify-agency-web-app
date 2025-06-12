@@ -1,6 +1,6 @@
 "use client";
 
-import { get, isEmpty, isEqual, map } from "lodash";
+import { get, isEmpty, isEqual, map, toLower } from "lodash";
 import CustomButton from "@/components/CustomButton";
 import Constant from "@/src/utils/Constant";
 import { useCallback, useState, useEffect } from "react";
@@ -234,18 +234,27 @@ const CleaningTaskPage = () => {
                               className={`${index === 0 ? "pt-4" : ""}`}
                             >
                               <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-2">
                                   <CustomText textClassName="text-sm">
                                     {name}
                                   </CustomText>
                                   <StatusLabel status={statusLabel} />
                                 </div>
 
-                                <CustomButton
-                                  buttonClassName="btn-primary btn-sm"
-                                  buttonText="Hantar Laporan"
-                                  onClick={() => onClickToDetail(id)}
-                                />
+                                {isEqual(toLower(statusLabel), "pending") ? (
+                                  <CustomButton
+                                    buttonClassName="btn-primary btn-sm"
+                                    buttonText={"Hantar Laporan"}
+                                    onClick={() => onClickToDetail(id)}
+                                  />
+                                ) : (
+                                  <CustomText
+                                    textClassName="text-xs text-black font-bold cursor-pointer"
+                                    onClick={() => onClickToDetail(id)}
+                                  >
+                                    Lihat
+                                  </CustomText>
+                                )}
                               </div>
 
                               <div className="divider-white divider"></div>
