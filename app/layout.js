@@ -53,6 +53,8 @@ export default function RootLayout({ children }) {
           href="https://fonts.gstatic.com"
           crossOrigin="true"
         />
+
+        <meta name="google-site-verification" content="xzSyuG_QIOpCOR6BfMK5zYb0-5UWt-jtdiE2vD4u5uI" />
         {/*<link*/}
         {/*  rel="stylesheet"*/}
         {/*  href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"*/}
