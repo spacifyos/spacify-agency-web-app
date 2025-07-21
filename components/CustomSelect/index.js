@@ -17,15 +17,19 @@ const CustomSelect = ({
   return (
     <label
       style={styles}
-      className={`default-select form-control w-full ${hideShadow ? "" : "global-box-shadow"} ${className}`}
+      className={`default-select form-control w-full ${className}`}
     >
-      {!isEmpty(label) ? <CustomText>{label}</CustomText> : ""}
+      {!isEmpty(label) ? (
+        <CustomText textClassName="text-xxs pb-1">{label}</CustomText>
+      ) : (
+        ""
+      )}
       <select
         aria-label={isEmpty(label) ? placeholder : label}
-        className={`select-bordered select w-full text-sm ${selectClassName}`}
+        className={`select-bordered select w-full text-sm ${selectClassName} ${hideShadow ? "" : "global-box-shadow"}`}
         style={selectStyles}
         onChange={onChange}
-        value={value} // This controls the selected option
+        value={value}
         required
       >
         {!hideDefaultOption && <option value=" ">{placeholder}</option>}

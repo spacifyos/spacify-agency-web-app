@@ -1,5 +1,5 @@
 import CustomText from "@/components/CustomText";
-import _ from "lodash";
+import { isEmpty } from "lodash";
 import CustomImage from "@/components/CustomImage";
 import { useRef } from "react";
 
@@ -31,26 +31,22 @@ const CustomInput = ({
   };
 
   return (
-    <label
-      className={`global-border-radius flex flex-col ${hideShadow ? "" : "global-box-shadow"} ${className}`}
-    >
+    <label className={`global-border-radius flex flex-col ${className}`}>
       <div className="flex">
         {required ? (
           <CustomText textClassName="text-error pr-1">*</CustomText>
-        ) : (
-          false
-        )}
-        {!_.isEmpty(label) ? (
-          <CustomText textClassName={`${labelClassName}`}>{label}</CustomText>
-        ) : (
-          false
-        )}
+        ) : null}
+        {!isEmpty(label) ? (
+          <CustomText textClassName={`text-xxs pb-1 ${labelClassName}`}>
+            {label}
+          </CustomText>
+        ) : null}
       </div>
 
       <div
-        className={`default-input input-bordered input flex items-center gap-2 text-sm`}
+        className={`default-input input-bordered input flex items-center gap-2 text-sm ${hideShadow ? "" : "global-box-shadow"}`}
       >
-        {!_.isEmpty(leftIcon) ? leftIcon : false}
+        {!isEmpty(leftIcon) ? leftIcon : false}
         <input
           ref={inputRef}
           type={inputType}
@@ -62,16 +58,14 @@ const CustomInput = ({
           onKeyDown={handleKeyPress}
           {...props}
         />
-        {!_.isEmpty(rightIcon) ? (
+        {!isEmpty(rightIcon) ? (
           <CustomImage
             className="cursor-pointer"
             src={rightIcon}
             imageStyle={{ width: 20, height: 20 }}
             onClick={onClickRightIcon}
           />
-        ) : (
-          false
-        )}
+        ) : null}
       </div>
     </label>
   );

@@ -442,6 +442,51 @@ const getPropertyOptionsRequest = async (setLoading, successCallback) => {
   await apiRequest(api.getPropertyOptionV2(), setLoading, successCallback);
 };
 
+const getSchedulerListingRequest = async (
+  postData,
+  setLoading,
+  successCallback,
+) => {
+  await apiRequest(
+    api.getSchedulerListing(postData),
+    setLoading,
+    successCallback,
+  );
+};
+
+const getSchedulerDetailRequest = async (id, setLoading, successCallback) => {
+  await apiRequest(api.getSchedulerDetail(id), setLoading, successCallback);
+};
+
+const patchSchedulerDetailRequest = async (
+  id,
+  postData,
+  setLoading,
+  successCallback,
+) => {
+  await apiRequest(
+    api.patchSchedulerDetail(id, postData),
+    setLoading,
+    successCallback,
+  );
+};
+
+const patchSchedulerDetailStatusRequest = async (
+  id,
+  setLoading,
+  successCallback,
+) => {
+  await apiRequest(
+    api.patchSchedulerDetailStatus(id),
+    setLoading,
+    successCallback,
+  );
+};
+
+const getPropertyOptionsV3Request = async (setLoading, successCallback) => {
+  await apiRequest(api.getPropertyOptionV3(), setLoading, successCallback);
+};
+
 export default {
   signInRequest,
   signUpRequest,
@@ -474,4 +519,9 @@ export default {
   signOutAccountRequest,
   getMaintenanceTicketOverviewRequest,
   getPropertyOptionsRequest,
+  getSchedulerListingRequest,
+  getSchedulerDetailRequest,
+  patchSchedulerDetailRequest,
+  patchSchedulerDetailStatusRequest,
+  getPropertyOptionsV3Request,
 };

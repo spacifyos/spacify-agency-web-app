@@ -2,7 +2,7 @@ import apiInstance, {
   AUTH_TOKEN_HEADER,
   AUTH_AGENT_TOKEN_HEADER,
 } from "./httpManager";
-import { includes, isEmpty, isEqual, map } from "lodash";
+import { includes, isEmpty, get, map } from "lodash";
 import moment from "moment/moment";
 import Constant from "@/src/utils/Constant";
 
@@ -264,6 +264,25 @@ const postMaintenanceTicketCheckOut = (id, postData) =>
 
 const getPropertyOptionV2 = () => apiInstance.get(`/property/options/v2`);
 
+const getSchedulerListing = (postData) => {
+  const startDate = get(postData, "startDate", moment().format("YYYY-MM-DD"));
+  const endDate = get(postData, "endDate", moment().format("YYYY-MM-DD"));
+  const propertyId = get(postData, "property_id", "");
+
+  return apiInstance.get(
+    `/scheduler?start_schedule_date=${startDate}&end_schedule_date=${endDate}&property_id=${propertyId}`,
+  );
+};
+const getSchedulerDetail = (id) => apiInstance.get(`/scheduler/${id}`);
+
+const patchSchedulerDetail = (id, postData) =>
+  apiInstance.patch(`/scheduler/${id}`, postData);
+
+const patchSchedulerDetailStatus = (id) =>
+  apiInstance.patch(`/scheduler/${id}/status`, { status: "completed" });
+
+const getPropertyOptionV3 = () => apiInstance.get(`/property/options/v3`);
+
 export default {
   signUpAccount,
   setHeaderLanguage,
@@ -330,4 +349,9 @@ export default {
   postMaintenanceTicketCheckIn,
   postMaintenanceTicketCheckOut,
   getPropertyOptionV2,
+  getSchedulerListing,
+  getSchedulerDetail,
+  patchSchedulerDetail,
+  patchSchedulerDetailStatus,
+  getPropertyOptionV3,
 };

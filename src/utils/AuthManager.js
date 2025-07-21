@@ -1,4 +1,4 @@
-const AUTHENTICATION_TOKEN = "SpacifyToken";
+const AUTHENTICATION_TOKEN = "SpacifyAgencyToken";
 const LOGIN_TYPE = "LoginType";
 const REFERRAL_CODE = "ReferralCode";
 

@@ -6,7 +6,6 @@
 @import "select.scss";
 @import "uChat.scss";
 @import "table.scss";
-@import "tab.scss";
 @import "page/meter-detail";
 @import "page/property-overview";
 @import "page/meter-detail";
@@ -21,7 +20,6 @@
 @import "page/booking-overview.scss";
 @import "page/my-appointment.scss";
 @import "page/appointment-overview.scss";
-@import "page/help-center.scss";
 @import "page/owner.scss";
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
 
@@ -183,4 +181,14 @@ body {
 
 .image-zoom-in:hover {
   transform: scale(1.1);
+}
+
+.divider-primary-background:before,
+.divider-primary-background:after {
+  @apply bg-primary-background;
+}
+
+.divider-white:before,
+.divider-white:after {
+  @apply bg-white;
 }
