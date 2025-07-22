@@ -589,8 +589,9 @@ const CleaningTaskDetailPage = () => {
                                         className="h-20 w-20 cursor-pointer"
                                         onClick={() =>
                                           setPopupImage(
-                                            get(img, "base64", "") ||
-                                              get(img, "url", ""),
+                                            isEmpty(img.mime_type)
+                                              ? get(img, "url", "")
+                                              : get(img, "base64", ""),
                                           )
                                         }
                                       />
