@@ -147,7 +147,25 @@ const CleaningTaskDetailPage = () => {
         }),
       );
 
-      setImageList(newImageList);
+      setImageList((prevList) => {
+        // Keep any images that are not present in the backend (by unique id or path)
+        const merged = [
+          ...newImageList,
+          ...prevList.filter(
+            (localImg) =>
+              !newImageList.some(
+                (remoteImg) =>
+                  (remoteImg.id &&
+                    localImg.id &&
+                    remoteImg.id === localImg.id) ||
+                  (remoteImg.path &&
+                    localImg.path &&
+                    remoteImg.path === localImg.path),
+              ),
+          ),
+        ];
+        return merged;
+      });
     };
 
     fetchAllImages();
@@ -201,10 +219,10 @@ const CleaningTaskDetailPage = () => {
       const extension = split(name, ".");
       const mimeType = get(image, ["type"], "");
 
-      if (some(imageList, { name })) {
-        Toast.error(`Image with the name "${name}" already exists.`);
-        return;
-      }
+      // if (some(imageList, { name })) {
+      //   Toast.error(`Image with the name "${name}" already exists.`);
+      //   return;
+      // }
 
       try {
         const base64 = await convertToBase64(image);
@@ -301,10 +319,14 @@ const CleaningTaskDetailPage = () => {
       const updatedForms = map(forms, (form, idx) => {
         if (idx === formIndex) {
           const list = get(form, "list", {});
-          const updatedList = set({ ...list }, itemKey, {
-            ...list[itemKey],
-            value: newValue,
-          });
+          // Only update the value property, preserve all others
+          const updatedList = {
+            ...list,
+            [itemKey]: {
+              ...list[itemKey],
+              value: newValue,
+            },
+          };
           return { ...form, list: updatedList };
         }
         return form;
@@ -481,6 +503,7 @@ const CleaningTaskDetailPage = () => {
                       imageList,
                       (img) => get(img, "sub_type", "") === imageSubTypeKey,
                     );
+
                     const canAddMoreImages =
                       isEqual(scheduleStatus, "pending") &&
                       size(filteredImages) < 5;
@@ -545,51 +568,54 @@ const CleaningTaskDetailPage = () => {
                               </CustomText>
 
                               <div className="flex flex-wrap items-center gap-2">
-                                {map(filteredImages, (img, idx) => (
-                                  <div
-                                    key={idx}
-                                    className={`relative flex items-center justify-center overflow-hidden rounded-2xl border ${
-                                      isEmpty(get(img, "path", ""))
-                                        ? ""
-                                        : get(img, "status", "")
-                                          ? "border-available"
-                                          : "border-error"
-                                    }`}
-                                  >
-                                    <CustomImage
-                                      src={
-                                        get(img, "base64", "") ||
-                                        get(img, "url", "")
-                                      }
-                                      className="h-20 w-20 cursor-pointer"
-                                      onClick={() =>
-                                        setPopupImage(
-                                          get(img, "base64", "") ||
-                                            get(img, "url", ""),
-                                        )
-                                      }
-                                    />
-
-                                    {get(img, "loading", "") ? (
-                                      <span className="loading loading-spinner loading-lg absolute text-primary" />
-                                    ) : isEqual(
-                                        toLower(scheduleStatus),
-                                        "pending",
-                                      ) ? (
-                                      <div
-                                        className="absolute right-1 top-1 z-10 cursor-pointer"
-                                        onClick={() =>
-                                          onClickRemoveGallery(img)
+                                {map(filteredImages, (img, idx) => {
+                                  return (
+                                    <div
+                                      key={idx}
+                                      className={`relative flex items-center justify-center overflow-hidden rounded-2xl border ${
+                                        isEmpty(get(img, "path", ""))
+                                          ? ""
+                                          : get(img, "status", "")
+                                            ? "border-available"
+                                            : "border-error"
+                                      }`}
+                                    >
+                                      <CustomImage
+                                        src={
+                                          isEmpty(img.mime_type)
+                                            ? get(img, "url", "")
+                                            : get(img, "base64", "")
                                         }
-                                      >
-                                        <CustomImage
-                                          src={Images.deleteIcon}
-                                          className="h-5 w-5"
-                                        />
-                                      </div>
-                                    ) : null}
-                                  </div>
-                                ))}
+                                        className="h-20 w-20 cursor-pointer"
+                                        onClick={() =>
+                                          setPopupImage(
+                                            get(img, "base64", "") ||
+                                              get(img, "url", ""),
+                                          )
+                                        }
+                                      />
+
+                                      {get(img, "loading", "") ? (
+                                        <span className="loading loading-spinner loading-lg absolute text-primary" />
+                                      ) : isEqual(
+                                          toLower(scheduleStatus),
+                                          "pending",
+                                        ) ? (
+                                        <div
+                                          className="absolute right-1 top-1 z-10 cursor-pointer"
+                                          onClick={() =>
+                                            onClickRemoveGallery(img)
+                                          }
+                                        >
+                                          <CustomImage
+                                            src={Images.deleteIcon}
+                                            className="h-5 w-5"
+                                          />
+                                        </div>
+                                      ) : null}
+                                    </div>
+                                  );
+                                })}
 
                                 {canAddMoreImages && (
                                   <div
