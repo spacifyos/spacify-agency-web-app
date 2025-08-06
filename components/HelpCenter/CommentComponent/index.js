@@ -75,9 +75,7 @@ const CommentComponent = ({
             </div>
           )}
         </div>
-      ) : (
-        false
-      )}
+      ) : null}
 
       {!Helper.isTenant(userType) ? (
         <div className="flex items-center justify-center gap-2 pt-2">
@@ -103,9 +101,7 @@ const CommentComponent = ({
             disable={postCommentLoading}
           />
         </div>
-      ) : (
-        false
-      )}
+      ) : null}
 
       <input
         accept="image/*"

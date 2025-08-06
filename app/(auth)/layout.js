@@ -207,8 +207,8 @@ export default function RootLayout({ children }) {
         <CustomImage src={iconSrc} className={item.width} alt={item.label} />
         <CustomText
           textClassName={`${
-            isActive ? "text-primary" : "text-disable"
-          } font-light text-sm`}
+            isActive ? "text-primary font-semibold" : "text-disable font-light"
+          } text-sm`}
         >
           {item.label}
         </CustomText>
@@ -289,7 +289,7 @@ export default function RootLayout({ children }) {
               </label>
             </div>
 
-            <div className="drawer-side z-10 max-h-screen">
+            <div className="drawer-side z-20 max-h-screen">
               <label
                 htmlFor="my-drawer"
                 aria-label="close sidebar"

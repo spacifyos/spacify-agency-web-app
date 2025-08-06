@@ -26,6 +26,8 @@ const MediaUploadModal = ({
           />
         </div>
 
+        <div className="my-4 h-px w-full bg-gray-200" />
+
         <div className="flex flex-row gap-3 pb-4">
           <div
             className="flex cursor-pointer flex-col items-center gap-1"

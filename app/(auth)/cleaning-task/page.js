@@ -233,28 +233,40 @@ const CleaningTaskPage = () => {
                               key={id}
                               className={`${index === 0 ? "pt-4" : ""}`}
                             >
-                              <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
+                              <div className="flex items-center">
+                                {/* Name and Status Group */}
+                                <div className="flex items-center gap-1">
                                   <CustomText textClassName="text-sm">
                                     {name}
                                   </CustomText>
+                                  <div className="w-px h-4 bg-gray-300 mx-2"></div>
                                   <StatusLabel status={statusLabel} />
                                 </div>
-
-                                {isEqual(toLower(statusLabel), "pending") ? (
-                                  <CustomButton
-                                    buttonClassName="btn-primary btn-sm"
-                                    buttonText={"Hantar Laporan"}
-                                    onClick={() => onClickToDetail(id)}
-                                  />
-                                ) : (
-                                  <CustomText
-                                    textClassName="text-xs text-black font-bold cursor-pointer"
-                                    onClick={() => onClickToDetail(id)}
-                                  >
-                                    Lihat
-                                  </CustomText>
-                                )}
+                                
+                                {/* Spacer */}
+                                <div className="flex-1"></div>
+                                
+                                {/* Divider before Button */}
+                                <div className="w-px h-8 bg-gray-300 mx-4"></div>
+                                
+                                {/* Button Column */}
+                                <div className="w-32 flex justify-center">
+                                  {isEqual(toLower(statusLabel), "pending") ? (
+                                    <CustomButton
+                                      buttonClassName="btn-primary btn-sm w-full"
+                                      buttonText={"Hantar Laporan"}
+                                      onClick={() => onClickToDetail(id)}
+                                    />
+                                  ) : (
+                                    <div className="flex items-center justify-center w-full h-8 cursor-pointer" onClick={() => onClickToDetail(id)}>
+                                      <CustomText
+                                        textClassName="text-xs text-black font-bold"
+                                      >
+                                        Lihat
+                                      </CustomText>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
 
                               <div className="divider-white divider"></div>
