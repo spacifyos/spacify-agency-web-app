@@ -28,7 +28,7 @@ import apiInstance from "@/src/services/httpUtilities/httpManager";
 import Toast from "@/src/utils/Toast";
 import DesktopModal from "@/components/DesktopModal";
 import StatusLabel from "@/components/StatusLabel";
-import statusLabel from "@/components/StatusLabel";
+import MediaUploadModal from "@/components/MediaUploadModal";
 
 const CleaningTaskDetailPage = () => {
   const router = useRouter();
@@ -51,12 +51,14 @@ const CleaningTaskDetailPage = () => {
   const [popupImage, setPopupImage] = useState(null);
   const [openCollapse, setOpenCollapse] = useState(null);
 
-  const fileInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
+  const galleryInputRef = useRef(null);
   const [currentImageContext, setCurrentImageContext] = useState({});
 
   const [detailUploading, setDetailUploading] = useState(false);
   const [updateDetailUploading, setUpdateDetailUploading] = useState(false);
   const [galleryDeleteLoading, setGalleryDeleteLoading] = useState(false);
+  const [showMediaUploadModal, setShowMediaUploadModal] = useState(false);
 
   useEffect(() => {
     handleImageSecretData();
@@ -205,6 +207,21 @@ const CleaningTaskDetailPage = () => {
     );
 
     e.target.value = "";
+  };
+
+  const handleMediaUploadSource = (source) => {
+    setShowMediaUploadModal(false);
+
+    if (source === "camera") {
+      if (cameraInputRef.current) {
+        cameraInputRef.current.click();
+      }
+    } else if (source === "gallery") {
+      // Handle gallery selection
+      if (galleryInputRef.current) {
+        galleryInputRef.current.click();
+      }
+    }
   };
 
   const checkImageSizeWithContext = async (image, context, idx) => {
@@ -627,8 +644,7 @@ const CleaningTaskDetailPage = () => {
                                         itemKey: key,
                                         sub_type: imageSubTypeKey,
                                       });
-                                      if (fileInputRef.current)
-                                        fileInputRef.current.click();
+                                      setShowMediaUploadModal(true);
                                     }}
                                   >
                                     <CustomImage
@@ -737,11 +753,30 @@ const CleaningTaskDetailPage = () => {
       </DesktopModal>
 
       <input
-        type="file"
+        capture="environment"
         accept="image/*"
-        style={{ display: "none" }}
-        ref={fileInputRef}
+        type="file"
+        multiple
+        hidden
+        ref={cameraInputRef}
         onChange={(e) => onChangeImage(e, currentImageContext)}
+      />
+
+      <input
+        accept="image/*"
+        type="file"
+        multiple
+        hidden
+        ref={galleryInputRef}
+        onChange={(e) => onChangeImage(e, currentImageContext)}
+      />
+
+      <MediaUploadModal
+        isOpen={showMediaUploadModal}
+        onClose={() => setShowMediaUploadModal(false)}
+        onSelectSource={handleMediaUploadSource}
+        title="Pilih Sumber Gambar"
+        type="image"
       />
     </div>
   );
