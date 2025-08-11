@@ -122,6 +122,10 @@ const isMasterAgency = (role) => {
   return includes(role, Constant.MASTER_AGENCY_ROLE);
 };
 
+const isSystemAdmin = (role) => {
+  return includes(role, Constant.SYSTEM_ADMIN_ROLE);
+};
+
 const isAgency = (role) => {
   return includes(role, Constant.AGENCY_ROLE);
 };
@@ -158,4 +162,5 @@ export default {
   isCleaner,
   isTenant,
   isOwner,
+  isSystemAdmin
 };

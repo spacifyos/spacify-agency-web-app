@@ -6,6 +6,7 @@ const Constant = {
 
   SUPER_ADMIN: "super-admin",
   MASTER_AGENCY_ROLE: "master-agency",
+  SYSTEM_ADMIN_ROLE: "system-admin",
   AGENCY_ROLE: "agency",
   TECHNICIAN_ROLE: "technician",
   CLEANER_ROLE: "cleaner",

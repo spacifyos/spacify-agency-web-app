@@ -33,7 +33,13 @@ const navigationItems = [
       inactive: Images.helpCenterIconDisable,
     },
     width: "w-5",
-    roles: ["master_agency", "agency", "super_admin", "technician"],
+    roles: [
+      "system_admin",
+      "master_agency",
+      "agency",
+      "super_admin",
+      "technician",
+    ],
   },
   {
     path: "/property",
@@ -43,7 +49,7 @@ const navigationItems = [
       inactive: Images.buildingIconDisable,
     },
     width: "w-5",
-    roles: ["master_agency", "agency", "super_admin"],
+    roles: ["system_admin", "master_agency", "agency", "super_admin"],
   },
   {
     path: "/cleaning-task",
@@ -53,7 +59,7 @@ const navigationItems = [
       inactive: Images.cleaningIcon2Disable,
     },
     width: "w-5",
-    roles: ["super_admin", "master_agency", "cleaner"],
+    roles: ["system_admin", "super_admin", "master_agency", "cleaner"],
   },
   // {
   //   path: "/cleaning-report",
@@ -84,6 +90,8 @@ const checkUserRole = (userRole, requiredRoles) => {
     switch (role) {
       case "master_agency":
         return Helper.isMasterAgency(userRole);
+      case "system_admin":
+        return Helper.isSystemAdmin(userRole);
       case "agency":
         return Helper.isAgency(userRole);
       case "super_admin":
