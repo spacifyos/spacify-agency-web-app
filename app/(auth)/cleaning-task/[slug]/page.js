@@ -232,12 +232,15 @@ const CleaningTaskDetailPage = () => {
     }
 
     if (image && image.size > 1) {
-      const name = get(image, ["name"], "");
-      const extension = split(name, ".");
+      const originalName = get(image, ["name"], "");
+      const extension = split(originalName, ".");
       const mimeType = get(image, ["type"], "");
 
-      // if (some(imageList, { name })) {
-      //   Toast.error(`Image with the name "${name}" already exists.`);
+      // Generate new image name with timestamp and random ID
+      const newImageName = Helper.generateImageName(originalName);
+
+      // if (some(imageList, { name: newImageName })) {
+      //   Toast.error(`Image with the name "${newImageName}" already exists.`);
       //   return;
       // }
 
@@ -245,7 +248,8 @@ const CleaningTaskDetailPage = () => {
         const base64 = await convertToBase64(image);
         const newImage = {
           type: 34,
-          name: name,
+          name: newImageName,
+          originalName: originalName, // Keep original name for reference
           extension: extension[1],
           mime_type: mimeType,
           status: false,

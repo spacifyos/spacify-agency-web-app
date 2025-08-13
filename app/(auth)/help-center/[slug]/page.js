@@ -387,12 +387,15 @@ export default function RequestOverview() {
     }
 
     if (image && image.size > 1) {
-      const name = get(image, ["name"], "");
-      const extension = split(name, ".");
+      const originalName = get(image, ["name"], "");
+      const extension = split(originalName, ".");
       const mimeType = get(image, ["type"], "");
+      
+      // Generate new image name with timestamp and random ID
+      const newImageName = Helper.generateImageName(originalName);
 
-      if (some(imageList, { name })) {
-        Toast.error(`Image with the name "${name}" already exists.`);
+      if (some(imageList, { name: newImageName })) {
+        Toast.error(`Image with the name "${newImageName}" already exists.`);
         return;
       }
 
@@ -400,7 +403,8 @@ export default function RequestOverview() {
         const base64 = await convertToBase64(image);
         const newImage = {
           type: 24,
-          name: name,
+          name: newImageName,
+          originalName: originalName, // Keep original name for reference
           extension: extension[1],
           mime_type: mimeType,
           status: false,
@@ -737,12 +741,15 @@ export default function RequestOverview() {
     }
 
     if (image && image.size > 1) {
-      const name = get(image, ["name"], "");
-      const extension = split(name, ".");
+      const originalName = get(image, ["name"], "");
+      const extension = split(originalName, ".");
       const mimeType = get(image, ["type"], "");
+      
+      // Generate new image name with timestamp and random ID
+      const newImageName = Helper.generateImageName(originalName);
 
-      if (some(imageList, { name })) {
-        Toast.error(`Image with the name "${name}" already exists.`);
+      if (some(imageList, { name: newImageName })) {
+        Toast.error(`Image with the name "${newImageName}" already exists.`);
         return;
       }
 
@@ -750,7 +757,8 @@ export default function RequestOverview() {
         const base64 = await convertCommentImageToBase64(image);
         const newImage = {
           type: 27,
-          name: name,
+          name: newImageName,
+          originalName: originalName, // Keep original name for reference
           extension: extension[1],
           mime_type: mimeType,
           status: false,

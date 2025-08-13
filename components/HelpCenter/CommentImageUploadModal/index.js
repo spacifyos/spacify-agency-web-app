@@ -37,6 +37,7 @@ const CommentImageUploadModal = ({
 
               return (
                 <div
+                  key={index}
                   className="relative mb-4 cursor-pointer overflow-hidden"
                   style={{ width: 80, height: 60 }}
                   onClick={() => setSelectedCommentImage(item)}

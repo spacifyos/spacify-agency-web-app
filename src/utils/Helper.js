@@ -146,6 +146,22 @@ const isOwner = (role) => {
   return includes(role, Constant.OWNER_ROLE);
 };
 
+const generateRandomId = (length = 8) => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+};
+
+const generateImageName = (originalName) => {
+  const timestamp = Date.now();
+  const randomId = generateRandomId(8);
+  const extension = originalName.split('.').pop();
+  return `${timestamp}_${randomId}.${extension}`;
+};
+
 export default {
   isProduction,
   secToMin,
@@ -162,5 +178,7 @@ export default {
   isCleaner,
   isTenant,
   isOwner,
-  isSystemAdmin
+  isSystemAdmin,
+  generateRandomId,
+  generateImageName
 };
