@@ -17,7 +17,7 @@ import {
   filter,
   toLower,
 } from "lodash";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import apiRequest from "@/src/services/httpUtilities/apiRequest";
 import Helper from "@/src/utils/Helper";
@@ -78,10 +78,14 @@ const CleaningTaskDetailPage = () => {
     setSecret(Helper.generateSecretKey(chiper1, chiper2));
   };
 
-  const schedulerTemplateForms = get(
-    schedulerDetail,
-    ["scheduler_template", "form"],
-    [],
+  const schedulerTemplateForms = useMemo(
+    () =>
+      get(
+        schedulerDetail,
+        ["scheduler_template", "form"],
+        [],
+      ),
+    [schedulerDetail]
   );
 
   const updateSchedulerDetail = async (postData) => {
@@ -89,8 +93,23 @@ const CleaningTaskDetailPage = () => {
       id,
       postData,
       setDetailUploading,
-      () => Toast.success("Update Successful"),
+      scheduleUpdateSuccessCallback,
     );
+  };
+
+  const scheduleUpdateSuccessCallback = async () => {
+    Toast.success("Update Successful");
+
+    // Fetch new detail data without loading
+    await apiRequest.getSchedulerDetailRequest(id, () => {}, setSchedulerDetail);
+
+    // Remove all related state data
+    setPostData(null);
+    setImageList([]);
+    setOpenCollapse(null);
+    setPopupImage(null);
+    setShowMediaUploadModal(false);
+    setCurrentImageContext({});
   };
 
   const fetchImageAsBase64 = async (url, secret) => {
@@ -387,7 +406,7 @@ const CleaningTaskDetailPage = () => {
   };
 
   useEffect(() => {
-    if (!isEmpty(schedulerDetail)) {
+    if (!isEmpty(schedulerDetail) && !isEmpty(postData)) {
       updateSchedulerDetail(postData);
     }
   }, [postData]);
@@ -407,6 +426,8 @@ const CleaningTaskDetailPage = () => {
   const onClickHandleSubmit = () => {
     Helper.documentGetElementById("schedule_submit_alert").showModal();
   };
+
+  console.log(imageList)
 
   const onClickRemoveImage = (target) => {
     setImageList((prevState) =>
@@ -432,17 +453,57 @@ const CleaningTaskDetailPage = () => {
   const onClickRemoveGallery = async (img) => {
     if (get(img, "mime_type") || get(img, "isUploaded")) {
       onClickRemoveImage(img);
+      updateSchedulerDetailAfterImageRemoval(img);
     } else if (get(img, "id")) {
       await apiRequest.deleteGalleryRequest(
         get(img, "id"),
         setGalleryDeleteLoading,
         () => {
           onClickRemoveImage(img);
+          updateSchedulerDetailAfterImageRemoval(img);
         },
       );
     } else {
       onClickRemoveImage(img);
+      updateSchedulerDetailAfterImageRemoval(img);
     }
+  };
+
+  const updateSchedulerDetailAfterImageRemoval = (removedImg) => {
+    setSchedulerDetail(prev => {
+      if (!prev) return prev;
+      
+      const forms = get(prev, ["scheduler_template", "form"], []);
+      const updatedForms = map(forms, (form) => {
+        const list = get(form, "list", {});
+        const updatedList = {};
+        
+        forEach(list, (item, key) => {
+          const imageSubTypeKey = get(item, "image_sub_type_key", "");
+          if (imageSubTypeKey === get(removedImg, "sub_type", "")) {
+            // Remove the image from this item's images array
+            const images = get(item, "images", []);
+            const filteredImages = filter(images, (img) => 
+              get(img, "id") !== get(removedImg, "id") && 
+              get(img, "path") !== get(removedImg, "path")
+            );
+            updatedList[key] = { ...item, images: filteredImages };
+          } else {
+            updatedList[key] = item;
+          }
+        });
+        
+        return { ...form, list: updatedList };
+      });
+      
+      return {
+        ...prev,
+        scheduler_template: {
+          ...prev.scheduler_template,
+          form: updatedForms
+        }
+      };
+    });
   };
 
   return (
