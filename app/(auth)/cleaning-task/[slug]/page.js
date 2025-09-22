@@ -666,7 +666,7 @@ const CleaningTaskDetailPage = () => {
                                       key={idx}
                                       className={`relative flex items-center justify-center overflow-hidden rounded-2xl border ${
                                         isEmpty(get(img, "path", ""))
-                                          ? "border-error"
+                                          ? ""
                                           : get(img, "status", "")
                                             ? "border-available"
                                             : "border-error"
