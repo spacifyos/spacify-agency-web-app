@@ -79,13 +79,8 @@ const CleaningTaskDetailPage = () => {
   };
 
   const schedulerTemplateForms = useMemo(
-    () =>
-      get(
-        schedulerDetail,
-        ["scheduler_template", "form"],
-        [],
-      ),
-    [schedulerDetail]
+    () => get(schedulerDetail, ["scheduler_template", "form"], []),
+    [schedulerDetail],
   );
 
   const updateSchedulerDetail = async (postData) => {
@@ -101,7 +96,11 @@ const CleaningTaskDetailPage = () => {
     Toast.success("Update Successful");
 
     // Fetch new detail data without loading
-    await apiRequest.getSchedulerDetailRequest(id, () => {}, setSchedulerDetail);
+    await apiRequest.getSchedulerDetailRequest(
+      id,
+      () => {},
+      setSchedulerDetail,
+    );
 
     // Remove all related state data
     setPostData(null);
@@ -390,6 +389,17 @@ const CleaningTaskDetailPage = () => {
       }),
     );
 
+    // Check if any image has empty path
+    const hasEmptyPath = some(checklist_images, (img) =>
+      isEmpty(get(img, "path", "")),
+    );
+    if (hasEmptyPath) {
+      Toast.error(
+        "Some images are still uploading. Please wait for upload to complete before updating.",
+      );
+      return;
+    }
+
     forEach(schedulerTemplateForms, (form) => {
       const formValue = get(form, "value", "");
       const formList = get(form, "list", {});
@@ -426,8 +436,6 @@ const CleaningTaskDetailPage = () => {
   const onClickHandleSubmit = () => {
     Helper.documentGetElementById("schedule_submit_alert").showModal();
   };
-
-  console.log(imageList)
 
   const onClickRemoveImage = (target) => {
     setImageList((prevState) =>
@@ -470,38 +478,40 @@ const CleaningTaskDetailPage = () => {
   };
 
   const updateSchedulerDetailAfterImageRemoval = (removedImg) => {
-    setSchedulerDetail(prev => {
+    setSchedulerDetail((prev) => {
       if (!prev) return prev;
-      
+
       const forms = get(prev, ["scheduler_template", "form"], []);
       const updatedForms = map(forms, (form) => {
         const list = get(form, "list", {});
         const updatedList = {};
-        
+
         forEach(list, (item, key) => {
           const imageSubTypeKey = get(item, "image_sub_type_key", "");
           if (imageSubTypeKey === get(removedImg, "sub_type", "")) {
             // Remove the image from this item's images array
             const images = get(item, "images", []);
-            const filteredImages = filter(images, (img) => 
-              get(img, "id") !== get(removedImg, "id") && 
-              get(img, "path") !== get(removedImg, "path")
+            const filteredImages = filter(
+              images,
+              (img) =>
+                get(img, "id") !== get(removedImg, "id") &&
+                get(img, "path") !== get(removedImg, "path"),
             );
             updatedList[key] = { ...item, images: filteredImages };
           } else {
             updatedList[key] = item;
           }
         });
-        
+
         return { ...form, list: updatedList };
       });
-      
+
       return {
         ...prev,
         scheduler_template: {
           ...prev.scheduler_template,
-          form: updatedForms
-        }
+          form: updatedForms,
+        },
       };
     });
   };
@@ -656,7 +666,7 @@ const CleaningTaskDetailPage = () => {
                                       key={idx}
                                       className={`relative flex items-center justify-center overflow-hidden rounded-2xl border ${
                                         isEmpty(get(img, "path", ""))
-                                          ? ""
+                                          ? "border-error"
                                           : get(img, "status", "")
                                             ? "border-available"
                                             : "border-error"
@@ -680,22 +690,24 @@ const CleaningTaskDetailPage = () => {
 
                                       {get(img, "loading", "") ? (
                                         <span className="loading loading-spinner loading-lg absolute text-primary" />
-                                      ) : isEqual(
+                                      ) : (
+                                        isEqual(
                                           toLower(scheduleStatus),
                                           "pending",
-                                        ) ? (
-                                        <div
-                                          className="absolute right-1 top-1 z-10 cursor-pointer"
-                                          onClick={() =>
-                                            onClickRemoveGallery(img)
-                                          }
-                                        >
-                                          <CustomImage
-                                            src={Images.deleteIcon}
-                                            className="h-5 w-5"
-                                          />
-                                        </div>
-                                      ) : null}
+                                        ) && (
+                                          <div
+                                            className="absolute right-1 top-1 z-10 cursor-pointer"
+                                            onClick={() =>
+                                              onClickRemoveGallery(img)
+                                            }
+                                          >
+                                            <CustomImage
+                                              src={Images.deleteIcon}
+                                              className="h-5 w-5"
+                                            />
+                                          </div>
+                                        )
+                                      )}
                                     </div>
                                   );
                                 })}
