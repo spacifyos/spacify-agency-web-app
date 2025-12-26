@@ -240,21 +240,29 @@ export default function HelpCenter() {
         requestDateValue={requestDateValue}
       />
 
-      <div className="hide-scroll-bar flex items-center overflow-y-hidden overflow-x-scroll py-1">
-        {map(btnLists, (list, index) => {
-          const value = get(list, ["value"], "");
-          const label = get(list, ["label"], "");
+      <div className="flex items-center justify-between">
+        <div className="hide-scroll-bar flex items-center overflow-y-hidden overflow-x-scroll py-1">
+          {map(btnLists, (list, index) => {
+            const value = get(list, ["value"], "");
+            const label = get(list, ["label"], "");
 
-          return (
-            <CustomButton
-              key={index}
-              buttonText={label}
-              buttonClassName={`btn-sm ${isEqual(selectedStatus, value) ? "btn-primary" : "btn-white"} mr-2`}
-              textClassName="text-xs"
-              onClick={() => onChangeStatusValue(value)}
-            />
-          );
-        })}
+            return (
+              <CustomButton
+                key={index}
+                buttonText={label}
+                buttonClassName={`btn-sm ${isEqual(selectedStatus, value) ? "btn-primary" : "btn-white"} mr-2`}
+                textClassName="text-xs"
+                onClick={() => onChangeStatusValue(value)}
+              />
+            );
+          })}
+        </div>
+        <CustomButton
+          buttonText="Create Ticket"
+          buttonClassName="btn-primary btn-sm ml-2"
+          textClassName="text-xs"
+          onClick={() => router.push("/help-center/create")}
+        />
       </div>
 
       <div className="hide-scroll-bar flex h-full flex-col gap-4 overflow-y-scroll px-1">

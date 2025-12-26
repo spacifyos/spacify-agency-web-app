@@ -487,6 +487,10 @@ const getPropertyOptionsV3Request = async (setLoading, successCallback) => {
   await apiRequest(api.getPropertyOptionV3(), setLoading, successCallback);
 };
 
+const getRoomOptionsRequest = async (unitId, setLoading, successCallback) => {
+  await apiRequest(api.getRoomOption(unitId), setLoading, successCallback);
+};
+
 export default {
   signInRequest,
   signUpRequest,
@@ -524,4 +528,5 @@ export default {
   patchSchedulerDetailRequest,
   patchSchedulerDetailStatusRequest,
   getPropertyOptionsV3Request,
+  getRoomOptionsRequest,
 };

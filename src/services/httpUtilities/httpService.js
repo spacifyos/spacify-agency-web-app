@@ -283,6 +283,9 @@ const patchSchedulerDetailStatus = (id) =>
 
 const getPropertyOptionV3 = () => apiInstance.get(`/property/options/v3`);
 
+const getRoomOption = (unitId) =>
+  apiInstance.get(`/room/options?unit_id=${unitId}`);
+
 export default {
   signUpAccount,
   setHeaderLanguage,
@@ -354,4 +357,5 @@ export default {
   patchSchedulerDetail,
   patchSchedulerDetailStatus,
   getPropertyOptionV3,
+  getRoomOption,
 };
