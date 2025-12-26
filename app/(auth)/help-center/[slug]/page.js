@@ -63,6 +63,10 @@ export default function RequestOverview() {
   const [getGalleryLinkLoading, setGetGalleryLinkLoading] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
 
+  const [ticketTypeOptions, setTicketTypeOptions] = useState([]);
+  const [subTypeOptions, setSubTypeOptions] = useState([]);
+  const [optionLoading, setOptionLoading] = useState(false);
+
   const [commentData, setCommentData] = useState([]);
   const [commentDataPagination, setCommentDataPagination] = useState("");
   const [messageValue, setMessageValue] = useState("");
@@ -106,6 +110,12 @@ export default function RequestOverview() {
     maintenanceTicketOverviewData,
   );
   const status = maintenanceTicketSelector.getStatusValue(
+    maintenanceTicketOverviewData,
+  );
+  const requestType = maintenanceTicketSelector.getRequestTypeValue(
+    maintenanceTicketOverviewData,
+  );
+  const requestSubType = maintenanceTicketSelector.getRequestSubTypeValue(
     maintenanceTicketOverviewData,
   );
 
@@ -156,14 +166,31 @@ export default function RequestOverview() {
         technician_external_remarks: externalRemark,
         technician_internal_remarks: internalRemark,
         status: status,
+        request_type: toString(requestType),
+        request_sub_type: toString(requestSubType),
       });
     }
   }, [maintenanceTicketOverviewData]);
 
   useEffect(() => {
+    const selectedType = toString(get(postData, "request_type", ""));
+    if (selectedType && selectedType !== "") {
+      const typeObj = filter(
+        ticketTypeOptions,
+        (t) => toString(get(t, "value", "")) === selectedType,
+      );
+      const subTypes = get(head(typeObj), "sub_types", []);
+      setSubTypeOptions(subTypes);
+    } else {
+      setSubTypeOptions([]);
+    }
+  }, [get(postData, "request_type", ""), ticketTypeOptions]);
+
+  useEffect(() => {
     handleImageSecretData();
     fetchMaintenanceData();
     fetchTicketCommentData(id);
+    fetchOptions();
   }, []);
 
   const fetchTicketCommentData = async (id, perPage = 12, page = 1) => {
@@ -173,6 +200,24 @@ export default function RequestOverview() {
       page,
       setGetCommentLoading,
       getCommentSuccessCallback,
+    );
+  };
+
+  const fetchOptions = async () => {
+    await apiRequest.getMaintenanceTicketOptionRequest(
+      setOptionLoading,
+      (res) => {
+        const typeOptions = get(res, "request_type", []);
+        const formattedTypes = map(typeOptions, (type) => ({
+          ...type,
+          value: toString(get(type, "value", "")),
+          sub_types: map(get(type, "sub_types", []), (sub) => ({
+            ...sub,
+            value: toString(get(sub, "value", "")),
+          })),
+        }));
+        setTicketTypeOptions(formattedTypes);
+      },
     );
   };
 
@@ -972,6 +1017,8 @@ export default function RequestOverview() {
         onClickUpdateTicket={onClickUpdateTicket}
         onClickCheckIn={onClickCheckIn}
         ticketUpdateLoading={ticketUpdateLoading}
+        ticketTypeOptions={ticketTypeOptions}
+        subTypeOptions={subTypeOptions}
       />
 
       <CommentComponent

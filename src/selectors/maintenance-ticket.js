@@ -69,6 +69,10 @@ export const getTechnicianTicketImages = (state) =>
   get(state, ["technician_maintenance_info_images"], []);
 export const getTechnicianTicketVideos = (state) =>
   get(state, ["technician_maintenance_info_video"], "");
+export const getRequestTypeValue = (state) =>
+  get(state, ["request_type", "id"], "");
+export const getRequestSubTypeValue = (state) =>
+  get(state, ["request_sub_type", "id"], "");
 export const getImages = (state) => get(state, ["images"], []);
 export const getStatusLabel = (state) => get(state, ["status", "label"], "");
 export const getStatusValue = (state) => get(state, ["status", "value"], "");

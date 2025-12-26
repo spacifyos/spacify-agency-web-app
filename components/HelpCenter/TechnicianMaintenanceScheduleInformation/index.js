@@ -35,6 +35,8 @@ const TechnicianMaintenanceScheduleInformation = ({
   setShowImageSourceModal,
   showVideoSourceModal,
   setShowVideoSourceModal,
+  ticketTypeOptions,
+  subTypeOptions,
 }) => {
   const videoId = get(videos, ["id"], "");
   const loading = get(videos, ["loading"], false);
@@ -56,6 +58,45 @@ const TechnicianMaintenanceScheduleInformation = ({
         className="divider-line"
         style={{ marginTop: 16, marginBottom: 16 }}
       ></div>
+
+      <BookingSelect
+        title={"Ticket Type"}
+        placeholder={"Select type"}
+        lists={ticketTypeOptions}
+        disabled={false}
+        bgColor="bg-white border border-disable"
+        className="pb-4"
+        value={get(postData, ["request_type"], "")}
+        onChange={(e) =>
+          setPostData((prevState) => {
+            return {
+              ...prevState,
+              ...{
+                request_type: e.target.value,
+                request_sub_type: "", // Reset sub-type when type changes
+              },
+            };
+          })
+        }
+      />
+
+      <BookingSelect
+        title={"Sub Type"}
+        placeholder={"Select sub type"}
+        lists={subTypeOptions}
+        disabled={isEmpty(get(postData, ["request_type"], ""))}
+        bgColor="bg-white border border-disable"
+        className="pb-4"
+        value={get(postData, ["request_sub_type"], "")}
+        onChange={(e) =>
+          setPostData((prevState) => {
+            return {
+              ...prevState,
+              ...{ request_sub_type: e.target.value },
+            };
+          })
+        }
+      />
 
       <BookingSelect
         title={"Status"}
