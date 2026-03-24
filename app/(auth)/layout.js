@@ -27,7 +27,7 @@ const navigationItems = [
   },
   {
     path: "/help-center",
-    label: "Help Center",
+    label: "Opreation Ticket",
     icon: {
       active: Images.helpCenterIconActive,
       inactive: Images.helpCenterIconDisable,
@@ -198,26 +198,28 @@ export default function RootLayout({ children }) {
       ? false
       : isEqual(pathname, item.path) || includes(pathname, item.path);
     const iconSrc = isActive ? item.icon.active : item.icon.inactive;
+    const itemClassName = `group flex cursor-pointer items-center gap-3 rounded-r-2xl border-l-4 px-6 py-4 transition-all duration-200 ${
+      isActive
+        ? "border-primary bg-primary-background shadow-sm"
+        : "border-transparent hover:border-primary/40 hover:bg-primary-background/40"
+    }`;
+    const textClassName = `${
+      isActive
+        ? "text-primary font-semibold tracking-[0.01em]"
+        : "text-disable font-medium tracking-[0.005em] group-hover:text-primary/90"
+    } text-sm leading-5 transition-colors duration-200`;
 
     return (
       <div
         key={item.path}
         onClick={() => handleNavigation(item)}
-        className={`flex cursor-pointer items-center gap-2 p-6 ${
-          isActive
-            ? "rounded-none border-l-4 border-primary bg-primary-background"
-            : ""
-        }`}
+        className={itemClassName}
         role="button"
         tabIndex={0}
         aria-label={item.label}
       >
         <CustomImage src={iconSrc} className={item.width} alt={item.label} />
-        <CustomText
-          textClassName={`${
-            isActive ? "text-primary font-semibold" : "text-disable font-light"
-          } text-sm`}
-        >
+        <CustomText textClassName={textClassName}>
           {item.label}
         </CustomText>
       </div>
@@ -247,7 +249,7 @@ export default function RootLayout({ children }) {
           </div>
           {navigationItems.map(renderNavigationItem)}
           <div
-            className="flex cursor-pointer items-center gap-2 p-6"
+            className="group flex cursor-pointer items-center gap-3 rounded-r-2xl border-l-4 border-transparent px-6 py-4 transition-all duration-200 hover:border-primary/40 hover:bg-primary-background/40"
             onClick={onClickLogoutModal}
             role="button"
             tabIndex={0}
@@ -258,7 +260,7 @@ export default function RootLayout({ children }) {
               className="w-5"
               alt="Logout"
             />
-            <CustomText textClassName="text-disable font-light text-sm">
+            <CustomText textClassName="text-disable font-medium text-sm leading-5 tracking-[0.005em] transition-colors duration-200 group-hover:text-primary/90">
               Log Out
             </CustomText>
           </div>
@@ -309,7 +311,7 @@ export default function RootLayout({ children }) {
                 ))}
                 <li>
                   <div
-                    className="flex cursor-pointer items-center gap-2 p-6"
+                    className="group flex cursor-pointer items-center gap-3 rounded-r-2xl border-l-4 border-transparent px-6 py-4 transition-all duration-200 hover:border-primary/40 hover:bg-primary-background/40"
                     onClick={onClickLogoutModal}
                     role="button"
                     tabIndex={0}
@@ -320,7 +322,7 @@ export default function RootLayout({ children }) {
                       className="w-5"
                       alt="Logout"
                     />
-                    <CustomText textClassName="text-disable font-light text-sm">
+                    <CustomText textClassName="text-disable font-medium text-sm leading-5 tracking-[0.005em] transition-colors duration-200 group-hover:text-primary/90">
                       Log Out
                     </CustomText>
                   </div>
