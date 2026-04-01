@@ -5,6 +5,7 @@ import BookingSelect from "@/components/Booking/BookingSelect";
 import CustomButton from "@/components/CustomButton";
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import UploadIcButton from "@/components/Booking/UploadIcButton";
 import Helper from "@/src/utils/Helper";
 import ImageUploading from "@/components/Booking/ImageUploading";
@@ -391,9 +392,10 @@ const DesktopFormSection = ({
 
           <UploadIcButton
             name="front_image"
-            icon={Images.uploadIconActive}
+            iconName="upload"
+            iconColor="active"
+            iconSize={15}
             buttonText="Front Image"
-            imageStyle={{ width: 15 }}
             buttonClassName="btn-primary-outline flex-row-reverse mt-1 w-full"
             onChangeImage={onChangeFrontICImage}
             onClickSelectImage={() =>
@@ -414,8 +416,9 @@ const DesktopFormSection = ({
 
           <UploadIcButton
             name="back_image"
-            icon={Images.uploadIconActive}
-            imageStyle={{ width: 15 }}
+            iconName="upload"
+            iconColor="active"
+            iconSize={15}
             buttonText="Back Image"
             buttonClassName="btn-primary-outline flex-row-reverse mt-1 w-full"
             onChangeImage={onChangeBackICImage}
@@ -428,11 +431,11 @@ const DesktopFormSection = ({
 
       <div className="flex items-start pt-6 pb-2">
         <div style={{ width: 20 }}>
-          <CustomImage
-            src={isReadAgree ? Images.checkIconAqua : Images.uncheckIconWhite}
-            imageStyle={{ width: 20 }}
+          <SvgIcon
+            name={isReadAgree ? "check" : "uncheck"}
+            color={isReadAgree ? "aqua" : "white"}
+            size={20}
             onClick={onClickReadAgree}
-            className="cursor-pointer"
           />
         </div>
 

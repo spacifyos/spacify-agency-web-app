@@ -1,92 +1,52 @@
 import CustomSelect from "@/components/CustomSelect";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
 import CustomButton from "@/components/CustomButton";
-import CustomInput from "@/components/CustomInput";
+
+const dateRangeOptions = [
+  { label: "Today", value: "today" },
+  { label: "This Week", value: "week" },
+  { label: "This Month", value: "month" },
+];
 
 const FilterSection = ({
-  isOpenFilter,
-  setIsOpenFilter,
   propertyOption,
   onChangePropertyValue,
   propertyValue,
+  selectedDateRange,
+  onChangeDateRange,
   onClickReset,
-  onChangeStartDateValue,
-  startDateValue,
-  onChangeEndDateValue,
-  endDateValue,
 }) => {
   return (
-    <div className="">
-      <div
-        className={`grid grid-cols-11 items-end gap-2 sm:grid-cols-11 md:grid-cols-11 lg:grid-cols-11 xl:grid-cols-11`}
-      >
-        <CustomSelect
-          label={"Property"}
-          className="col-span-9 sm:col-span-9 md:col-span-4 lg:col-span-4 xl:col-span-4"
-          placeholder={"Property"}
-          optionList={propertyOption}
-          onChange={onChangePropertyValue}
-          value={propertyValue}
-        />
+    <div className="flex flex-col gap-3">
+      {/* Date range pills */}
+      <div className="flex items-center gap-2">
+        {dateRangeOptions.map((option) => (
+          <CustomButton
+            key={option.value}
+            buttonText={option.label}
+            buttonClassName={`btn-sm flex-1 ${selectedDateRange === option.value ? "btn-primary" : "btn-white"}`}
+            textClassName="text-xs"
+            onClick={() => onChangeDateRange(option.value)}
+          />
+        ))}
+      </div>
 
-        <CustomInput
-          label={"Start Date"}
-          className="col-span-3 hidden w-full sm:col-span-3 md:col-span-3 md:block lg:col-span-3 lg:block xl:col-span-3 xl:block"
-          placeholder={"Start Date"}
-          onChange={onChangeStartDateValue}
-          value={startDateValue}
-          inputType="date"
-        />
-
-        <CustomInput
-          label={"End Date"}
-          className="col-span-3 hidden w-full sm:col-span-3 md:col-span-3 md:block lg:col-span-3 lg:block xl:col-span-3 xl:block"
-          placeholder={"End Date"}
-          onChange={onChangeEndDateValue}
-          value={endDateValue}
-          inputType="date"
-        />
-
-        <div
-          className="global-box-shadow global-border-radius col-span-2 flex h-12 cursor-pointer items-center justify-center bg-white sm:col-span-2 sm:flex md:col-span-1 md:hidden lg:col-span-1 lg:hidden xl:col-span-1 xl:hidden"
-          onClick={() => setIsOpenFilter(!isOpenFilter)}
-        >
-          <CustomImage src={Images.filterIconBlack} className="h-6 w-6" />
+      {/* Property filter + Reset */}
+      <div className="flex items-center gap-2">
+        <div className="flex-1">
+          <CustomSelect
+            placeholder={"Property"}
+            optionList={propertyOption}
+            onChange={onChangePropertyValue}
+            value={propertyValue}
+          />
         </div>
-
         <CustomButton
-          buttonClassName="btn-primary sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1 col-span-2 md:flex lg:flex xl:flex sm:hidden hidden"
+          buttonClassName="btn-primary-outline h-10 shrink-0 px-4"
           buttonText="Reset"
+          textClassName="text-sm"
           onClick={onClickReset}
         />
       </div>
-
-      {isOpenFilter ? (
-        <div className="grid grid-cols-12 gap-2 pt-2">
-          <CustomInput
-            className="col-span-5 sm:col-span-5 md:col-span-5 lg:col-span-5 xl:col-span-5"
-            placeholder={"Start Date"}
-            onChange={onChangeStartDateValue}
-            value={startDateValue}
-            inputType="date"
-          />
-
-          <CustomInput
-            className="col-span-5 sm:col-span-5 md:col-span-5 lg:col-span-5 xl:col-span-5"
-            placeholder={"End Date"}
-            onChange={onChangeEndDateValue}
-            value={endDateValue}
-            inputType="date"
-          />
-
-          <CustomButton
-            buttonClassName="btn-primary xl:col-span-1 lg:col-span-1 md:col-span-1 sm:col-span-2 col-span-2 block sm:block md:hidden lg:hidden xl:hidden"
-            buttonText="Reset"
-            onClick={onClickReset}
-          />
-        </div>
-      ) : null}
     </div>
   );
 };

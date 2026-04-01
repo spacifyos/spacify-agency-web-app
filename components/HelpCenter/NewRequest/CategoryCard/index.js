@@ -1,12 +1,13 @@
 import { isEqual } from "lodash";
-import CustomImage from "@/components/CustomImage";
+import SvgIcon from "@/components/SvgIcon";
 import CustomText from "@/components/CustomText";
 
 const CategoryCard = ({
   selectedValue,
   value,
-  icon,
-  iconActive,
+  iconName,
+  iconColor,
+  iconActiveColor,
   onClickChangeSection,
   btnText,
   btnDescription,
@@ -20,9 +21,10 @@ const CategoryCard = ({
           style={{ borderRadius: 100 }}
           onClick={() => onClickChangeSection(value, subType)}
         >
-          <CustomImage
-            className="w-6"
-            src={`${isEqual(selectedValue, value) ? icon : iconActive}`}
+          <SvgIcon
+            name={iconName}
+            color={isEqual(selectedValue, value) ? iconColor : iconActiveColor}
+            size={24}
           />
         </div>
 

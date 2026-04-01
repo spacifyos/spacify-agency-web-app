@@ -1,6 +1,5 @@
 import CustomSelect from "@/components/CustomSelect";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 
@@ -24,63 +23,67 @@ const FilterSection = ({
   requestDateValue,
 }) => {
   return (
-    <div className="">
-      <div
-        className={`grid grid-cols-11 gap-2 sm:grid-cols-11 md:grid-cols-11 lg:grid-cols-11 xl:grid-cols-11`}
-      >
-        <CustomSelect
-          className="col-span-9 sm:col-span-9 md:col-span-4 lg:col-span-4 xl:col-span-4"
-          placeholder={"Property"}
-          optionList={propertyOption}
-          onChange={onChangePropertyValue}
-          value={propertyValue}
-        />
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2">
+        <div className="flex-1">
+          <CustomSelect
+            placeholder={"Property"}
+            optionList={propertyOption}
+            onChange={onChangePropertyValue}
+            value={propertyValue}
+          />
+        </div>
 
-        <CustomSelect
-          className="col-span-3 hidden w-full sm:col-span-3 md:col-span-3 md:block lg:col-span-3 lg:block xl:col-span-3 xl:block"
-          placeholder={"Block"}
-          optionList={blockOption}
-          onChange={onChangeBlockValue}
-          value={blockValue}
-        />
+        <div className="hidden flex-1 md:block">
+          <CustomSelect
+            placeholder={"Block"}
+            optionList={blockOption}
+            onChange={onChangeBlockValue}
+            value={blockValue}
+          />
+        </div>
 
-        <CustomSelect
-          className="col-span-3 hidden w-full sm:col-span-3 md:col-span-3 md:block lg:col-span-3 lg:block xl:col-span-3 xl:block"
-          placeholder={"Floor"}
-          optionList={floorOptions}
-          onChange={onChangeFloorValue}
-          value={floorValue}
-        />
+        <div className="hidden flex-1 md:block">
+          <CustomSelect
+            placeholder={"Floor"}
+            optionList={floorOptions}
+            onChange={onChangeFloorValue}
+            value={floorValue}
+          />
+        </div>
 
-        <div
-          className="global-box-shadow global-border-radius col-span-2 flex cursor-pointer items-center justify-center bg-white sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1"
+        <button
+          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-border bg-surface transition-colors hover:bg-surface-secondary"
           onClick={() => setIsOpenFilter(!isOpenFilter)}
         >
-          <CustomImage src={Images.filterIconBlack} className="h-6 w-6" />
-        </div>
+          <SvgIcon name="filter" color="black" size={20} />
+        </button>
       </div>
 
       {isOpenFilter ? (
-        <div className="grid grid-cols-11 gap-2 pt-2">
-          <CustomSelect
-            className="col-span-5 sm:col-span-5 md:col-span-5 lg:col-span-5 xl:col-span-5"
-            placeholder={"Unit"}
-            optionList={unitOption}
-            onChange={onChangeUnitValue}
-            value={unitValue}
-          />
+        <div className="flex items-center gap-2">
+          <div className="flex-1">
+            <CustomSelect
+              placeholder={"Unit"}
+              optionList={unitOption}
+              onChange={onChangeUnitValue}
+              value={unitValue}
+            />
+          </div>
 
-          <CustomInput
-            className="col-span-5 sm:col-span-5 md:col-span-5 lg:col-span-5 xl:col-span-5"
-            placeholder={"Request Date"}
-            onChange={onChangeRequestDateValue}
-            value={requestDateValue}
-            inputType="date"
-          />
+          <div className="flex-1">
+            <CustomInput
+              placeholder={"Request Date"}
+              onChange={onChangeRequestDateValue}
+              value={requestDateValue}
+              inputType="date"
+            />
+          </div>
 
           <CustomButton
-            buttonClassName="btn-primary xl:col-span-1 lg:col-span-1 md:col-span-1 sm:col-span-2 col-span-2"
+            buttonClassName="btn-primary-outline h-10 shrink-0 px-4"
             buttonText="Reset"
+            textClassName="text-sm"
             onClick={onClickReset}
           />
         </div>

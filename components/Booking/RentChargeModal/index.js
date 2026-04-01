@@ -1,8 +1,6 @@
 import CustomText from "@/components/CustomText";
-import CustomModal from "@/components/CustomModal";
 import DesktopModal from "@/components/DesktopModal";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 
 const RentChargeModal = ({ onClickCloseRentChargeModal }) => {
   return (
@@ -17,10 +15,7 @@ const RentChargeModal = ({ onClickCloseRentChargeModal }) => {
               className="btn btn-sm btn-circle btn-ghost right-2"
               onClick={onClickCloseRentChargeModal}
             >
-              <CustomImage
-                className="xl:w-4 lg:w-4 md:w-4 sm:w-3 w-3"
-                src={Images.closeIconBlack}
-              />
+              <SvgIcon name="close" color="black" size={16} />
             </button>
           </form>
         </div>

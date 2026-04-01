@@ -3,8 +3,7 @@ import _ from "lodash";
 import CustomButton from "@/components/CustomButton";
 import DesktopModal from "@/components/DesktopModal";
 import CustomText from "@/components/CustomText";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 
 const SetPinNumberModal = ({
   pinNumberValue,
@@ -32,10 +31,7 @@ const SetPinNumberModal = ({
           </CustomText>
           <form method="dialog" className={`flex justify-end`}>
             <button className="btn btn-sm btn-circle btn-ghost right-2">
-              <CustomImage
-                src={Images.closeIconBlack}
-                imageStyle={{ width: 18, height: 18 }}
-              />
+              <SvgIcon name="close" color="black" size={18} />
             </button>
           </form>
         </div>

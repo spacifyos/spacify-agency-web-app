@@ -1,6 +1,5 @@
 import CustomSelect from "@/components/CustomSelect";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import CustomButton from "@/components/CustomButton";
 
 const FilterSection = ({
@@ -25,58 +24,31 @@ const FilterSection = ({
   genderValue,
 }) => {
   return (
-    <div className="">
-      <div
-        className={`grid grid-cols-11 gap-2 sm:grid-cols-11 md:grid-cols-11 lg:grid-cols-11 xl:grid-cols-11 ${isOpenFilter ? "pb-2" : "pb-7"}`}
-      >
-        <CustomSelect
-          className="col-span-9 sm:col-span-9 md:col-span-4 lg:col-span-4 xl:col-span-4"
-          placeholder={"Property"}
-          optionList={propertyOption}
-          onChange={onChangePropertyValue}
-          value={propertyValue}
-        />
-
-        <CustomSelect
-          className="col-span-3 hidden w-full sm:col-span-3 md:col-span-3 md:block lg:col-span-3 lg:block xl:col-span-3 xl:block"
-          placeholder={"Unit"}
-          optionList={unitOption}
-          onChange={onChangeUnitValue}
-          value={unitValue}
-        />
-
-        <CustomSelect
-          className="col-span-3 hidden w-full sm:col-span-3 md:col-span-3 md:block lg:col-span-3 lg:block xl:col-span-3 xl:block"
-          placeholder={"Gender"}
-          optionList={[
-            { label: "Male", value: "male" },
-            { label: "Female", value: "female" },
-            { label: "Mixed", value: "mixed" },
-          ]}
-          onChange={onChangeGenderValue}
-          value={genderValue}
-        />
-
-        <div
-          className="global-box-shadow global-border-radius col-span-2 flex cursor-pointer items-center justify-center bg-white sm:col-span-2 md:col-span-1 lg:col-span-1 xl:col-span-1"
-          onClick={() => setIsOpenFilter(!isOpenFilter)}
-        >
-          <CustomImage src={Images.filterIconBlack} className="h-6 w-6" />
-        </div>
-      </div>
-
-      {isOpenFilter ? (
-        <div className="grid grid-cols-10 gap-2 pb-7 sm:grid-cols-10 md:grid-cols-10 lg:grid-cols-10 xl:grid-cols-10">
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center gap-2">
+        <div className="flex-1">
           <CustomSelect
-            className="col-span-5 sm:col-span-5 md:col-span-5 md:hidden lg:col-span-5 lg:hidden xl:col-span-5 xl:hidden"
+            className="w-full"
+            placeholder={"Property"}
+            optionList={propertyOption}
+            onChange={onChangePropertyValue}
+            value={propertyValue}
+          />
+        </div>
+
+        <div className="flex-1">
+          <CustomSelect
+            className="w-full"
             placeholder={"Unit"}
             optionList={unitOption}
             onChange={onChangeUnitValue}
             value={unitValue}
           />
+        </div>
 
+        <div className="flex-1">
           <CustomSelect
-            className="col-span-5 sm:col-span-5 md:col-span-5 md:hidden lg:col-span-5 lg:hidden xl:col-span-5 xl:hidden"
+            className="w-full"
             placeholder={"Gender"}
             optionList={[
               { label: "Male", value: "male" },
@@ -86,36 +58,53 @@ const FilterSection = ({
             onChange={onChangeGenderValue}
             value={genderValue}
           />
+        </div>
 
-          <CustomSelect
-            className="col-span-5 sm:col-span-5 md:col-span-3 lg:col-span-3 xl:col-span-3"
-            placeholder={"Bedroom"}
-            optionList={bedroomOption}
-            onChange={onChangeBedroomValue}
-            value={bedroomValue}
-          />
+        <div
+          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-border bg-surface"
+          onClick={() => setIsOpenFilter(!isOpenFilter)}
+        >
+          <SvgIcon name="filter" color="black" size={20} />
+        </div>
+      </div>
 
-          <CustomSelect
-            className="col-span-5 sm:col-span-5 md:col-span-3 lg:col-span-3 xl:col-span-3"
-            placeholder={"Bathroom"}
-            optionList={bathroomOption}
-            onChange={onChangeBathroomValue}
-            value={bathroomValue}
-          />
+      {isOpenFilter ? (
+        <div className="flex items-center gap-2">
+          <div className="flex-1">
+            <CustomSelect
+              className="w-full"
+              placeholder={"Bedroom"}
+              optionList={bedroomOption}
+              onChange={onChangeBedroomValue}
+              value={bedroomValue}
+            />
+          </div>
 
-          <CustomSelect
-            className="col-span-4 sm:col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-3"
-            placeholder={"Status"}
-            optionList={[
-              { label: "Available", value: true },
-              { label: "Not Available", value: false },
-            ]}
-            onChange={onChangeStatusValue}
-            value={statusValue}
-          />
+          <div className="flex-1">
+            <CustomSelect
+              className="w-full"
+              placeholder={"Bathroom"}
+              optionList={bathroomOption}
+              onChange={onChangeBathroomValue}
+              value={bathroomValue}
+            />
+          </div>
+
+          <div className="flex-1">
+            <CustomSelect
+              className="w-full"
+              placeholder={"Status"}
+              optionList={[
+                { label: "Available", value: true },
+                { label: "Not Available", value: false },
+              ]}
+              onChange={onChangeStatusValue}
+              value={statusValue}
+            />
+          </div>
 
           <CustomButton
-            buttonClassName="btn-primary xl:col-span-1 lg:col-span-1 md:col-span-1 sm:col-span-2 col-span-2"
+            buttonClassName="btn-primary shrink-0"
             buttonText="Reset"
             onClick={onClickReset}
           />

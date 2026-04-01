@@ -3,7 +3,7 @@
 }
 
 .amenities-nav-container {
-  @apply amenities-container global-box-shadow sticky grid grid-cols-1 gap-5 overflow-y-scroll bg-white px-3 py-6;
+  @apply global-box-shadow sticky grid grid-cols-1 gap-5 overflow-y-scroll bg-white px-3 py-6;
 }
 
 .tag-container::-webkit-scrollbar {

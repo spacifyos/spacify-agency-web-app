@@ -1,9 +1,16 @@
 .btn {
-  @apply global-border-radius border-none font-normal;
+  @apply global-border-radius border-none font-medium text-sm tracking-wide;
+  transition: all 0.15s ease;
 }
 
 .btn-primary {
   @apply text-white;
+  background-color: var(--color-primary);
+
+  &:hover {
+    opacity: 0.9;
+    background-color: var(--color-primary);
+  }
 }
 
 .btn-black {
@@ -15,19 +22,24 @@
 }
 
 .btn-white {
-  @apply global-box-shadow bg-white;
-}
+  @apply bg-white text-black;
+  border: 1px solid var(--color-border);
+  box-shadow: none;
 
-.btn-white:hover {
-  @apply bg-white shadow-lg;
+  &:hover {
+    @apply bg-white;
+    border-color: var(--color-primary);
+  }
 }
 
 .btn-primary-outline {
-  @apply border border-solid border-primary bg-white text-primary;
-}
+  @apply bg-white font-medium;
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
 
-.btn-primary-outline:hover {
-  @apply global-box-shadow bg-white;
+  &:hover {
+    background-color: rgba(245, 131, 60, 0.05);
+  }
 }
 
 .btn-secondary {
@@ -35,16 +47,15 @@
 }
 
 .btn-disable {
-  @apply border bg-disable text-black;
+  @apply bg-disable-background text-muted;
+  border: 1px solid var(--color-border);
 }
 
 .btn-disable:hover {
-  @apply border text-black;
+  @apply bg-disable-background text-muted;
 }
 
 .default-btn:focus-visible,
-//.btn-primary:focus-visible,
-.disable-btn:focus-visible,
 .disable-btn:focus-visible,
 .tag-button:focus-visible,
 .tag-button-active:focus-visible,

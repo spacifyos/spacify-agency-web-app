@@ -1,5 +1,6 @@
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import { isEmpty, map } from "lodash";
 
 const MediaInput = ({
@@ -40,14 +41,17 @@ const MediaInput = ({
           >
             {itemLoading ? (
               false
-            ) : (
+            ) : type === "image" ? (
               <CustomImage
-                src={
-                  type === "image"
-                    ? item?.base64 || Images.imageNotFound
-                    : Images.playIcon
-                }
-                className={type === "image" ? "" : "h-14 w-14 cursor-pointer"}
+                src={item?.base64 || Images.imageNotFound}
+                onClick={() => onPopup && onPopup(index)}
+              />
+            ) : (
+              <SvgIcon
+                name="play"
+                color="active"
+                size={56}
+                className="cursor-pointer"
                 onClick={() => onPopup && onPopup(index)}
               />
             )}
@@ -59,7 +63,7 @@ const MediaInput = ({
                 className="absolute right-1 top-1 z-10 cursor-pointer"
                 onClick={() => onRemove && onRemove(id, type, isUploaded)}
               >
-                <CustomImage src={Images.deleteIcon} className="h-5 w-5" />
+                <SvgIcon name="delete" color="error" size={20} />
               </div>
             )}
           </div>
@@ -71,10 +75,7 @@ const MediaInput = ({
           className="global-border-radius flex h-28 w-28 cursor-pointer items-center justify-center bg-primary-background"
           onClick={onShowSourceModal}
         >
-          <CustomImage
-            src={Images.addIconBlack}
-            imageStyle={{ width: 20, height: 20 }}
-          />
+          <SvgIcon name="add" color="black" size={20} />
         </div>
       ) : (
         false

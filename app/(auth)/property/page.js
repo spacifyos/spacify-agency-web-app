@@ -270,7 +270,7 @@ export default function CardListing({ params }) {
   };
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col gap-4">
       <LoadingOverlay loading={propertyListingLoading || unitListingLoading} />
 
       <FilterSection
@@ -294,28 +294,15 @@ export default function CardListing({ params }) {
         genderValue={genderValue}
         onChangeGenderValue={onChangeGenderValue}
       />
+
       <div className="relative flex h-full flex-col overflow-hidden">
         <CardViewModal
           data={selectedRoom}
           onClickShareBooking={onClickShareBooking}
         />
 
-        <div className="flex h-full flex-col gap-4 overflow-y-scroll lg:hidden xl:hidden">
+        <div className="flex h-full flex-col gap-4 overflow-y-auto">
           <MobilePropertySelectionComponent
-            propertyListing={propertyListing}
-            onClickSelectProperty={onClickSelectProperty}
-            selectedPropertyId={selectedPropertyId}
-            userRole={userRole}
-          />
-
-          <CinemaUnitContent
-            unitListing={unitListing}
-            onClickSelectRoomDetail={onClickSelectRoomDetail}
-          />
-        </div>
-
-        <div className="hidden h-full flex-row gap-6 lg:flex xl:flex">
-          <PropertySelectionComponent
             propertyListing={propertyListing}
             onClickSelectProperty={onClickSelectProperty}
             selectedPropertyId={selectedPropertyId}

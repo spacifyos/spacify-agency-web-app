@@ -1,7 +1,6 @@
 import CustomText from "@/components/CustomText";
 import { map, get, isEmpty } from "lodash";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 
 const BookingSelect = ({
   className,
@@ -10,7 +9,7 @@ const BookingSelect = ({
   title,
   lists,
   name,
-  rightIcon = Images.downIconBlack,
+  rightIcon,
   required,
   bgColor = "bg-primary-background",
   disabled = true,
@@ -50,7 +49,7 @@ const BookingSelect = ({
           })}
         </select>
 
-        <CustomImage src={rightIcon} imageStyle={{ width: 10 }} />
+        <SvgIcon name="down" color="black" size={10} />
       </div>
       {isEmpty(errorMessage) ? (
         false

@@ -2,8 +2,7 @@ import DesktopModal from "@/components/DesktopModal";
 import BookingInput from "@/components/Booking/BookingInput";
 import { get } from "lodash";
 import CustomButton from "@/components/CustomButton";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import CustomText from "@/components/CustomText";
 
 const DesktopChangePasswordModal = ({
@@ -27,10 +26,7 @@ const DesktopChangePasswordModal = ({
           </CustomText>
           <form method="dialog" className={`flex justify-end`}>
             <button className="btn btn-sm btn-circle btn-ghost right-2">
-              <CustomImage
-                className="xl:w-4 lg:w-4 md:w-4 sm:w-3 w-3"
-                src={Images.closeIconBlack}
-              />
+              <SvgIcon name="close" color="black" size={16} />
             </button>
           </form>
         </div>

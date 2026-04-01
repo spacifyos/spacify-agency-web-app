@@ -1,7 +1,6 @@
 import DesktopModal from "@/components/DesktopModal";
 import CustomText from "@/components/CustomText";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import { get, isEmpty, isEqual } from "lodash";
 import * as listingSelector from "@/src/selectors/listing";
 
@@ -26,10 +25,7 @@ const CardViewModal = ({ data, onClickShareBooking }) => {
           </CustomText>
           <form method="dialog" className={`flex justify-end`}>
             <button className="btn btn-sm btn-circle btn-ghost right-2">
-              <CustomImage
-                className="xl:w-4 lg:w-4 md:w-4 sm:w-3 w-3"
-                src={Images.closeIconBlack}
-              />
+              <SvgIcon name="close" color="black" size={16} />
             </button>
           </form>
         </div>
@@ -62,13 +58,10 @@ const CardViewModal = ({ data, onClickShareBooking }) => {
                   : "Occupied"}
             </CustomText>
 
-            <CustomImage
-              src={
-                isAvailableBook
-                  ? Images.shareIconActive
-                  : Images.shareIconDisable
-              }
-              className={`w-4 ${isAvailableBook ? "cursor-pointer" : ""}`}
+            <SvgIcon
+              name="share"
+              color={isAvailableBook ? "active" : "disable"}
+              size={16}
               onClick={(event) => {
                 if (isAvailableBook) {
                   event.stopPropagation();
@@ -84,21 +77,21 @@ const CardViewModal = ({ data, onClickShareBooking }) => {
           </CustomText>
 
           <div className="flex items-center gap-2">
-            <CustomImage src={Images.bathroomIconActive} className="w-4" />
+            <SvgIcon name="bathroom" color="active" size={16} />
             <CustomText textClassName="text-xs">
               {isEmpty(bathroom) ? "-" : bathroom}
             </CustomText>
           </div>
 
           <div className="flex items-center gap-2">
-            <CustomImage src={Images.bedIconActive} className="w-4" />
+            <SvgIcon name="bed" color="active" size={16} />
             <CustomText textClassName="text-xs">
               {isEmpty(bedType) ? "-" : bedType}
             </CustomText>
           </div>
 
           <div className="flex items-center gap-2">
-            <CustomImage src={Images.spaceIconActive} className="w-4" />
+            <SvgIcon name="space" color="active" size={16} />
             <CustomText textClassName="text-xs">
               {isEmpty(spaceType) ? "-" : spaceType}
             </CustomText>

@@ -1,0 +1,180 @@
+@import "tailwindcss";
+@plugin "daisyui";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
+@theme {
+  --font-sans: "Noto Sans", sans-serif;
+  --text-xxs: 10px;
+  --spacing-125: 500px;
+
+  --color-primary: #f5833c;
+  --color-primary-background: #f7f8fa;
+  --color-secondary: #F05A22;
+  --color-secondary-background: #FFF4E0;
+  --color-available: #22c55e;
+  --color-available-light: #f0fdf4;
+  --color-error: #ef4444;
+  --color-error-light: #fef2f2;
+  --color-tertiary: #3b82f6;
+  --color-warning: #f59e0b;
+  --color-disable: #d1d5db;
+  --color-disable-background: #f3f4f6;
+  --color-black: #1f2937;
+  --color-white: #FFFFFF;
+  --color-aqua: #06b6d4;
+  --color-female: #f472b6;
+  --color-male: #60a5fa;
+  --color-mixed: #a78bfa;
+  --color-female-background: #fdf2f8;
+  --color-male-background: #eff6ff;
+  --color-mixed-background: #f5f3ff;
+  --color-active: #06b6d4;
+  --color-muted: #9ca3af;
+  --color-border: #e5e7eb;
+  --color-surface: #ffffff;
+  --color-surface-secondary: #f9fafb;
+}
+
+@utility global-horizontal-padding {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@utility global-horizontal-margin {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+@utility global-box-shadow {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+}
+
+@utility global-border-radius {
+  border-radius: 12px;
+}
+
+@utility global-border {
+  border: 1px solid var(--color-border);
+}
+
+:root {
+  --color-primary: #f5833c !important;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: var(--color-surface);
+}
+
+* {
+  scrollbar-color: unset;
+  scrollbar-gutter: auto !important;
+}
+
+.pb-23 {
+  padding-bottom: 88px;
+}
+
+.toggle-primary-color {
+  @apply bg-primary;
+  border: none;
+}
+
+.toggle-disable-color {
+  @apply bg-disable;
+  border: none;
+}
+
+.border-16 {
+  border-width: 16px;
+}
+
+.border-secondary-color {
+  @apply border-secondary-background;
+}
+
+.divider-line {
+  height: 1px;
+  width: 100%;
+  background-color: var(--color-border);
+  @apply my-4;
+}
+
+.divider-custom:before {
+  height: 4px;
+  width: 30%;
+  max-width: 30%;
+  border-radius: 99px;
+}
+
+.divider-custom:after {
+  display: none;
+}
+
+.modal-box {
+  padding-top: 0;
+}
+
+.divider-step-section {
+  &:before,
+  &:after {
+    height: 1px;
+  }
+}
+
+.section-title {
+  @apply text-base font-semibold;
+}
+
+.second-section-title {
+  @apply text-base font-semibold;
+}
+
+.body-container {
+  @apply global-horizontal-padding relative;
+}
+
+.feature-button {
+  cursor: pointer;
+}
+
+.feature-button:hover {
+  @apply bg-white;
+}
+
+.collapse-arrow > .collapse-title:after {
+  top: 25px !important;
+}
+
+.hide-scroll-bar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.desktop-responsive {
+  @apply hidden sm:flex md:flex lg:flex xl:flex 2xl:flex;
+}
+
+.mobile-responsive {
+  @apply sm:hidden md:hidden lg:hidden xl:hidden 2xl:hidden;
+}
+
+.image-zoom-in:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+.divider-primary-background:before,
+.divider-primary-background:after {
+  @apply bg-primary-background;
+}
+
+.divider-white:before,
+.divider-white:after {
+  @apply bg-white;
+}

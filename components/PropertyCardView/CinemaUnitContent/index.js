@@ -10,18 +10,17 @@ import {
 import CustomEmptyBox from "@/components/CustomEmptyBox";
 import * as listingSelector from "@/src/selectors/listing";
 import CustomText from "@/components/CustomText";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 
 const CinemaUnitContent = ({ unitListing, onClickSelectRoomDetail }) => {
   return (
     <div className="h-full w-full">
       {isEmpty(unitListing) ? (
-        <div className="flex h-full w-full items-center justify-center rounded-3xl bg-white">
+        <div className="flex h-full w-full items-center justify-center rounded-2xl border border-border bg-surface">
           <CustomEmptyBox />
         </div>
       ) : (
-        <div className="hide-scroll-bar flex h-full flex-col rounded-3xl bg-white p-6 lg:overflow-y-scroll xl:overflow-y-scroll">
+        <div className="hide-scroll-bar flex h-full flex-col gap-4 overflow-y-auto rounded-2xl border border-border bg-surface p-5">
           {map(unitListing, (list, index) => {
             const name = listingSelector.getName(list);
             const rooms = listingSelector.getRooms(list);
@@ -50,30 +49,30 @@ const CinemaUnitContent = ({ unitListing, onClickSelectRoomDetail }) => {
               false
             ) : (
               <div key={index}>
-                <div className="" style={{ zoom: 1 }}>
-                  <div className="flex items-center gap-2 pb-4">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2 pb-3">
                     <CustomText
-                      textClassName={`${checkGenderColor(genderValue)} text-white text-xs py-1 px-1.5 rounded`}
+                      textClassName={`${checkGenderColor(genderValue)} text-white text-xs py-1 px-1.5 rounded-lg`}
                     >
                       {isEmpty(genderLabel)
                         ? "N/A"
                         : first(genderLabel.split(""))}
                     </CustomText>
 
-                    <CustomText textClassName="text-base text-primary font-bold">
+                    <CustomText textClassName="text-base text-primary font-semibold">
                       {isEmpty(name) ? "-" : name}
                     </CustomText>
 
                     {isEmpty(styleLabel) ? (
                       false
                     ) : (
-                      <CustomText textClassName="italic">
+                      <CustomText textClassName="italic text-muted text-sm">
                         | {styleLabel}
                       </CustomText>
                     )}
 
                     <CustomText
-                      textClassName={`${isEqual(unitStatus, "fully") ? "bg-error" : isEqual(unitStatus, "partial") ? "bg-warning" : "bg-active"} text-xs rounded px-2 py-1 text-white`}
+                      textClassName={`${isEqual(unitStatus, "fully") ? "bg-error" : isEqual(unitStatus, "partial") ? "bg-warning" : "bg-active"} text-xs rounded-lg px-2 py-1 text-white`}
                     >
                       {capitalize(unitStatus)}
                     </CustomText>
@@ -102,56 +101,50 @@ const CinemaUnitContent = ({ unitListing, onClickSelectRoomDetail }) => {
                           key={idx}
                           onClick={() => onClickSelectRoomDetail(room)}
                           style={{ maxWidth: 112 }}
-                          className={`${spaceStatusTypeValue === 4 ? "bg-disable-background" : isEqual(status, "vacant") ? "bg-available-light" : "bg-error-light"} global-border-radius flex cursor-pointer flex-col gap-1 overflow-hidden p-2`}
+                          className={`${spaceStatusTypeValue === 4 ? "bg-surface-secondary" : isEqual(status, "vacant") ? "bg-available-light" : "bg-error-light"} flex cursor-pointer flex-col gap-1 overflow-hidden rounded-xl p-2.5 transition-all hover:opacity-80`}
                         >
-                          <div className={`flex flex-col items-start gap-1`}>
+                          <div className="flex flex-col items-start gap-1">
                             <div className="flex items-center gap-0.5">
-                              {/*<CustomText*/}
-                              {/*  textClassName={`text-white text-xxs ${*/}
-                              {/*    !isAvailableBook && isEqual(status, "vacant")*/}
-                              {/*      ? "bg-disable"*/}
-                              {/*      : isEqual(status, "vacant")*/}
-                              {/*        ? "bg-available"*/}
-                              {/*        : "bg-error"*/}
-                              {/*  } px-1 rounded`}*/}
-                              {/*>*/}
-                              {/*  {!isAvailableBook && isEqual(status, "vacant")*/}
-                              {/*    ? "N"*/}
-                              {/*    : isEqual(status, "vacant")*/}
-                              {/*      ? "V"*/}
-                              {/*      : "O"}*/}
-                              {/*</CustomText>*/}
-
-                              <CustomImage
-                                src={
+                              <SvgIcon
+                                name={
+                                  isEqual(spaceType, "R")
+                                    ? "bed"
+                                    : !isAvailableBook &&
+                                        isEqual(status, "vacant")
+                                      ? "carDisable"
+                                      : isEqual(status, "vacant")
+                                        ? "carAvailable"
+                                        : "carOccupied"
+                                }
+                                color={
                                   isEqual(spaceType, "R")
                                     ? !isAvailableBook &&
                                       isEqual(status, "vacant")
-                                      ? Images.bedIconDisable
-                                      : Images.bedIconActive
+                                      ? "disable"
+                                      : "active"
                                     : !isAvailableBook &&
                                         isEqual(status, "vacant")
-                                      ? Images.carDisableIcon
+                                      ? "disable"
                                       : isEqual(status, "vacant")
-                                        ? Images.carAvailableIcon
-                                        : Images.carOccupiedIcon
+                                        ? "available"
+                                        : "error"
                                 }
-                                className="h-4 w-4"
+                                size={16}
                               />
 
-                              <CustomText textClassName="text-disable">
+                              <CustomText textClassName="text-muted">
                                 |
                               </CustomText>
 
                               <CustomText
-                                textClassName={`${spaceStatusTypeValue === 4 ? "text-disable" : "text-black"} text-xs font-bold line-clamp-1`}
+                                textClassName={`${spaceStatusTypeValue === 4 ? "text-muted" : "text-black"} text-xs font-semibold line-clamp-1`}
                               >
                                 RM{isEmpty(rental) ? "0" : toNumber(rental)}
                               </CustomText>
                             </div>
 
                             <CustomText
-                              textClassName={`${spaceStatusTypeValue === 4 ? "text-disable" : "text-primary"} text-xs font-bold line-clamp-1`}
+                              textClassName={`${spaceStatusTypeValue === 4 ? "text-muted" : "text-primary"} text-xs font-semibold line-clamp-1`}
                             >
                               {isEmpty(name) ? "-" : name}
                             </CustomText>
@@ -159,15 +152,15 @@ const CinemaUnitContent = ({ unitListing, onClickSelectRoomDetail }) => {
                             {isEqual(spaceType, "C") ? (
                               false
                             ) : (
-                              <div className="flex items-center justify-start gap-3">
+                              <div className="flex items-center justify-start gap-2">
                                 <CustomText
-                                  textClassName={`${spaceStatusTypeValue === 4 ? "bg-disable" : "bg-primary"} text-xs text-white px-1.5 py-0.5 rounded`}
+                                  textClassName={`${spaceStatusTypeValue === 4 ? "bg-disable" : "bg-primary"} text-xs text-white px-1.5 py-0.5 rounded-lg`}
                                 >
                                   {isEmpty(bedType) ? "-" : bedType}
                                 </CustomText>
 
                                 <CustomText
-                                  textClassName={`${spaceStatusTypeValue === 4 ? "bg-disable" : "bg-secondary"} text-xs text-white px-1.5 py-0.5 rounded`}
+                                  textClassName={`${spaceStatusTypeValue === 4 ? "bg-disable" : "bg-secondary"} text-xs text-white px-1.5 py-0.5 rounded-lg`}
                                 >
                                   {isEmpty(bathroom) ? "-" : bathroom}
                                 </CustomText>
@@ -180,7 +173,7 @@ const CinemaUnitContent = ({ unitListing, onClickSelectRoomDetail }) => {
                   </div>
                 </div>
 
-                <div className="divider-line"></div>
+                <div className="my-4 border-t border-border"></div>
               </div>
             );
           })}

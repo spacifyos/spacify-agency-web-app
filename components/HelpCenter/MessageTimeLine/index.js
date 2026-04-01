@@ -1,7 +1,7 @@
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
 import CustomText from "@/components/CustomText";
-import { get, isEmpty, isEqual, map } from "lodash";
+import { get, isEmpty, map } from "lodash";
 
 const MessageTimeLine = ({ item, onClickSelectedCommentImage }) => {
   const date = get(item, ["date"], "");
@@ -11,41 +11,50 @@ const MessageTimeLine = ({ item, onClickSelectedCommentImage }) => {
   const isAuthor = get(item, ["is_author"], false);
 
   return (
-    <div className="grid grid-cols-12 gap-1 pb-4">
-      <div className="col-span-1 flex flex-col items-center justify-center">
-        <CustomImage
-          src={isAuthor ? Images.circleIconActive : Images.circleIconAqua}
-          className="h-6 w-4"
-        />
-        <div className="mt-2.5 h-full w-0.5 bg-disable"></div>
+    <div className={`flex gap-3 py-3 ${isAuthor ? "" : ""}`}>
+      {/* Avatar */}
+      <div
+        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+          isAuthor
+            ? "bg-primary/10 text-primary"
+            : "bg-tertiary/10 text-tertiary"
+        }`}
+      >
+        {name ? name.charAt(0).toUpperCase() : "?"}
       </div>
 
-      <div className="col-span-11 flex w-full flex-col">
-        <div className="flex flex-col items-start gap-1 pb-2">
-          {/*<CustomImage*/}
-          {/*  // src={img}*/}
-          {/*  imageStyle={{ width: 40, height: 40 }}*/}
-          {/*  className="rounded-3xl"*/}
-          {/*/>*/}
-          <CustomText textClassName="xl:text-sm lg:text-sm md:text-sm sm:text-xs text-xs">
+      {/* Content */}
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline gap-2">
+          <CustomText textClassName="text-sm font-semibold text-black">
             {name}
           </CustomText>
-          <CustomText textClassName="text-xs text-disable text-end">
+          <CustomText textClassName="text-xs text-muted shrink-0">
             {date}
           </CustomText>
         </div>
 
-        {isEmpty(images) ? (
-          <CustomText textClassName="bg-primary-background py-2 px-4 global-border-radius border text-sm">
-            {content}
-          </CustomText>
-        ) : (
-          <div className="flex gap-2">
+        {!isEmpty(content) && (
+          <div
+            className={`mt-1.5 rounded-2xl rounded-tl-sm px-3.5 py-2.5 ${
+              isAuthor
+                ? "bg-primary/5 border border-primary/10"
+                : "bg-surface-secondary border border-border"
+            }`}
+          >
+            <CustomText textClassName="text-sm text-black leading-relaxed">
+              {content}
+            </CustomText>
+          </div>
+        )}
+
+        {!isEmpty(images) && (
+          <div className="mt-2 flex flex-wrap gap-2">
             {map(images, (image, index) => (
               <CustomImage
                 key={index}
                 onClick={() => onClickSelectedCommentImage(image)}
-                className="global-border-radius h-14 w-14 cursor-pointer overflow-hidden border"
+                className="h-16 w-16 cursor-pointer overflow-hidden rounded-xl border border-border object-cover transition-opacity hover:opacity-80"
                 src={isEmpty(image) ? Images.imageNotFound : image}
               />
             ))}

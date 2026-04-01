@@ -1,4 +1,3 @@
-import Images from "@/src/utils/Image";
 import { map, get, remove } from "lodash";
 import CategoryCard from "@/components/HelpCenter/NewRequest/CategoryCard";
 import * as maintenanceTicketSelector from "@/src/selectors/maintenance-ticket";
@@ -17,8 +16,9 @@ const HelpCenterSection = ({
           ...option,
           ...{
             description: "Have A Question Or Want To Send Feedback",
-            icon: Images.generalEnquiryIconWhite,
-            iconActive: Images.generalEnquiryIconActive,
+            iconName: "generalEnquiry",
+            iconColor: "white",
+            iconActiveColor: "active",
           },
         };
       case 2:
@@ -26,8 +26,9 @@ const HelpCenterSection = ({
           ...option,
           ...{
             description: "Submit Maintenance Requests For Issue Resolution",
-            icon: Images.maintenanceRequestIconWhite,
-            iconActive: Images.maintenanceRequestIconActive,
+            iconName: "maintenanceRequest",
+            iconColor: "white",
+            iconActiveColor: "active",
           },
         };
     }
@@ -41,15 +42,17 @@ const HelpCenterSection = ({
         const label = get(item, "label", "");
         const description = get(item, "description", "");
         const value = get(item, "value", "");
-        const icon = get(item, "icon", "");
-        const iconActive = get(item, "iconActive", "");
+        const iconName = get(item, "iconName", "");
+        const iconColor = get(item, "iconColor", "");
+        const iconActiveColor = get(item, "iconActiveColor", "");
         const subType = maintenanceTicketSelector.getRequestTypeSubType(item);
 
         return (
           <CategoryCard
             key={index}
-            icon={icon}
-            iconActive={iconActive}
+            iconName={iconName}
+            iconColor={iconColor}
+            iconActiveColor={iconActiveColor}
             value={value}
             selectedValue={selectSection}
             btnDescription={description}

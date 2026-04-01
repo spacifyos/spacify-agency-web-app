@@ -1,13 +1,11 @@
 "use client";
 
-import Images from "@/src/utils/Image";
-import CustomImage from "@/components/CustomImage";
+import SvgIcon from "@/components/SvgIcon";
 import CustomText from "@/components/CustomText";
 import { useRouter } from "next/navigation";
 import * as authSelector from "@/src/selectors/auth";
 import { useEffect, useState } from "react";
-import { isEmpty, get, size, isEqual } from "lodash";
-import SetPinNumberModal from "@/components/EditProfile/SetPinNumberModal";
+import { isEmpty, isEqual } from "lodash";
 import Toast from "@/src/utils/Toast";
 import apiRequest from "@/src/services/httpUtilities/apiRequest";
 import Helper from "@/src/utils/Helper";
@@ -19,7 +17,6 @@ import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function Account() {
   const router = useRouter();
-  const initialTime = 60;
 
   const [userProfileData, setUserProfileData] = useState([]);
   const [userProfileLoading, setUserProfileLoading] = useState(false);
@@ -60,7 +57,6 @@ export default function Account() {
 
   const onClickOpenChangePasswordModal = (id) => {
     const checkId = isEmpty(id) ? targetModalId : id;
-
     setTargetModalId(checkId);
     Helper.documentGetElementById(checkId).showModal();
   };
@@ -83,11 +79,9 @@ export default function Account() {
     if (isEmpty(currentPasswordValue)) {
       newErrors["current_password"] = "Current password is required.";
     }
-
     if (isEmpty(passwordValue)) {
       newErrors["password"] = "Password is required.";
     }
-
     if (isEmpty(confirmPasswordValue)) {
       newErrors["confirm_password"] = "Confirm password is required.";
     }
@@ -137,7 +131,6 @@ export default function Account() {
 
   const closeChangePasswordModal = () => {
     setErrorMessage([]);
-
     Helper.documentGetElementById(targetModalId).close();
   };
 
@@ -165,81 +158,86 @@ export default function Account() {
     fetchUserprofileData();
   };
 
-  const onClickCopy = () => {
-    navigator.clipboard.writeText(referralText);
-
-    Toast.success("Copied link to clipboard.");
-
-    setIsCopy(true);
-  };
-
   return (
-    <div className="hide-scroll-bar relative flex h-full flex-col justify-between overflow-y-scroll rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
+    <div className="hide-scroll-bar flex h-full flex-col overflow-y-auto">
       <LoadingOverlay loading={userProfileLoading || editProfileLoading} />
 
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-center">
-          <CustomImage
-            src={Images.userIconActive}
-            className="my-2 w-20 sm:w-28 md:w-32 lg:w-36 xl:w-32"
-          />
-        </div>
-
-        <BookingInput
-          bgColor="bg-white border border-disable"
-          inputClassName="border-none"
-          title={"Name"}
-          placeholder={"Name"}
-          className="pb-3"
-          value={nameValue}
-          onChange={onChangeNameValue}
-        />
-
-        <CustomLabelValue
-          label={"Email"}
-          value={isEmpty(email) ? "-" : email}
-          className="pb-4"
-        />
-
-        <div>
-          <CustomLabelValue
-            label={"Phone Number"}
-            value={isEmpty(phoneNumber) ? "-" : phoneNumber}
-            styles={{ paddingBottom: 0 }}
-          />
-
-          <CustomText textClassName="text-primary text-xs pb-4">
-            Use this phone number to login system
+      <div className="flex flex-col gap-6 rounded-2xl bg-white p-5">
+        {/* Avatar */}
+        <div className="flex flex-col items-center gap-2 pb-2">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary-background">
+            <SvgIcon name="user" color="active" size={48} />
+          </div>
+          <CustomText textClassName="text-lg font-semibold text-black">
+            {isEmpty(name) ? "..." : name}
+          </CustomText>
+          <CustomText textClassName="text-sm text-muted">
+            {isEmpty(email) ? "-" : email}
           </CustomText>
         </div>
 
-        <div>
-          <CustomText textClassName="text-xs pb-2">Change Password</CustomText>
+        {/* Profile Fields */}
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-black">
+              Name
+            </label>
+            <input
+              type="text"
+              className="user-input input w-full bg-white px-4 py-3"
+              placeholder="Name"
+              value={nameValue}
+              onChange={onChangeNameValue}
+            />
+          </div>
 
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-black">
+              Email
+            </label>
+            <div className="rounded-xl bg-surface-secondary px-4 py-3 text-sm text-muted">
+              {isEmpty(email) ? "-" : email}
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-black">
+              Phone Number
+            </label>
+            <div className="rounded-xl bg-surface-secondary px-4 py-3 text-sm text-muted">
+              {isEmpty(phoneNumber) ? "-" : phoneNumber}
+            </div>
+            <p className="mt-1 text-xs text-primary">
+              Use this phone number to login
+            </p>
+          </div>
+        </div>
+
+        {/* Change Password */}
+        <div className="border-t border-border pt-4">
           <CustomButton
-            buttonClassName="btn-primary-outline btn-sm mb-4 w-60"
-            buttonStyles={{ paddingRight: 30, paddingLeft: 30, height: 40 }}
+            buttonClassName="btn-primary-outline btn-sm w-full"
             buttonText="Change Password"
             onClick={() =>
               onClickOpenChangePasswordModal("desktop_change_password_modal")
             }
           />
         </div>
-      </div>
 
-      <div className="grid grid-cols-2 gap-5 pt-10">
-        <CustomButton
-          buttonClassName="btn-primary-outline"
-          buttonText={"Cancel"}
-          onClick={onClickGoBack}
-        />
-
-        <CustomButton
-          loading={userProfileLoading}
-          buttonClassName="btn-primary"
-          buttonText={"Submit"}
-          onClick={onClickSubmit}
-        />
+        {/* Actions */}
+        <div className="flex gap-3 border-t border-border pt-4">
+          <CustomButton
+            buttonClassName="btn-primary-outline flex-1"
+            buttonText="Cancel"
+            onClick={onClickGoBack}
+          />
+          <CustomButton
+            loading={userProfileLoading}
+            buttonClassName="btn-primary flex-1"
+            buttonText="Save Changes"
+            onClick={onClickSubmit}
+          />
+        </div>
       </div>
 
       <DesktopChangePasswordModal

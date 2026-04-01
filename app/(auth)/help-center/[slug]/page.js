@@ -32,6 +32,8 @@ import CommentComponent from "@/components/HelpCenter/CommentComponent";
 import TechnicianInFormationBoard from "@/components/HelpCenter/TechnicianInFormationBoard";
 import CommentImageUploadModal from "@/components/HelpCenter/CommentImageUploadModal";
 import LoadingOverlay from "@/components/LoadingOverlay";
+import CustomText from "@/components/CustomText";
+import SvgIcon from "@/components/SvgIcon";
 
 export default function RequestOverview() {
   const router = useRouter();
@@ -435,8 +437,7 @@ export default function RequestOverview() {
       const originalName = get(image, ["name"], "");
       const extension = split(originalName, ".");
       const mimeType = get(image, ["type"], "");
-      
-      // Generate new image name with timestamp and random ID
+
       const newImageName = Helper.generateImageName(originalName);
 
       if (some(imageList, { name: newImageName })) {
@@ -449,7 +450,7 @@ export default function RequestOverview() {
         const newImage = {
           type: 24,
           name: newImageName,
-          originalName: originalName, // Keep original name for reference
+          originalName: originalName,
           extension: extension[1],
           mime_type: mimeType,
           status: false,
@@ -681,7 +682,6 @@ export default function RequestOverview() {
 
   const updateSuccessCallback = async () => {
     await fetchMaintenanceData();
-    // location.reload();
   };
 
   const onClickSendMessage = async () => {
@@ -789,8 +789,7 @@ export default function RequestOverview() {
       const originalName = get(image, ["name"], "");
       const extension = split(originalName, ".");
       const mimeType = get(image, ["type"], "");
-      
-      // Generate new image name with timestamp and random ID
+
       const newImageName = Helper.generateImageName(originalName);
 
       if (some(imageList, { name: newImageName })) {
@@ -803,7 +802,7 @@ export default function RequestOverview() {
         const newImage = {
           type: 27,
           name: newImageName,
-          originalName: originalName, // Keep original name for reference
+          originalName: originalName,
           extension: extension[1],
           mime_type: mimeType,
           status: false,
@@ -964,80 +963,96 @@ export default function RequestOverview() {
   };
 
   return (
-    <div className="hide-scroll-bar relative flex h-full flex-col gap-6 overflow-hidden overflow-y-scroll rounded-3xl">
+    <div className="relative flex h-full flex-col overflow-hidden">
       <LoadingOverlay
         loading={
-          // getGalleryLinkLoading ||
-          // imageUploading ||
           ticketUpdateLoading ||
           (maintenanceTicketOverviewDataLoading &&
             !isEmpty(maintenanceTicketOverviewData))
         }
       />
 
-      <RequestOverviewDetail
-        data={maintenanceTicketOverviewData}
-        imageLoading={imageLoading}
-        imageList={imageList}
-        videoValue={videoValue}
-        videoLoading={videoLoading}
-        onClickPopupImage={onClickPopupImage}
-        onClickPopupVideo={onClickPopupVideo}
-      />
+      {/* Header */}
+      <div className="flex items-center gap-3 border-b border-border bg-surface px-4 py-3">
+        <button
+          onClick={onClickGoBack}
+          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-surface-secondary"
+        >
+          <SvgIcon name="left" color="black" size={18} />
+        </button>
+        <div className="min-w-0 flex-1">
+          <CustomText textClassName="text-sm font-semibold text-black truncate">
+            {requestNumber || "Ticket Detail"}
+          </CustomText>
+        </div>
+      </div>
 
-      <TechnicianInFormationBoard
-        data={maintenanceTicketOverviewData}
-        onClickCheckIn={onClickCheckIn}
-        onClickCheckOut={onClickCheckOut}
-        checkInLoading={checkInLoading}
-        checkOutLoading={checkOutLoading}
-      />
+      {/* Scrollable content */}
+      <div className="hide-scroll-bar flex flex-1 flex-col gap-4 overflow-y-auto p-4">
+        <RequestOverviewDetail
+          data={maintenanceTicketOverviewData}
+          imageLoading={imageLoading}
+          imageList={imageList}
+          videoValue={videoValue}
+          videoLoading={videoLoading}
+          onClickPopupImage={onClickPopupImage}
+          onClickPopupVideo={onClickPopupVideo}
+        />
 
-      <MaintenanceScheduleInformationComponent
-        data={maintenanceTicketOverviewData}
-        images={technicianImageList}
-        videos={technicianVideoValue}
-        onClickPopupImage={onClickPopupImage}
-        onClickPopupVideo={onClickPopupVideo}
-        onClickRemoveGallery={onClickRemoveGallery}
-        setPostData={setPostData}
-        postData={postData}
-        onChangeImage={onChangeImage}
-        uploadImageRef={uploadImageRef}
-        uploadCameraImageRef={uploadCameraImageRef}
-        uploadVideoRef={uploadVideoRef}
-        uploadCameraVideoRef={uploadCameraVideoRef}
-        showImageSourceModal={showImageSourceModal}
-        setShowImageSourceModal={setShowImageSourceModal}
-        showVideoSourceModal={showVideoSourceModal}
-        setShowVideoSourceModal={setShowVideoSourceModal}
-        handleImageSourceSelect={handleImageSourceSelect}
-        handleVideoSourceSelect={handleVideoSourceSelect}
-        onChangeVideo={onChangeVideo}
-        onClickUpdateTicket={onClickUpdateTicket}
-        onClickCheckIn={onClickCheckIn}
-        ticketUpdateLoading={ticketUpdateLoading}
-        ticketTypeOptions={ticketTypeOptions}
-        subTypeOptions={subTypeOptions}
-      />
+        <TechnicianInFormationBoard
+          data={maintenanceTicketOverviewData}
+          onClickCheckIn={onClickCheckIn}
+          onClickCheckOut={onClickCheckOut}
+          checkInLoading={checkInLoading}
+          checkOutLoading={checkOutLoading}
+        />
 
-      <CommentComponent
-        onClickSendMessage={onClickSendMessage}
-        setMessageValue={setMessageValue}
-        messageValue={messageValue}
-        data={commentData}
-        pagination={commentDataPagination}
-        postCommentLoading={postCommentLoading}
-        getCommentLoading={getCommentLoading}
-        onClickLoadMore={onClickLoadMore}
-        onChangeCommentImage={onChangeCommentImage}
-        uploadCommentImageRef={uploadCommentImageRef}
-        uploadCameraCommentImageRef={uploadCameraCommentImageRef}
-        onClickSelectedCommentImage={onClickSelectedCommentImage}
-        handleCommentImageSourceSelect={handleCommentImageSourceSelect}
-        showCommentImageSourceModal={showCommentImageSourceModal}
-        setShowCommentImageSourceModal={setShowCommentImageSourceModal}
-      />
+        <MaintenanceScheduleInformationComponent
+          data={maintenanceTicketOverviewData}
+          images={technicianImageList}
+          videos={technicianVideoValue}
+          onClickPopupImage={onClickPopupImage}
+          onClickPopupVideo={onClickPopupVideo}
+          onClickRemoveGallery={onClickRemoveGallery}
+          setPostData={setPostData}
+          postData={postData}
+          onChangeImage={onChangeImage}
+          uploadImageRef={uploadImageRef}
+          uploadCameraImageRef={uploadCameraImageRef}
+          uploadVideoRef={uploadVideoRef}
+          uploadCameraVideoRef={uploadCameraVideoRef}
+          showImageSourceModal={showImageSourceModal}
+          setShowImageSourceModal={setShowImageSourceModal}
+          showVideoSourceModal={showVideoSourceModal}
+          setShowVideoSourceModal={setShowVideoSourceModal}
+          handleImageSourceSelect={handleImageSourceSelect}
+          handleVideoSourceSelect={handleVideoSourceSelect}
+          onChangeVideo={onChangeVideo}
+          onClickUpdateTicket={onClickUpdateTicket}
+          onClickCheckIn={onClickCheckIn}
+          ticketUpdateLoading={ticketUpdateLoading}
+          ticketTypeOptions={ticketTypeOptions}
+          subTypeOptions={subTypeOptions}
+        />
+
+        <CommentComponent
+          onClickSendMessage={onClickSendMessage}
+          setMessageValue={setMessageValue}
+          messageValue={messageValue}
+          data={commentData}
+          pagination={commentDataPagination}
+          postCommentLoading={postCommentLoading}
+          getCommentLoading={getCommentLoading}
+          onClickLoadMore={onClickLoadMore}
+          onChangeCommentImage={onChangeCommentImage}
+          uploadCommentImageRef={uploadCommentImageRef}
+          uploadCameraCommentImageRef={uploadCameraCommentImageRef}
+          onClickSelectedCommentImage={onClickSelectedCommentImage}
+          handleCommentImageSourceSelect={handleCommentImageSourceSelect}
+          showCommentImageSourceModal={showCommentImageSourceModal}
+          setShowCommentImageSourceModal={setShowCommentImageSourceModal}
+        />
+      </div>
 
       <ImageModal
         data={selectedImageList}

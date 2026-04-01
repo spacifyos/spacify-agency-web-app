@@ -2,9 +2,7 @@ import { capitalize, first, get, isEmpty, isEqual, map } from "lodash";
 import CustomEmptyBox from "@/components/CustomEmptyBox";
 import * as listingSelector from "@/src/selectors/listing";
 import CustomText from "@/components/CustomText";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
-import { getUnitStatus } from "@/src/selectors/listing";
+import SvgIcon from "@/components/SvgIcon";
 
 const DesktopUnitContent = ({ unitListing, onClickShareBooking }) => {
   return (
@@ -114,13 +112,10 @@ const DesktopUnitContent = ({ unitListing, onClickShareBooking }) => {
                                   : "Occupied"}
                             </CustomText>
 
-                            <CustomImage
-                              src={
-                                isAvailableBook
-                                  ? Images.shareIconActive
-                                  : Images.shareIconDisable
-                              }
-                              className={`w-4 ${isAvailableBook ? "cursor-pointer" : ""}`}
+                            <SvgIcon
+                              name="share"
+                              color={isAvailableBook ? "active" : "disable"}
+                              size={16}
                               onClick={(event) => {
                                 if (isAvailableBook) {
                                   event.stopPropagation();
@@ -133,10 +128,7 @@ const DesktopUnitContent = ({ unitListing, onClickShareBooking }) => {
 
                           <div className="flex items-center gap-2">
                             <div className="w-5">
-                              <CustomImage
-                                src={Images.bedIconActive}
-                                className="w-5"
-                              />
+                              <SvgIcon name="bed" color="active" size={20} />
                             </div>
                             <CustomText textClassName="text-xs" lineClamp={1}>
                               {isEmpty(name) ? "-" : name}

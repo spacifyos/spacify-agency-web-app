@@ -2,8 +2,7 @@ import { capitalize, get, isEmpty, isEqual, map } from "lodash";
 import CustomEmptyBox from "@/components/CustomEmptyBox";
 import * as listingSelector from "@/src/selectors/listing";
 import CustomText from "@/components/CustomText";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 
 const MobileUnitContent = ({ unitListing, onClickShareBooking }) => {
   return (
@@ -90,13 +89,10 @@ const MobileUnitContent = ({ unitListing, onClickShareBooking }) => {
                               </CustomText>
                             </div>
 
-                            <CustomImage
-                              src={
-                                isEmpty(isAvailableBook)
-                                  ? Images.shareIconActive
-                                  : Images.shareIconDisable
-                              }
-                              className="w-3 cursor-pointer"
+                            <SvgIcon
+                              name="share"
+                              color={isEmpty(isAvailableBook) ? "active" : "disable"}
+                              size={12}
                               onClick={(event) => {
                                 if (isAvailableBook) {
                                   event.stopPropagation();

@@ -1,7 +1,6 @@
 import CustomText from "@/components/CustomText";
 import { isEqual, isEmpty } from "lodash";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 
 const BookingDateInput = ({
   className = "",
@@ -45,14 +44,16 @@ const BookingDateInput = ({
         />
 
         {isEqual(type, "date") ? (
-          <CustomImage
-            src={Images.calenderIconBlack}
-            imageStyle={{ width: isEqual(type, "month") ? 30 : 20 }}
+          <SvgIcon
+            name="calendar"
+            color="black"
+            size={isEqual(type, "month") ? 30 : 20}
           />
         ) : (
-          <CustomImage
-            src={Images.clockIconBlack}
-            imageStyle={{ width: isEqual(type, "month") ? 30 : 20 }}
+          <SvgIcon
+            name="clock"
+            color="black"
+            size={isEqual(type, "month") ? 30 : 20}
           />
         )}
       </div>

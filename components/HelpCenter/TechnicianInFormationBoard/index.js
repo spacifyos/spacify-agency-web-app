@@ -2,7 +2,6 @@ import CustomText from "@/components/CustomText";
 import CustomButton from "@/components/CustomButton";
 import { isEmpty, map } from "lodash";
 import * as maintenanceTicketSelector from "@/src/selectors/maintenance-ticket";
-import CustomLabelValue from "@/components/CustomLabelValue";
 import LocationMap from "@/components/HelpCenter/LocationMap";
 
 const TechnicianInFormationBoard = ({
@@ -34,18 +33,25 @@ const TechnicianInFormationBoard = ({
 
         return (
           <div
-            className="rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8"
+            className="rounded-2xl border border-border bg-surface"
             key={index}
           >
-            <div className="flex items-center justify-between">
-              <CustomText textClassName="text-disable text-sm">
-                Technician {index + 1}
-              </CustomText>
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-border p-4">
+              <div>
+                <CustomText textClassName="text-xs font-semibold text-muted uppercase tracking-wider">
+                  Technician {index + 1}
+                </CustomText>
+                <CustomText textClassName="text-sm font-semibold text-black mt-0.5">
+                  {technicianName}
+                </CustomText>
+              </div>
 
               {isAllowToCheckIn ? (
                 !checkedIn ? (
                   <CustomButton
-                    buttonClassName={`${checkInLoading ? "btn-primary" : "btn-primary-outline"} btn-xs min-h-8 max-h-8 min-w-20`}
+                    buttonClassName="btn-primary rounded-full px-4 py-1.5 h-auto min-h-0"
+                    textClassName="text-xs font-medium"
                     buttonText="Check In"
                     onClick={onClickCheckIn}
                     loading={checkInLoading}
@@ -53,93 +59,57 @@ const TechnicianInFormationBoard = ({
                   />
                 ) : !checkedOut ? (
                   <CustomButton
-                    buttonClassName={`${checkOutLoading ? "btn-primary" : "btn-primary-outline"} btn-xs min-h-8 max-h-8 min-w-20 w-20`}
+                    buttonClassName="btn-primary-outline rounded-full px-4 py-1.5 h-auto min-h-0"
+                    textClassName="text-xs font-medium"
                     buttonText="Check Out"
                     onClick={onClickCheckOut}
                     disable={checkOutLoading}
                     loading={checkOutLoading}
                   />
-                ) : (
-                  false
-                )
-              ) : (
-                false
-              )}
+                ) : null
+              ) : null}
             </div>
 
-            <div
-              className="divider-line"
-              style={{ marginTop: 16, marginBottom: 16 }}
-            ></div>
-
-            <CustomLabelValue
-              label={"Technician Name"}
-              value={technicianName}
-            />
-
-            {checkedIn ? (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 xl:col-span-1">
-                  {isEmpty(checkInTime) ? (
-                    false
-                  ) : (
-                    <CustomLabelValue
-                      label={"Check In Date & Time"}
-                      value={checkInTime}
-                    />
-                  )}
-
-                  {isEmpty(checkInLat) || isEmpty(checkInLng) ? (
-                    false
-                  ) : (
-                    <div className={`pb-4`}>
-                      <CustomText
-                        textClassName={`text-disable text-xs font-normal pb-1`}
-                      >
-                        Check In Location
+            {/* Check in/out details */}
+            {checkedIn && (
+              <div className="grid grid-cols-2 gap-4 p-4">
+                <div>
+                  {!isEmpty(checkInTime) && (
+                    <div className="mb-3">
+                      <CustomText textClassName="text-xs text-muted mb-0.5">
+                        Check In
                       </CustomText>
-
+                      <CustomText textClassName="text-xs font-medium text-black">
+                        {checkInTime}
+                      </CustomText>
+                    </div>
+                  )}
+                  {!isEmpty(checkInLat) && !isEmpty(checkInLng) && (
+                    <div className="overflow-hidden rounded-xl">
                       <LocationMap lat={checkInLat} lng={checkInLng} />
                     </div>
                   )}
                 </div>
-                <div className="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 xl:col-span-1">
-                  {isEmpty(checkOutTime) ? (
-                    false
-                  ) : (
-                    <CustomLabelValue
-                      label={"Check Out Date & Time"}
-                      value={checkOutTime}
-                    />
-                  )}
 
-                  {isEmpty(checkOutLat) || isEmpty(checkOutLng) ? (
-                    false
-                  ) : (
-                    <div className={``}>
-                      <CustomText
-                        textClassName={`text-disable text-xs font-normal pb-1`}
-                      >
-                        Check Out Location
+                <div>
+                  {!isEmpty(checkOutTime) && (
+                    <div className="mb-3">
+                      <CustomText textClassName="text-xs text-muted mb-0.5">
+                        Check Out
                       </CustomText>
-
+                      <CustomText textClassName="text-xs font-medium text-black">
+                        {checkOutTime}
+                      </CustomText>
+                    </div>
+                  )}
+                  {!isEmpty(checkOutLat) && !isEmpty(checkOutLng) && (
+                    <div className="overflow-hidden rounded-xl">
                       <LocationMap lat={checkOutLat} lng={checkOutLng} />
                     </div>
                   )}
                 </div>
               </div>
-            ) : (
-              false
             )}
-
-            {/*<div className="flex justify-center">*/}
-            {/*    <CustomButton*/}
-            {/*        buttonStyles={{ padding: "5px 30px" }}*/}
-            {/*        buttonClassName="btn-primary"*/}
-            {/*        buttonText={"Submit"}*/}
-            {/*        onClick={onClickUpdateTicket}*/}
-            {/*    />*/}
-            {/*</div>*/}
           </div>
         );
       });

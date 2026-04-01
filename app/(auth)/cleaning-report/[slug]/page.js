@@ -9,37 +9,53 @@ import Images from "@/src/utils/Image";
 const CleaningReportDetailPage = () => {
   return (
     <div className="relative h-full overflow-y-scroll hide-scroll-bar">
-      <CustomText textClassName="font-bold">Cleaning Details</CustomText>
-      <CustomText textClassName="text-black text-xs">
-        Cleaning Scheduler / Cleaning Details
-      </CustomText>
+      <div className="pb-4">
+        <CustomText textClassName="font-semibold text-black text-lg">
+          Cleaning Details
+        </CustomText>
+        <CustomText textClassName="text-muted text-xs pt-1">
+          Cleaning Scheduler / Cleaning Details
+        </CustomText>
+      </div>
 
-      <div className="grid grid-cols-5 gap-6 pt-4">
-        <div className="col-span-1 rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
-          <CustomText textClassName="pb-4 font-bold">
+      <div className="flex flex-col gap-4">
+        {/* General Information Card */}
+        <div className="rounded-2xl border border-border bg-white p-5">
+          <CustomText textClassName="pb-4 font-semibold text-black text-base">
             General Information
           </CustomText>
 
-          <CustomLabelValue label="Date" value="2025-05-21" />
-          <CustomLabelValue
-            label="Property/Unit"
-            value="Epic Residence, C-20-09"
-            highlight
-          />
-          <CustomLabelValue label="Remark" value="-" />
-          <CustomLabelValue label="Toilet Water Paip Work Well" value="Yes" />
-          <CustomLabelValue label="Any Defect" value="Yes" />
-          <CustomLabelValue label="Peraturan Highlight" value="Yes" />
+          <div className="flex flex-col gap-2">
+            <CustomLabelValue label="Date" value="2025-05-21" />
+            <CustomLabelValue
+              label="Property/Unit"
+              value="Epic Residence, C-20-09"
+              highlight
+            />
+            <CustomLabelValue label="Remark" value="-" />
+            <CustomLabelValue label="Toilet Water Paip Work Well" value="Yes" />
+            <CustomLabelValue label="Any Defect" value="Yes" />
+            <CustomLabelValue label="Peraturan Highlight" value="Yes" />
+          </div>
         </div>
 
-        <div className="col-span-4 rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
-          <CustomText textClassName="pb-4 font-bold">Photo Gallery</CustomText>
-          <div className="flex flex-wrap gap-4">
+        {/* Photo Gallery Card */}
+        <div className="rounded-2xl border border-border bg-white p-5">
+          <CustomText textClassName="pb-4 font-semibold text-black text-base">
+            Photo Gallery
+          </CustomText>
+
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
             {map(Array(20), (item, index) => {
               return (
-                <div key={index}>
-                  <CustomText textClassName="text-disable text-xs">{get(item, "label", "Photo 1")}</CustomText>
-                  <CustomImage src={Images.logo} className="h-52 w-28 border rounded-3xl" />
+                <div key={index} className="flex flex-col gap-1">
+                  <CustomText textClassName="text-muted text-xs">
+                    {get(item, "label", "Photo 1")}
+                  </CustomText>
+                  <CustomImage
+                    src={Images.logo}
+                    className="h-32 w-full rounded-xl border border-border object-cover"
+                  />
                 </div>
               );
             })}

@@ -101,22 +101,10 @@ const btnLists = [
 ];
 
 const ProgressBar = ({ percent }) => (
-  <div
-    style={{
-      background: "#eee",
-      borderRadius: 4,
-      width: 60,
-      height: 8,
-      marginLeft: 8,
-    }}
-  >
+  <div className="ml-2 h-2 w-[60px] overflow-hidden rounded bg-surface-secondary">
     <div
-      style={{
-        width: `${percent}%`,
-        background: "#4caf50",
-        height: "100%",
-        borderRadius: 4,
-      }}
+      className="h-full rounded bg-green-500"
+      style={{ width: `${percent}%` }}
     />
   </div>
 );
@@ -126,19 +114,19 @@ const StatusBadge = ({ status }) => {
     icon = "";
   if (status === "Pending") {
     color = "bg-yellow-200 text-yellow-800";
-    icon = "⏳";
+    icon = "";
   }
   if (status === "Cancel By Platform") {
     color = "bg-red-200 text-red-800";
-    icon = "❌";
+    icon = "";
   }
   if (status === "Cancel By Client") {
     color = "bg-orange-200 text-orange-800";
-    icon = "🚫";
+    icon = "";
   }
   return (
-    <span className={`rounded px-2 py-1 text-xs font-semibold ${color} ml-2`}>
-      {icon} {status}
+    <span className={`ml-2 rounded-lg px-2 py-1 text-xs font-semibold ${color}`}>
+      {status}
     </span>
   );
 };
@@ -148,8 +136,9 @@ const CleaningReportPage = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   return (
-    <div className="relative h-full">
-      <div className="hide-scroll-bar flex items-center overflow-y-hidden overflow-x-scroll pb-4">
+    <div className="relative flex h-full flex-col gap-4">
+      {/* Status filter tabs */}
+      <div className="hide-scroll-bar flex items-center gap-2 overflow-y-hidden overflow-x-scroll">
         {map(btnLists, (list, index) => {
           const value = get(list, ["value"], "");
           const label = get(list, ["label"], "");
@@ -158,7 +147,7 @@ const CleaningReportPage = () => {
             <CustomButton
               key={index}
               buttonText={label}
-              buttonClassName={`btn-sm ${isEqual(selectedStatus, value) ? "btn-primary" : "btn-white"} mr-2`}
+              buttonClassName={`btn-sm ${isEqual(selectedStatus, value) ? "btn-primary" : "btn-primary-outline"}`}
               textClassName="text-xs"
               onClick={() => setSelectedStatus(value)}
             />
@@ -166,14 +155,18 @@ const CleaningReportPage = () => {
         })}
       </div>
 
-      <div className="sticky top-0 z-10 flex gap-1">
+      {/* Month selector */}
+      <div className="hide-scroll-bar flex gap-1 overflow-x-auto">
         {map(monthArray, function (month, index) {
           return (
             <button
               key={index}
               onClick={() => setSelectedMonth(index + 1)}
-              style={{ borderBottomRightRadius: 0, borderBottomLeftRadius: 0 }}
-              className={`btn h-10 w-20 cursor-pointer ${selectedMonth === index + 1 ? "btn-primary" : "btn-disable"} text-xs font-bold`}
+              className={`btn btn-sm h-9 min-w-[52px] cursor-pointer rounded-xl rounded-b-none text-xs font-semibold ${
+                selectedMonth === index + 1
+                  ? "btn-primary"
+                  : "border-border bg-surface-secondary text-muted"
+              }`}
             >
               {month}
             </button>
@@ -181,60 +174,51 @@ const CleaningReportPage = () => {
         })}
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="table">
-          <thead></thead>
-          <tbody className="">
-            <tr className="bg-white" style={{ paddingTop: 16 }}>
-              {dataArray.map((item, idx) => (
-                <td key={idx} className="h-8">
-                  <CustomText
-                    textClassName={`font-bold text-xs h-full flex items-center`}
+      {/* Summary card */}
+      <div className="rounded-2xl border border-border bg-white">
+        <div className="overflow-x-auto">
+          <table className="table w-full">
+            <thead>
+              <tr>
+                {dataArray.map((item, idx) => (
+                  <th
+                    key={idx}
+                    className="px-4 py-3 text-xs font-semibold text-black"
                   >
                     {item.label}
-                  </CustomText>
-                </td>
-              ))}
-            </tr>
-
-            <tr className="bg-white">
-              {dataArray.map((item, idx) => (
-                <td key={idx}>
-                  <div
-                    className="divider-primary-background divider"
-                    style={{ margin: 0 }}
-                  ></div>
-                </td>
-              ))}
-            </tr>
-
-            <tr className="bg-white">
-              {dataArray.map((item, idx) => (
-                <td key={idx} className="h-8">
-                  <CustomText
-                    textClassName={`text-xs h-full flex items-center`}
-                  >
-                    {item.value}
-                  </CustomText>
-                </td>
-              ))}
-            </tr>
-
-            {propertyArray.map((item, idx) => (
-              <tr key={idx} className="mb-4 bg-white" style={{ marginBottom: 100 }}>
-                {Object.entries(item).map(([key, value], cellIdx) => (
-                  <td key={cellIdx} className="h-8">
-                    <CustomText
-                      textClassName={`${key === 'property' ? 'text-primary' : ''} text-xs h-full flex items-center`}
-                    >
-                      {value}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {/* Summary row */}
+              <tr className="border-t border-border">
+                {dataArray.map((item, idx) => (
+                  <td key={idx} className="px-4 py-3">
+                    <CustomText textClassName="text-xs text-muted">
+                      {item.value}
                     </CustomText>
                   </td>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+
+              {/* Property rows */}
+              {propertyArray.map((item, idx) => (
+                <tr key={idx} className="border-t border-border">
+                  {Object.entries(item).map(([key, value], cellIdx) => (
+                    <td key={cellIdx} className="px-4 py-3">
+                      <CustomText
+                        textClassName={`text-xs ${key === "property" ? "text-primary font-semibold" : "text-black"}`}
+                      >
+                        {value}
+                      </CustomText>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

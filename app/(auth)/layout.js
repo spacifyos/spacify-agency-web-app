@@ -5,34 +5,25 @@ import { includes, isEmpty, isEqual } from "lodash";
 import { usePathname, useRouter } from "next/navigation";
 import AuthManager from "@/src/utils/AuthManager";
 import Helper from "@/src/utils/Helper";
-import CustomImage from "@/components/CustomImage";
 import DesktopModal from "@/components/DesktopModal";
 import CustomText from "@/components/CustomText";
 import CustomButton from "@/components/CustomButton";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import apiRequest from "@/src/services/httpUtilities/apiRequest";
 import * as authSelector from "@/src/selectors/auth";
 import LoadingOverlay from "@/components/LoadingOverlay";
 
-// Navigation item type definition
-const navigationItems = [
+// Bottom nav items (main tabs)
+const bottomNavItems = [
   {
     path: "/my-account",
-    label: "My Account",
-    icon: {
-      active: Images.accountIconActive,
-      inactive: Images.accountIconDisable,
-    },
-    width: "w-4",
+    label: "Account",
+    svgName: "account",
   },
   {
     path: "/help-center",
-    label: "Opreation Ticket",
-    icon: {
-      active: Images.helpCenterIconActive,
-      inactive: Images.helpCenterIconDisable,
-    },
-    width: "w-5",
+    label: "Tickets",
+    svgName: "helpCenter",
     roles: [
       "system_admin",
       "master_agency",
@@ -44,40 +35,28 @@ const navigationItems = [
   {
     path: "/property",
     label: "Property",
-    icon: {
-      active: Images.buildingIconActive,
-      inactive: Images.buildingIconDisable,
-    },
-    width: "w-5",
+    svgName: "building",
     roles: ["system_admin", "master_agency", "agency", "super_admin"],
   },
   {
     path: "/cleaning-task",
-    label: "Cleaning Task",
-    icon: {
-      active: Images.cleaningIcon2Active,
-      inactive: Images.cleaningIcon2Disable,
-    },
-    width: "w-5",
+    label: "Cleaning",
+    svgName: "cleaning",
     roles: ["system_admin", "super_admin", "master_agency", "cleaner"],
   },
-  // {
-  //   path: "/cleaning-report",
-  //   label: "Cleaning Report",
-  //   icon: {
-  //     active: Images.cleaningIcon2Active,
-  //     inactive: Images.cleaningIcon2Disable,
-  //   },
-  //   width: "w-5",
-  //   roles: ["master_agency", "super_admin"],
-  // },
+  {
+    path: "/more",
+    label: "More",
+    svgName: "more",
+  },
+];
+
+// "More" menu items
+const moreMenuItems = [
   {
     path: "https://tms.spacify.asia/privacy-policy",
     label: "Terms and Conditions",
-    icon: {
-      inactive: Images.termIconDisable,
-    },
-    width: "w-5",
+    svgName: "term",
     isExternal: true,
   },
 ];
@@ -112,7 +91,7 @@ export default function RootLayout({ children }) {
   const [userProfileData, setUserProfileData] = useState(null);
   const [userProfileDataLoading, setUserProfileDataLoading] = useState(false);
   const [signOutLoading, setSignOutLoading] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isMoreOpen, setIsMoreOpen] = useState(false);
   const [error, setError] = useState(null);
 
   const userRole = authSelector.getRolePermissionsRole(userProfileData);
@@ -161,7 +140,7 @@ export default function RootLayout({ children }) {
     } else {
       router.push(item.path);
     }
-    setIsDrawerOpen(false);
+    setIsMoreOpen(false);
   };
 
   const signOutAccountRequest = async () => {
@@ -189,183 +168,145 @@ export default function RootLayout({ children }) {
     Helper.documentGetElementById("logout_modal").close();
   };
 
-  const renderNavigationItem = (item) => {
-    if (!checkUserRole(userRole, item.roles)) {
-      return null;
-    }
-
-    const isActive = item.isExternal
-      ? false
-      : isEqual(pathname, item.path) || includes(pathname, item.path);
-    const iconSrc = isActive ? item.icon.active : item.icon.inactive;
-    const itemClassName = `group flex cursor-pointer items-center gap-3 rounded-r-2xl border-l-4 px-6 py-4 transition-all duration-200 ${
-      isActive
-        ? "border-primary bg-primary-background shadow-sm"
-        : "border-transparent hover:border-primary/40 hover:bg-primary-background/40"
-    }`;
-    const textClassName = `${
-      isActive
-        ? "text-primary font-semibold tracking-[0.01em]"
-        : "text-disable font-medium tracking-[0.005em] group-hover:text-primary/90"
-    } text-sm leading-5 transition-colors duration-200`;
-
-    return (
-      <div
-        key={item.path}
-        onClick={() => handleNavigation(item)}
-        className={itemClassName}
-        role="button"
-        tabIndex={0}
-        aria-label={item.label}
-      >
-        <CustomImage src={iconSrc} className={item.width} alt={item.label} />
-        <CustomText textClassName={textClassName}>
-          {item.label}
-        </CustomText>
-      </div>
-    );
+  const isNavActive = (path) => {
+    if (path === "/more") return isMoreOpen;
+    return isEqual(pathname, path) || includes(pathname, path);
   };
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-white">
+    <div className="relative flex h-full w-full flex-col overflow-hidden bg-surface">
       <LoadingOverlay loading={signOutLoading || userProfileDataLoading} />
 
       {error && (
-        <div className="absolute right-4 top-4 z-50 rounded-md bg-red-100 p-4 text-red-700">
+        <div className="absolute right-4 top-4 z-50 rounded-xl border border-error-light bg-error-light px-4 py-3 text-sm text-error">
           {error}
         </div>
       )}
 
-      <div className="relative flex h-full flex-col sm:flex-col md:flex-col lg:flex-col xl:flex-row">
-        {/* Desktop Sidebar */}
-        <div className="hidden w-64 sm:hidden md:hidden lg:hidden xl:block">
-          <div className="flex items-center justify-center p-4">
-            <CustomImage
-              src={Images.logoHorizontalColor}
-              className="w-36"
-              alt="Spacify Logo"
-              onClick={() => router.push("/my-account")}
-            />
-          </div>
-          {navigationItems.map(renderNavigationItem)}
-          <div
-            className="group flex cursor-pointer items-center gap-3 rounded-r-2xl border-l-4 border-transparent px-6 py-4 transition-all duration-200 hover:border-primary/40 hover:bg-primary-background/40"
-            onClick={onClickLogoutModal}
-            role="button"
-            tabIndex={0}
-            aria-label="Logout"
-          >
-            <CustomImage
-              src={Images.signUpIconDisable}
-              className="w-5"
-              alt="Logout"
-            />
-            <CustomText textClassName="text-disable font-medium text-sm leading-5 tracking-[0.005em] transition-colors duration-200 group-hover:text-primary/90">
-              Log Out
-            </CustomText>
-          </div>
-        </div>
+      {/* Main Content */}
+      <main className="flex-1 overflow-hidden">
+        <div className="h-full overflow-hidden p-4">{children}</div>
+      </main>
 
-        {/* Mobile Header */}
-        <div className="flex w-full items-center justify-between pr-4 sm:flex md:flex lg:flex xl:hidden">
-          <div className="flex items-center justify-center p-4">
-            <CustomImage
-              src={Images.logoHorizontalColor}
-              className="w-24 sm:w-24 md:w-28 lg:w-32"
-              alt="Spacify Logo"
-            />
-          </div>
+      {/* More menu overlay */}
+      {isMoreOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/30"
+          onClick={() => setIsMoreOpen(false)}
+        />
+      )}
 
-          <div className="drawer" style={{ width: "unset" }}>
-            <input
-              id="my-drawer"
-              type="checkbox"
-              className="drawer-toggle"
-              checked={isDrawerOpen}
-              onChange={(e) => setIsDrawerOpen(e.target.checked)}
-            />
+      {/* More menu sheet */}
+      {isMoreOpen && (
+        <div className="fixed inset-x-0 bottom-16 z-50 mx-auto w-full max-w-3xl px-4 pb-2">
+          <div className="rounded-2xl border border-border bg-surface shadow-lg">
+            <div className="p-3">
+              {moreMenuItems.map((item) => (
+                <button
+                  key={item.path}
+                  onClick={() => handleNavigation(item)}
+                  className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors hover:bg-surface-secondary"
+                >
+                  <SvgIcon name={item.svgName} color="muted" size={20} />
+                  <CustomText textClassName="text-sm font-medium text-black">
+                    {item.label}
+                  </CustomText>
+                </button>
+              ))}
 
-            <div className="drawer-content">
-              <label
-                htmlFor="my-drawer"
-                className="cursor-pointer"
-                aria-label="Open menu"
+              <div className="my-1 h-px bg-border" />
+
+              <button
+                onClick={() => {
+                  setIsMoreOpen(false);
+                  onClickLogoutModal();
+                }}
+                className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-left text-error transition-colors hover:bg-error/5"
               >
-                <CustomImage
-                  src={Images.burgerMenuIconActive}
-                  className="w-7"
-                  alt="Menu"
-                />
-              </label>
+                <SvgIcon name="signUp" color="error" size={20} />
+                <CustomText textClassName="text-sm font-medium text-error">
+                  Log Out
+                </CustomText>
+              </button>
             </div>
+          </div>
+        </div>
+      )}
 
-            <div className="drawer-side z-20 max-h-screen">
-              <label
-                htmlFor="my-drawer"
-                aria-label="close sidebar"
-                className="drawer-overlay"
-              ></label>
-              <ul className="menu min-h-full w-80 bg-base-200 bg-white p-0 text-base-content">
-                {navigationItems.map((item) => (
-                  <li key={item.path}>{renderNavigationItem(item)}</li>
-                ))}
-                <li>
-                  <div
-                    className="group flex cursor-pointer items-center gap-3 rounded-r-2xl border-l-4 border-transparent px-6 py-4 transition-all duration-200 hover:border-primary/40 hover:bg-primary-background/40"
-                    onClick={onClickLogoutModal}
-                    role="button"
-                    tabIndex={0}
-                    aria-label="Logout"
+      {/* Bottom Navigation */}
+      <nav className="shrink-0 border-t border-border bg-surface">
+        <div className="flex items-center justify-around py-1.5">
+          {bottomNavItems.map((item) => {
+            if (!checkUserRole(userRole, item.roles)) return null;
+
+            const isActive = isNavActive(item.path);
+
+            if (item.path === "/more") {
+              return (
+                <button
+                  key={item.path}
+                  onClick={() => setIsMoreOpen(!isMoreOpen)}
+                  className="flex cursor-pointer flex-col items-center gap-0.5 px-3 py-1"
+                >
+                  <SvgIcon
+                    name={item.svgName}
+                    color={isActive ? "active" : "muted"}
+                    size={22}
+                  />
+                  <span
+                    className={`text-[10px] font-medium ${isActive ? "text-primary" : "text-muted"}`}
                   >
-                    <CustomImage
-                      src={Images.signUpIconDisable}
-                      className="w-5"
-                      alt="Logout"
-                    />
-                    <CustomText textClassName="text-disable font-medium text-sm leading-5 tracking-[0.005em] transition-colors duration-200 group-hover:text-primary/90">
-                      Log Out
-                    </CustomText>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+                    {item.label}
+                  </span>
+                </button>
+              );
+            }
 
-        {/* Main Content */}
-        <div className="h-full w-full overflow-hidden pb-0 pl-0 pr-0 pt-0 xl:pb-4 xl:pr-4 xl:pt-4">
-          <div className="h-full overflow-hidden rounded-3xl bg-primary-background p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
-            {children}
-          </div>
+            return (
+              <button
+                key={item.path}
+                onClick={() => handleNavigation(item)}
+                className="flex cursor-pointer flex-col items-center gap-0.5 px-3 py-1"
+              >
+                <SvgIcon
+                  name={item.svgName}
+                  color={isActive ? "active" : "muted"}
+                  size={22}
+                />
+                <span
+                  className={`text-[10px] font-medium ${isActive ? "text-primary" : "text-muted"}`}
+                >
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
         </div>
-      </div>
+      </nav>
 
       {/* Logout Modal */}
       <DesktopModal id="logout_modal">
         <div className="p-6">
-          <div className="flex flex-col">
-            <CustomText textClassName="text-xl font-bold pb-2">
-              Confirm Logout
-            </CustomText>
-            <CustomText textClassName="text-sm pb-2">
-              Are you sure you want to logout?
-            </CustomText>
+          <CustomText textClassName="text-lg font-semibold text-black">
+            Log Out
+          </CustomText>
+          <CustomText textClassName="text-sm text-muted mt-2 mb-6">
+            Are you sure you want to log out of your account?
+          </CustomText>
 
-            <div className="flex justify-end gap-4 pt-2">
-              <CustomButton
-                buttonClassName="btn-primary min-h-10 h-10 min-w-24 w-24"
-                buttonText="Cancel"
-                onClick={onClickCancelLogout}
-                aria-label="Cancel logout"
-              />
-
-              <CustomButton
-                buttonClassName="btn-primary-outline min-h-10 h-10 min-w-24 w-24"
-                buttonText="Logout"
-                onClick={onClickLogout}
-                aria-label="Confirm logout"
-              />
-            </div>
+          <div className="flex gap-3">
+            <CustomButton
+              buttonClassName="btn-primary-outline flex-1 min-h-10 h-10"
+              buttonText="Cancel"
+              onClick={onClickCancelLogout}
+              aria-label="Cancel logout"
+            />
+            <CustomButton
+              buttonClassName="btn-primary flex-1 min-h-10 h-10"
+              buttonText="Log Out"
+              onClick={onClickLogout}
+              aria-label="Confirm logout"
+            />
           </div>
         </div>
       </DesktopModal>

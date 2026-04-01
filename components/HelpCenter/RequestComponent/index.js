@@ -4,6 +4,7 @@ import BookingSelect from "@/components/Booking/BookingSelect";
 import CustomText from "@/components/CustomText";
 import CustomImage from "@/components/CustomImage";
 import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import Helper from "@/src/utils/Helper";
 import Constant from "@/src/utils/Constant";
 import { get, isEmpty, map, size } from "lodash";
@@ -114,7 +115,7 @@ const SpecificRequestComponent = ({
                   className="absolute top-1 right-1 cursor-pointer bg-white rounded-2xl"
                   onClick={() => onClickRemoveImage(path)}
                 >
-                  <CustomImage src={Images.deleteIcon} className="w-5 h-5" />
+                  <SvgIcon name="delete" color="error" size={20} />
                 </div>
               )}
             </div>
@@ -128,10 +129,7 @@ const SpecificRequestComponent = ({
             className="bg-primary-background global-border-radius cursor-pointer flex items-center justify-center w-28 h-28"
             onClick={() => uploadImageRef && uploadImageRef.current.click()}
           >
-            <CustomImage
-              src={Images.addIconBlack}
-              imageStyle={{ width: 20, height: 20 }}
-            />
+            <SvgIcon name="add" color="black" size={20} />
 
             <input
               capture="environment"
@@ -160,9 +158,10 @@ const SpecificRequestComponent = ({
             {loading ? (
               false
             ) : (
-              <CustomImage
-                src={Images.playIcon}
-                className="w-14 h-14 cursor-pointer"
+              <SvgIcon
+                name="play"
+                color="active"
+                size={56}
                 onClick={onClickPopupVideo}
               />
             )}
@@ -174,7 +173,7 @@ const SpecificRequestComponent = ({
                 className="absolute top-1 right-1 cursor-pointer z-10"
                 onClick={() => onClickRemoveVideo(path)}
               >
-                <CustomImage src={Images.deleteIcon} className="w-5 h-5" />
+                <SvgIcon name="delete" color="error" size={20} />
               </div>
             )}
           </div>
@@ -185,10 +184,7 @@ const SpecificRequestComponent = ({
             className="bg-primary-background global-border-radius cursor-pointer flex items-center justify-center w-28 h-28"
             onClick={() => uploadVideoRef && uploadVideoRef.current.click()}
           >
-            <CustomImage
-              src={Images.addIconBlack}
-              imageStyle={{ width: 20, height: 20 }}
-            />
+            <SvgIcon name="add" color="black" size={20} />
 
             <input
               capture="environment"

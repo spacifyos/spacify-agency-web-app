@@ -5,8 +5,7 @@ import CustomButton from "@/components/CustomButton";
 import BookingInput from "@/components/Booking/BookingInput";
 import CustomEmptyBox from "@/components/CustomEmptyBox";
 import * as maintenanceTicketSelector from "@/src/selectors/maintenance-ticket";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import Helper from "@/src/utils/Helper";
 import MediaUploadModal from "@/components/MediaUploadModal";
 
@@ -33,75 +32,80 @@ const CommentComponent = ({
   const currentPage = maintenanceTicketSelector.getCurrentPage(pagination);
 
   return (
-    <div className="h-full rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
-      <CustomText textClassName="text-disable text-sm">Comment</CustomText>
-      <div
-        className="divider-line"
-        style={{ marginTop: 16, marginBottom: 16 }}
-      ></div>
+    <div className="rounded-2xl border border-border bg-surface">
+      {/* Header */}
+      <div className="border-b border-border p-4">
+        <CustomText textClassName="text-xs font-semibold text-muted uppercase tracking-wider">
+          Comments
+        </CustomText>
+      </div>
 
-      {getCommentLoading && isEmpty(data) ? (
-        <div className="flex items-center justify-center py-4 text-primary">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
-      ) : isEmpty(data) ? (
-        <div className="py-10">
-          <CustomEmptyBox emptyTitle="No comment found" emptyDesc="" />
-        </div>
-      ) : (
-        map(data, (item, index) => {
-          return (
-            <MessageTimeLine
-              item={item}
-              key={index}
-              onClickSelectedCommentImage={onClickSelectedCommentImage}
-            />
-          );
-        })
-      )}
+      {/* Comment list */}
+      <div className="p-4">
+        {getCommentLoading && isEmpty(data) ? (
+          <div className="flex items-center justify-center py-6 text-primary">
+            <span className="loading loading-spinner loading-md"></span>
+          </div>
+        ) : isEmpty(data) ? (
+          <div className="py-6">
+            <CustomEmptyBox emptyTitle="No comments yet" emptyDesc="" />
+          </div>
+        ) : (
+          <div className="flex flex-col">
+            {map(data, (item, index) => (
+              <MessageTimeLine
+                item={item}
+                key={index}
+                onClickSelectedCommentImage={onClickSelectedCommentImage}
+              />
+            ))}
+          </div>
+        )}
 
-      {hasMorePage && lastPage > currentPage && !isEmpty(data) ? (
-        <div className="flex justify-center py-4">
-          {getCommentLoading && !isEmpty(data) ? (
-            <span className="loading loading-dots loading-sm"></span>
-          ) : (
-            <div
-              onClick={() => onClickLoadMore(currentPage)}
-              className="cursor-pointer"
-            >
-              <CustomText textClassName="text-disable xl:text-sm lg:text-sm md:text-sm sm:text-xs text-xs">
+        {hasMorePage && lastPage > currentPage && !isEmpty(data) && (
+          <div className="flex justify-center py-3">
+            {getCommentLoading && !isEmpty(data) ? (
+              <span className="loading loading-dots loading-sm"></span>
+            ) : (
+              <button
+                onClick={() => onClickLoadMore(currentPage)}
+                className="cursor-pointer text-xs font-medium text-primary hover:underline"
+              >
                 Load more
-              </CustomText>
-            </div>
-          )}
-        </div>
-      ) : null}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
 
-      {!Helper.isTenant(userType) ? (
-        <div className="flex items-center justify-center gap-2 pt-2">
-          <div
-            className="flex cursor-pointer items-center justify-center"
+      {/* Message input */}
+      {!Helper.isTenant(userType) && (
+        <div className="flex items-center gap-2 border-t border-border p-3">
+          <button
+            className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full hover:bg-surface-secondary"
             onClick={() => setShowCommentImageSourceModal(true)}
           >
-            <CustomImage src={Images.imageIconDisable} className="h-10 w-10" />
+            <SvgIcon name="image" color="disable" size={20} />
+          </button>
+          <div className="flex-1">
+            <BookingInput
+              bgColor="bg-surface-secondary border border-border"
+              inputClassName="border-none text-sm"
+              placeholder="Write a message..."
+              value={messageValue}
+              onChange={(e) => setMessageValue(e.target.value)}
+            />
           </div>
-          <BookingInput
-            bgColor="bg-white border border-disable"
-            inputClassName="border-none"
-            placeholder="Message"
-            value={messageValue}
-            onChange={(e) => setMessageValue(e.target.value)}
-          />
           <CustomButton
-            buttonStyles={{ height: 40, minHeight: 40, maxHeight: 40 }}
-            buttonClassName="btn-primary max-w-20 w-20 min-h-10 h-10"
+            buttonClassName="btn-primary rounded-full px-4 py-1.5 h-auto min-h-0 shrink-0"
+            textClassName="text-xs font-medium"
             buttonText="Send"
             onClick={onClickSendMessage}
             loading={postCommentLoading}
             disable={postCommentLoading}
           />
         </div>
-      ) : null}
+      )}
 
       <input
         accept="image/*"

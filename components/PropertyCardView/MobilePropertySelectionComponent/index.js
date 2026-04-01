@@ -12,8 +12,8 @@ const MobilePropertySelectionComponent = ({
   userRole,
 }) => {
   return (
-    <div className="relative lg:hidden xl:hidden">
-      <div className="hide-scroll-bar flex flex-row gap-2 overflow-x-scroll sm:flex-row md:flex-row lg:flex-col xl:flex-col">
+    <div className="relative">
+      <div className="hide-scroll-bar flex flex-row gap-3 overflow-x-auto pb-1">
         {map(propertyListing, (list) => {
           const imageUrl = listingSelector.getImageUrl(list);
           const name = listingSelector.getName(list);
@@ -38,101 +38,81 @@ const MobilePropertySelectionComponent = ({
 
           return (
             <div
-              style={{ minWidth: 180 }}
               key={propertyId}
-              className={`flex cursor-pointer flex-col items-center justify-center rounded-3xl bg-white p-4 ${isSelectProperty ? "border border-2 border-primary" : ""}`}
+              className={`flex min-w-[160px] cursor-pointer flex-col items-center rounded-2xl border bg-surface p-4 transition-all ${isSelectProperty ? "border-primary" : "border-border"}`}
               onClick={() => onClickSelectProperty(propertyId)}
             >
-              <div className="flex flex-col items-center justify-center">
-                <div className="flex flex-col items-center gap-2 pb-2 sm:flex-col md:flex-col lg:flex-row xl:flex-row">
-                  <div
-                    style={{
-                      width: 60,
-                      height: 60,
-                      maxWidth: 60,
-                      maxHeight: 60,
+              <div className="flex flex-col items-center gap-2 pb-2">
+                <div className="h-[56px] w-[56px] overflow-hidden rounded-xl">
+                  <CustomImage
+                    className="overflow-hidden rounded-xl"
+                    imageStyle={{
+                      width: 56,
+                      height: 56,
+                      maxWidth: 56,
+                      maxHeight: 56,
                     }}
-                  >
-                    <CustomImage
-                      className="global-border-radius overflow-hidden border"
-                      imageStyle={{
-                        width: 60,
-                        height: 60,
-                        maxWidth: 60,
-                        maxHeight: 60,
-                      }}
-                      src={isEmpty(imageUrl) ? Images.imageNotFound : imageUrl}
-                    />
-                  </div>
-
-                  <CustomText
-                    textClassName={`text-xs xl:text-start lg:text-start md:text-center sm:text-center text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"} line-clamp-1`}
-                  >
-                    {isEmpty(name) ? "-" : name}
-                  </CustomText>
+                    src={isEmpty(imageUrl) ? Images.imageNotFound : imageUrl}
+                  />
                 </div>
 
-                {includes(userRole, Constant.MASTER_AGENCY_ROLE) ? (
-                  <>
-                    <div className="flex items-center gap-1 pb-1">
+                <CustomText
+                  textClassName={`text-xs text-center font-semibold line-clamp-1 ${isSelectProperty ? "text-primary" : "text-muted"}`}
+                >
+                  {isEmpty(name) ? "-" : name}
+                </CustomText>
+              </div>
+
+              {includes(userRole, Constant.MASTER_AGENCY_ROLE) ? (
+                <>
+                  <div className="flex items-center gap-1 pb-1">
+                    <CustomText
+                      textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-muted"}`}
+                    >
+                      Total Unit:
+                    </CustomText>
+                    <CustomText
+                      textClassName={`text-xs text-center font-semibold ${isSelectProperty ? "text-primary" : "text-muted"}`}
+                    >
+                      {size(totalUnits)}
+                    </CustomText>
+                  </div>
+
+                  <div>
+                    <div className="flex gap-1 pb-1">
                       <CustomText
-                        textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
-                      >
-                        Total Unit:
-                      </CustomText>
+                        textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-muted"}`}
+                      >{`R:`}</CustomText>
                       <CustomText
-                        textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
-                      >
-                        {size(totalUnits)}
-                      </CustomText>
+                        textClassName={`text-xs text-center font-semibold ${isSelectProperty ? "text-primary" : "text-muted"}`}
+                      >{`${totalOccupiedRoom}/${totalRoom} (${totalVacantRoom})`}</CustomText>
+                      <CustomText
+                        textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-muted"}`}
+                      >{`- OR:`}</CustomText>
+                      <CustomText
+                        textClassName={`text-xs text-center font-semibold ${isSelectProperty ? "text-primary" : "text-muted"}`}
+                      >{`${roomOccupancyRate}%`}</CustomText>
                     </div>
 
-                    <div className="">
-                      <div className="flex gap-1 pb-1">
-                        <CustomText
-                          textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
-                        >{`R:`}</CustomText>
-                        <CustomText
-                          textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
-                        >{`${totalOccupiedRoom}/${totalRoom} (${totalVacantRoom})`}</CustomText>
-                        <CustomText
-                          textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
-                        >{`- OR:`}</CustomText>
-                        <CustomText
-                          textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
-                        >{`${roomOccupancyRate}%`}</CustomText>
-                      </div>
-
-                      <div className="flex gap-1">
-                        <CustomText
-                          textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
-                        >{`CP:`}</CustomText>
-                        <CustomText
-                          textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
-                        >{`${totalOccupiedCarPark}/${totalCarPark} (${totalVacantCarPark}) `}</CustomText>
-                        <CustomText
-                          textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
-                        >{`- OR:`}</CustomText>
-                        <CustomText
-                          textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
-                        >{`${carParkOccupancyRate}%`}</CustomText>
-                      </div>
+                    <div className="flex gap-1">
+                      <CustomText
+                        textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-muted"}`}
+                      >{`CP:`}</CustomText>
+                      <CustomText
+                        textClassName={`text-xs text-center font-semibold ${isSelectProperty ? "text-primary" : "text-muted"}`}
+                      >{`${totalOccupiedCarPark}/${totalCarPark} (${totalVacantCarPark}) `}</CustomText>
+                      <CustomText
+                        textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-muted"}`}
+                      >{`- OR:`}</CustomText>
+                      <CustomText
+                        textClassName={`text-xs text-center font-semibold ${isSelectProperty ? "text-primary" : "text-muted"}`}
+                      >{`${carParkOccupancyRate}%`}</CustomText>
                     </div>
-                  </>
-                ) : (
-                  false
-                )}
-              </div>
-              <div className="hidden lg:block xl:block">
-                <CustomImage
-                  className="w-2"
-                  src={
-                    isSelectProperty
-                      ? Images.rightIconActive
-                      : Images.rightIconDisable
-                  }
-                />
-              </div>
+                  </div>
+                </>
+              ) : (
+                false
+              )}
             </div>
           );
         })}

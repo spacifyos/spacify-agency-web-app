@@ -1,9 +1,8 @@
 "use client";
 
 import CustomText from "@/components/CustomText";
-import CustomLabelValue from "@/components/CustomLabelValue";
 import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import {
   map,
   size,
@@ -45,6 +44,7 @@ const CleaningTaskDetailPage = () => {
   const unitName = get(schedulerDetail, "unit_name", "-");
   const scheduleDate = get(schedulerDetail, "schedule_date", "-");
   const scheduleStatus = get(schedulerDetail, ["status", "value"], "-");
+  const isPending = isEqual(toLower(scheduleStatus), "pending");
 
   const [imageList, setImageList] = useState([]);
   const [imageUploading, setImageUploading] = useState(false);
@@ -95,14 +95,12 @@ const CleaningTaskDetailPage = () => {
   const scheduleUpdateSuccessCallback = async () => {
     Toast.success("Update Successful");
 
-    // Fetch new detail data without loading
     await apiRequest.getSchedulerDetailRequest(
       id,
       () => {},
       setSchedulerDetail,
     );
 
-    // Remove all related state data
     setPostData(null);
     setImageList([]);
     setOpenCollapse(null);
@@ -168,7 +166,6 @@ const CleaningTaskDetailPage = () => {
       );
 
       setImageList((prevList) => {
-        // Keep any images that are not present in the backend (by unique id or path)
         const merged = [
           ...newImageList,
           ...prevList.filter(
@@ -235,7 +232,6 @@ const CleaningTaskDetailPage = () => {
         cameraInputRef.current.click();
       }
     } else if (source === "gallery") {
-      // Handle gallery selection
       if (galleryInputRef.current) {
         galleryInputRef.current.click();
       }
@@ -254,20 +250,14 @@ const CleaningTaskDetailPage = () => {
       const extension = split(originalName, ".");
       const mimeType = get(image, ["type"], "");
 
-      // Generate new image name with timestamp and random ID
       const newImageName = Helper.generateImageName(originalName);
-
-      // if (some(imageList, { name: newImageName })) {
-      //   Toast.error(`Image with the name "${newImageName}" already exists.`);
-      //   return;
-      // }
 
       try {
         const base64 = await convertToBase64(image);
         const newImage = {
           type: 34,
           name: newImageName,
-          originalName: originalName, // Keep original name for reference
+          originalName: originalName,
           extension: extension[1],
           mime_type: mimeType,
           status: false,
@@ -358,7 +348,6 @@ const CleaningTaskDetailPage = () => {
       const updatedForms = map(forms, (form, idx) => {
         if (idx === formIndex) {
           const list = get(form, "list", {});
-          // Only update the value property, preserve all others
           const updatedList = {
             ...list,
             [itemKey]: {
@@ -389,7 +378,6 @@ const CleaningTaskDetailPage = () => {
       }),
     );
 
-    // Check if any image has empty path
     const hasEmptyPath = some(checklist_images, (img) =>
       isEmpty(get(img, "path", "")),
     );
@@ -441,14 +429,12 @@ const CleaningTaskDetailPage = () => {
     setImageList((prevState) =>
       filter(prevState, (img) => {
         if (target && typeof target === "object") {
-          // If passed the whole image object
           if (get(target, "path", "")) {
             return get(img, "path", "") !== get(target, "path", "");
           } else if (get(target, "id", "")) {
             return get(img, "id", "") !== get(target, "id", "");
           }
         } else {
-          // If passed just a string (path or id)
           return (
             get(img, "path", "") !== target && get(img, "id", "") !== target
           );
@@ -489,7 +475,6 @@ const CleaningTaskDetailPage = () => {
         forEach(list, (item, key) => {
           const imageSubTypeKey = get(item, "image_sub_type_key", "");
           if (imageSubTypeKey === get(removedImg, "sub_type", "")) {
-            // Remove the image from this item's images array
             const images = get(item, "images", []);
             const filteredImages = filter(
               images,
@@ -516,314 +501,368 @@ const CleaningTaskDetailPage = () => {
     });
   };
 
+  const checkboxLabels = ["Baik", "Tak Baik", "N/A"];
+
   return (
-    <div className="hide-scroll-bar relative h-full overflow-y-scroll">
-      <div className="flex flex-col gap-4">
-        <div className="rounded-3xl bg-white p-4 sm:p-4 md:p-4 lg:p-8 xl:p-8">
-          <div className="flex items-center justify-between pb-4">
-            <CustomText textClassName="font-bold text-primary">
-              Maklumat Umum
-            </CustomText>
-
-            <StatusLabel status={scheduleStatus} />
-          </div>
-
-          <CustomLabelValue label="Name" value={name} />
-          <CustomLabelValue label="Hartanah" value={propertyName} />
-          <CustomLabelValue label="Unit Kediaman" value={unitName} />
-          <CustomLabelValue
-            label="Tarikh Pembersihan"
-            value={scheduleDate}
-            styles={{ paddingBottom: 0 }}
-          />
+    <div className="flex h-full flex-col overflow-hidden">
+      {/* Sticky Header */}
+      <div className="flex shrink-0 items-center gap-3 pb-4">
+        <button
+          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-border bg-surface transition-colors hover:bg-surface-secondary"
+          onClick={() => router.back()}
+        >
+          <SvgIcon name="left" color="black" size={18} />
+        </button>
+        <div className="flex-1">
+          <CustomText textClassName="text-base font-semibold text-black">
+            Butiran Tugas
+          </CustomText>
         </div>
-        {map(schedulerTemplateForms, (form, index) => {
-          const formLabel = get(form, "label", "");
-          const formList = get(form, "list", {});
-          const isOpen = openCollapse === index;
-
-          return (
-            <div
-              key={index}
-              className={`collapse bg-white ${isOpen ? "collapse-open" : ""} overflow-hidden`}
-            >
-              <input
-                type="checkbox"
-                checked={isOpen}
-                onChange={() => setOpenCollapse(isOpen ? null : index)}
-                style={{ display: "none" }}
-              />
-              <div
-                className="collapse-title cursor-pointer px-4 sm:px-4 md:px-4 lg:px-8 xl:px-8"
-                onClick={() => setOpenCollapse(isOpen ? null : index)}
-              >
-                <div className="flex items-center justify-between">
-                  <CustomText textClassName="font-bold text-primary">
-                    {formLabel}
-                  </CustomText>
-                  <CustomImage
-                    src={isOpen ? Images.upIconBlack : Images.downIconBlack}
-                    className="w-4"
-                  />
-                </div>
-              </div>
-              <div className="collapse-content px-4 sm:px-4 md:px-4 lg:px-8 xl:px-8">
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between rounded-lg bg-primary-background px-4 py-4 sm:px-4 md:px-4 lg:px-8 xl:px-8">
-                    <CustomText textClassName="text-sm">
-                      Senarai Semak
-                    </CustomText>
-
-                    <div className="flex items-center justify-center">
-                      {map(["Baik", "Tak Baik", "N/A"], (label) => (
-                        <div key={label} className="flex items-center">
-                          <div className="divider-white divider divider-horizontal"></div>
-                          <CustomText textClassName="text-xs w-[50px] text-center">
-                            {label}
-                          </CustomText>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {map(formList, (item, key) => {
-                    const label = get(item, "label", "");
-                    const imageSubTypeKey = get(item, "image_sub_type_key", "");
-                    const hasImage = !isEmpty(imageSubTypeKey);
-                    const value = get(item, "value", 3);
-                    const filteredImages = filter(
-                      imageList,
-                      (img) => get(img, "sub_type", "") === imageSubTypeKey,
-                    );
-
-                    const canAddMoreImages =
-                      isEqual(scheduleStatus, "pending") &&
-                      size(filteredImages) < 5;
-
-                    return (
-                      <div
-                        key={key}
-                        className="rounded-lg bg-primary-background px-4 py-4 sm:px-4 md:px-4 lg:px-8 xl:px-8"
-                      >
-                        <div className="flex items-center justify-between">
-                          <CustomText textClassName="text-sm">
-                            {label}
-                          </CustomText>
-
-                          <div className="flex items-center justify-center">
-                            {map([1, 2, 3], (checkboxValue) => (
-                              <div
-                                key={checkboxValue}
-                                className="flex items-center"
-                              >
-                                <div className="divider-white divider divider-horizontal" />
-                                <div className="flex h-6 w-[50px] items-center justify-center">
-                                  {isEqual(
-                                    toLower(scheduleStatus),
-                                    "pending",
-                                  ) ? (
-                                    <input
-                                      type="checkbox"
-                                      className="checkbox-primary checkbox border-black transition-colors duration-200 hover:border-primary"
-                                      checked={value === checkboxValue}
-                                      onChange={() =>
-                                        handleCheckboxChange(
-                                          index,
-                                          key,
-                                          checkboxValue,
-                                        )
-                                      }
-                                      aria-label={`Select ${label} as ${checkboxValue === 1 ? "Baik" : checkboxValue === 2 ? "Tak Baik" : "N/A"}`}
-                                    />
-                                  ) : value === checkboxValue ? (
-                                    <CustomImage
-                                      src={Images.checkIconActive}
-                                      className="h-5 w-5"
-                                      alt={`Selected ${label} as ${checkboxValue === 1 ? "Baik" : checkboxValue === 2 ? "Tak Baik" : "N/A"}`}
-                                    />
-                                  ) : null}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {hasImage && (
-                          <div>
-                            <div className="divider-white divider" />
-                            <div>
-                              <CustomText textClassName="text-sm pb-2">
-                                Gambar{" "}
-                                <span className="text-disable">
-                                  (3–5 gambar, maks 1MB setiap satu)
-                                </span>
-                              </CustomText>
-
-                              <div className="flex flex-wrap items-center gap-2">
-                                {map(filteredImages, (img, idx) => {
-                                  return (
-                                    <div
-                                      key={idx}
-                                      className={`relative flex items-center justify-center overflow-hidden rounded-2xl border ${
-                                        isEmpty(get(img, "path", ""))
-                                          ? ""
-                                          : get(img, "status", "")
-                                            ? "border-available"
-                                            : "border-error"
-                                      }`}
-                                    >
-                                      <CustomImage
-                                        src={
-                                          isEmpty(img.mime_type)
-                                            ? get(img, "url", "")
-                                            : get(img, "base64", "")
-                                        }
-                                        className="h-20 w-20 cursor-pointer"
-                                        onClick={() =>
-                                          setPopupImage(
-                                            isEmpty(img.mime_type)
-                                              ? get(img, "url", "")
-                                              : get(img, "base64", ""),
-                                          )
-                                        }
-                                      />
-
-                                      {get(img, "loading", "") ? (
-                                        <span className="loading loading-spinner loading-lg absolute text-primary" />
-                                      ) : (
-                                        isEqual(
-                                          toLower(scheduleStatus),
-                                          "pending",
-                                        ) && (
-                                          <div
-                                            className="absolute right-1 top-1 z-10 cursor-pointer"
-                                            onClick={() =>
-                                              onClickRemoveGallery(img)
-                                            }
-                                          >
-                                            <CustomImage
-                                              src={Images.deleteIcon}
-                                              className="h-5 w-5"
-                                            />
-                                          </div>
-                                        )
-                                      )}
-                                    </div>
-                                  );
-                                })}
-
-                                {canAddMoreImages && (
-                                  <div
-                                    className="flex h-20 w-20 cursor-pointer items-center justify-center rounded-2xl bg-white"
-                                    onClick={() => {
-                                      setCurrentImageContext({
-                                        formIndex: index,
-                                        itemKey: key,
-                                        sub_type: imageSubTypeKey,
-                                      });
-                                      setShowMediaUploadModal(true);
-                                    }}
-                                  >
-                                    <CustomImage
-                                      src={Images.addIconDisable}
-                                      className="h-5 w-5"
-                                    />
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-
-                  {isEqual(scheduleStatus, "pending") ? (
-                    <div className="flex justify-end pt-4">
-                      <CustomButton
-                        buttonClassName="btn-primary btn-sm"
-                        buttonText="Kemaskini"
-                        onClick={() => {
-                          updatePostData();
-                        }}
-                      />
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-
-        {!isEmpty(schedulerDetail) && isEqual(scheduleStatus, "pending") ? (
-          <div className="flex w-full justify-center">
-            <CustomButton
-              buttonClassName="btn-primary min-h-9 h-9 w-32"
-              buttonText="Hantar"
-              textClassName="text-xs"
-              onClick={onClickHandleSubmit}
-            />
-          </div>
-        ) : null}
+        <StatusLabel status={scheduleStatus} />
       </div>
 
+      {/* Scrollable Content */}
+      <div className="hide-scroll-bar flex-1 overflow-y-auto">
+        <div className="flex flex-col gap-4 pb-4">
+          {/* General Information Card */}
+          <div className="rounded-2xl border border-border bg-surface">
+            <div className="border-b border-border px-4 py-3">
+              <CustomText textClassName="text-xs font-semibold text-muted uppercase tracking-wider">
+                Maklumat Umum
+              </CustomText>
+            </div>
+
+            <div className="grid grid-cols-2 gap-x-4 gap-y-3 p-4">
+              <div>
+                <CustomText textClassName="text-xs text-muted mb-1">
+                  Name
+                </CustomText>
+                <CustomText textClassName="text-sm font-semibold text-black">
+                  {name}
+                </CustomText>
+              </div>
+              <div>
+                <CustomText textClassName="text-xs text-muted mb-1">
+                  Tarikh
+                </CustomText>
+                <CustomText textClassName="text-sm font-semibold text-black">
+                  {scheduleDate}
+                </CustomText>
+              </div>
+              <div>
+                <CustomText textClassName="text-xs text-muted mb-1">
+                  Hartanah
+                </CustomText>
+                <CustomText textClassName="text-sm font-semibold text-black">
+                  {propertyName}
+                </CustomText>
+              </div>
+              <div>
+                <CustomText textClassName="text-xs text-muted mb-1">
+                  Unit Kediaman
+                </CustomText>
+                <CustomText textClassName="text-sm font-semibold text-black">
+                  {unitName}
+                </CustomText>
+              </div>
+            </div>
+          </div>
+
+          {/* Checklist Form Sections */}
+          {map(schedulerTemplateForms, (form, index) => {
+            const formLabel = get(form, "label", "");
+            const formList = get(form, "list", {});
+            const isOpen = openCollapse === index;
+
+            return (
+              <div
+                key={index}
+                className="overflow-hidden rounded-2xl border border-border bg-surface"
+              >
+                {/* Section header */}
+                <button
+                  className="flex w-full cursor-pointer items-center justify-between px-4 py-3"
+                  onClick={() => setOpenCollapse(isOpen ? null : index)}
+                >
+                  <CustomText textClassName="text-xs font-semibold text-muted uppercase tracking-wider">
+                    {formLabel}
+                  </CustomText>
+                  <SvgIcon
+                    name={isOpen ? "up" : "down"}
+                    color="muted"
+                    size={16}
+                  />
+                </button>
+
+                {/* Section content */}
+                {isOpen && (
+                  <div className="border-t border-border">
+                    {/* Checklist header row */}
+                    <div className="flex items-center justify-between bg-surface-secondary px-4 py-2.5">
+                      <CustomText textClassName="text-xs font-semibold text-muted">
+                        Senarai Semak
+                      </CustomText>
+                      <div className="flex items-center">
+                        {map(checkboxLabels, (label) => (
+                          <CustomText
+                            key={label}
+                            textClassName="text-[10px] text-muted w-[44px] text-center"
+                          >
+                            {label}
+                          </CustomText>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Checklist items */}
+                    <div className="divide-y divide-border">
+                      {map(formList, (item, key) => {
+                        const label = get(item, "label", "");
+                        const imageSubTypeKey = get(
+                          item,
+                          "image_sub_type_key",
+                          "",
+                        );
+                        const hasImage = !isEmpty(imageSubTypeKey);
+                        const value = get(item, "value", 3);
+                        const filteredImages = filter(
+                          imageList,
+                          (img) =>
+                            get(img, "sub_type", "") === imageSubTypeKey,
+                        );
+
+                        const canAddMoreImages =
+                          isPending && size(filteredImages) < 5;
+
+                        return (
+                          <div key={key} className="px-4 py-3">
+                            <div className="flex items-center justify-between">
+                              <CustomText textClassName="text-sm text-black flex-1 pr-2">
+                                {label}
+                              </CustomText>
+
+                              <div className="flex shrink-0 items-center">
+                                {map([1, 2, 3], (checkboxValue) => (
+                                  <div
+                                    key={checkboxValue}
+                                    className="flex h-8 w-[44px] items-center justify-center"
+                                  >
+                                    {isPending ? (
+                                      <button
+                                        className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-md border-2 transition-all ${
+                                          value === checkboxValue
+                                            ? "border-primary bg-primary"
+                                            : "border-border bg-white hover:border-primary/40"
+                                        }`}
+                                        onClick={() =>
+                                          handleCheckboxChange(
+                                            index,
+                                            key,
+                                            checkboxValue,
+                                          )
+                                        }
+                                        aria-label={`Select ${label} as ${checkboxLabels[checkboxValue - 1]}`}
+                                      >
+                                        {value === checkboxValue && (
+                                          <SvgIcon
+                                            name="check"
+                                            color="white"
+                                            size={14}
+                                          />
+                                        )}
+                                      </button>
+                                    ) : value === checkboxValue ? (
+                                      <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary">
+                                        <SvgIcon
+                                          name="check"
+                                          color="white"
+                                          size={14}
+                                        />
+                                      </div>
+                                    ) : (
+                                      <div className="h-6 w-6 rounded-md border-2 border-border bg-white" />
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            {hasImage && (
+                              <div className="mt-3 rounded-xl bg-surface-secondary p-3">
+                                <CustomText textClassName="text-xs text-muted mb-2">
+                                  Gambar{" "}
+                                  <span className="text-muted/60">
+                                    (3-5 gambar, maks 5MB)
+                                  </span>
+                                </CustomText>
+
+                                <div className="flex flex-wrap items-center gap-2">
+                                  {map(filteredImages, (img, idx) => {
+                                    const imgSrc = isEmpty(img.mime_type)
+                                      ? get(img, "url", "")
+                                      : get(img, "base64", "");
+                                    const isUploaded = !isEmpty(
+                                      get(img, "path", ""),
+                                    );
+
+                                    return (
+                                      <div
+                                        key={idx}
+                                        className={`relative overflow-hidden rounded-xl border-2 ${
+                                          !isUploaded
+                                            ? "border-border"
+                                            : get(img, "status", "")
+                                              ? "border-available"
+                                              : "border-error"
+                                        }`}
+                                      >
+                                        <CustomImage
+                                          src={imgSrc}
+                                          className="h-[72px] w-[72px] cursor-pointer"
+                                          onClick={() =>
+                                            setPopupImage(imgSrc)
+                                          }
+                                        />
+
+                                        {get(img, "loading", "") ? (
+                                          <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                            <span className="loading loading-spinner loading-sm text-white" />
+                                          </div>
+                                        ) : (
+                                          isPending && (
+                                            <button
+                                              className="absolute right-1 top-1 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full bg-error"
+                                              onClick={() =>
+                                                onClickRemoveGallery(img)
+                                              }
+                                            >
+                                              <SvgIcon
+                                                name="close"
+                                                color="white"
+                                                size={12}
+                                              />
+                                            </button>
+                                          )
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+
+                                  {canAddMoreImages && (
+                                    <button
+                                      className="flex h-[72px] w-[72px] cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-border bg-white transition-colors hover:border-primary/30 hover:bg-primary/5"
+                                      onClick={() => {
+                                        setCurrentImageContext({
+                                          formIndex: index,
+                                          itemKey: key,
+                                          sub_type: imageSubTypeKey,
+                                        });
+                                        setShowMediaUploadModal(true);
+                                      }}
+                                    >
+                                      <SvgIcon
+                                        name="add"
+                                        color="muted"
+                                        size={20}
+                                      />
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Update button per section */}
+                    {isPending && (
+                      <div className="border-t border-border px-4 py-3">
+                        <CustomButton
+                          buttonClassName="btn-primary-outline btn-sm w-full"
+                          buttonText="Kemaskini"
+                          textClassName="text-xs"
+                          onClick={updatePostData}
+                          loading={detailUploading}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Submit button */}
+          {!isEmpty(schedulerDetail) && isPending && (
+            <CustomButton
+              buttonClassName="btn-primary min-h-12 h-12 rounded-xl w-full"
+              buttonText="Hantar Laporan"
+              textClassName="text-sm font-semibold"
+              onClick={onClickHandleSubmit}
+              loading={updateDetailUploading}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Image popup overlay */}
       {popupImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
           onClick={() => setPopupImage(null)}
         >
           <div className="relative" onClick={(e) => e.stopPropagation()}>
             <CustomImage
               src={popupImage}
               alt="Popup"
-              className="max-h-[80vh] max-w-[90vw]"
+              className="max-h-[80vh] max-w-[90vw] rounded-2xl"
             />
           </div>
 
-          <div
-            className="absolute right-3 top-3 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-3xl"
-            style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+          <button
+            className="absolute right-4 top-4 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-colors hover:bg-white/20"
             onClick={() => setPopupImage(null)}
           >
-            <CustomText textClassName="text-lg text-white">X</CustomText>
-          </div>
+            <SvgIcon name="close" color="white" size={18} />
+          </button>
         </div>
       )}
 
+      {/* Confirmation modal */}
       <DesktopModal id="schedule_submit_alert">
         <div className="p-6">
-          <div className="flex items-center">
-            <CustomText textClassName="flex-1 text-center text-base font-bold">
+          <div className="flex items-center justify-between">
+            <CustomText textClassName="text-base font-semibold text-black">
               Pengesahan
             </CustomText>
-            <form method="dialog" className={`flex justify-end`}>
-              <button className="btn-ghost btn btn-sm btn-circle right-2">
-                <CustomImage
-                  className="w-3 sm:w-3 md:w-4 lg:w-4 xl:w-4"
-                  src={Images.closeIconBlack}
-                />
+            <form method="dialog">
+              <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-surface-secondary">
+                <SvgIcon name="close" color="muted" size={16} />
               </button>
             </form>
           </div>
 
-          <div className="divider-line"></div>
-          <CustomText>
+          <div className="my-4 border-t border-border" />
+
+          <CustomText textClassName="text-sm text-black leading-relaxed">
             Adakah anda pasti untuk menyerahkan, selepas diserahkan tidak boleh
             berubah
           </CustomText>
 
-          <div className="flex justify-end gap-4 pt-4">
+          <div className="flex gap-3 pt-5">
             <CustomButton
-              buttonClassName="btn-primary-outline"
+              buttonClassName="btn-primary-outline flex-1 min-h-10 h-10"
               buttonText="Tidak"
               onClick={() => {
                 Helper.documentGetElementById("schedule_submit_alert").close();
               }}
             />
             <CustomButton
-              buttonClassName="btn-primary"
+              buttonClassName="btn-primary flex-1 min-h-10 h-10"
               buttonText="Ya"
               onClick={onClickSubmit}
+              loading={updateDetailUploading}
             />
           </div>
         </div>

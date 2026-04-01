@@ -1,14 +1,16 @@
 @mixin custom-select($bgColor) {
-  border-radius: 0.5rem;
+  border-radius: 12px;
 
   select {
-    @apply text-black border-white;
+    @apply text-black;
+    border: 1px solid var(--color-border);
     background-color: $bgColor;
+    border-radius: 12px;
+    transition: border-color 0.15s ease;
   }
 
   select:required:invalid {
-    @apply text-sm;
-    @apply text-disable;
+    @apply text-sm text-muted;
   }
 
   option[value=""][disabled] {
@@ -22,6 +24,8 @@
   select:focus {
     outline: none;
     outline-offset: unset;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(245, 131, 60, 0.1);
   }
 }
 

@@ -3,7 +3,7 @@ import * as maintenanceTicketSelector from "@/src/selectors/maintenance-ticket";
 import CustomLabelValue from "@/components/CustomLabelValue";
 import { get, isEmpty, map } from "lodash";
 import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 
 const MaintenanceScheduleInformation = ({
   data,
@@ -72,9 +72,10 @@ const MaintenanceScheduleInformation = ({
           <div
             className={`w-28 h-28 relative flex justify-center items-center border global-border-radius`}
           >
-            <CustomImage
-              src={Images.playIcon}
-              className="w-14 h-14 cursor-pointer"
+            <SvgIcon
+              name="play"
+              color="active"
+              size={56}
               onClick={() => onClickPopupVideo("tenant")}
             />
           </div>

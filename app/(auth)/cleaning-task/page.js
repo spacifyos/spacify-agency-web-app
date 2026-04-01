@@ -2,11 +2,9 @@
 
 import { get, isEmpty, isEqual, map, toLower } from "lodash";
 import CustomButton from "@/components/CustomButton";
-import Constant from "@/src/utils/Constant";
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import CustomText from "@/components/CustomText";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import { useRouter } from "next/navigation";
 import apiRequest from "@/src/services/httpUtilities/apiRequest";
 import StatusLabel from "@/components/StatusLabel";
@@ -14,41 +12,52 @@ import FilterSection from "@/components/Cleaning/FilterSection";
 import moment from "moment";
 import CustomEmptyBox from "@/components/CustomEmptyBox";
 
-const btnLists = [
-  {
-    label: "All",
-    value: "",
-  },
-  {
-    label: "Tugasan Hari Ini",
-    value: Constant.TICKET_NEW,
-  },
-  {
-    label: "Tugas Dijadualkan",
-    value: Constant.TICKET_PENDING,
-  },
+const statusFilters = [
+  { label: "All", value: "" },
+  { label: "Pending", value: "pending" },
+  { label: "Completed", value: "completed" },
+  { label: "Rejected", value: "rejected" },
+  { label: "Cancelled", value: "cancelled" },
 ];
+
+const getDateRange = (rangeKey) => {
+  switch (rangeKey) {
+    case "today":
+      return {
+        startDate: moment().format("YYYY-MM-DD"),
+        endDate: moment().format("YYYY-MM-DD"),
+      };
+    case "week":
+      return {
+        startDate: moment().startOf("isoWeek").format("YYYY-MM-DD"),
+        endDate: moment().endOf("isoWeek").add(1, "day").format("YYYY-MM-DD"),
+      };
+    case "month":
+      return {
+        startDate: moment().startOf("month").format("YYYY-MM-DD"),
+        endDate: moment().endOf("month").add(1, "day").format("YYYY-MM-DD"),
+      };
+    default:
+      return {
+        startDate: moment().format("YYYY-MM-DD"),
+        endDate: moment().format("YYYY-MM-DD"),
+      };
+  }
+};
 
 const CleaningTaskPage = () => {
   const router = useRouter();
-  const defaultStartDate = moment().format("YYYY-MM-DD");
-  const defaultEndDate = moment().add(1, "day").format("YYYY-MM-DD");
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedDateRange, setSelectedDateRange] = useState("today");
 
   const [propertyOptions, setPropertyOptions] = useState({});
   const [propertyOptionsLoading, setPropertyOptionsLoading] = useState(false);
 
   const [schedulerData, setSchedulerData] = useState([]);
   const [schedulerLoading, setSchedulerLoading] = useState(false);
-  const [postData, setPostData] = useState({
-    startDate: defaultStartDate,
-    endDate: defaultEndDate,
-  });
+  const [postData, setPostData] = useState(getDateRange("today"));
 
-  const [isOpenFilter, setIsOpenFilter] = useState(false);
   const [propertyValue, setPropertyValue] = useState("");
-  const [startDateValue, setStartDateValue] = useState(defaultStartDate);
-  const [endDateValue, setEndDateValue] = useState(defaultEndDate);
   const [openCollapse, setOpenCollapse] = useState([]);
 
   useEffect(() => {
@@ -74,6 +83,29 @@ const CleaningTaskPage = () => {
     );
   };
 
+  // Filter data by status
+  const filteredData = useMemo(() => {
+    if (isEmpty(schedulerData) || !selectedStatus) return schedulerData;
+
+    const result = {};
+    map(schedulerData, (propertyGroups, date) => {
+      const filteredPropertyGroups = {};
+      map(propertyGroups, (units, propertyName) => {
+        const filteredUnits = units.filter((unit) => {
+          const statusLabel = toLower(get(unit, ["status", "label"], ""));
+          return isEqual(statusLabel, toLower(selectedStatus));
+        });
+        if (filteredUnits.length > 0) {
+          filteredPropertyGroups[propertyName] = filteredUnits;
+        }
+      });
+      if (!isEmpty(filteredPropertyGroups)) {
+        result[date] = filteredPropertyGroups;
+      }
+    });
+    return result;
+  }, [schedulerData, selectedStatus]);
+
   const onClickToDetail = (id) => {
     router.push(`/cleaning-task/${id}`);
   };
@@ -81,106 +113,83 @@ const CleaningTaskPage = () => {
   const onChangePropertyValue = (e) => {
     setPostData({
       ...postData,
-      ...{ property_id: e.target.value },
+      property_id: e.target.value,
     });
     setPropertyValue(e.target.value);
   };
 
-  const onChangeEndDateValue = (e) => {
+  const onChangeDateRange = (rangeKey) => {
+    setSelectedDateRange(rangeKey);
+    const range = getDateRange(rangeKey);
     setPostData({
       ...postData,
-      ...{
-        endDate: e.target.value,
-      },
+      ...range,
     });
-    setEndDateValue(e.target.value);
-  };
-
-  const onChangeStartDateValue = (e) => {
-    setPostData({
-      ...postData,
-      ...{
-        startDate: e.target.value,
-      },
-    });
-    setStartDateValue(e.target.value);
   };
 
   const onClickReset = () => {
-    setPostData({ startDate: defaultStartDate, endDate: defaultEndDate });
+    setSelectedDateRange("today");
+    setSelectedStatus("");
     setPropertyValue("");
-    setStartDateValue(defaultStartDate);
-    setEndDateValue(defaultEndDate);
+    setPostData(getDateRange("today"));
   };
 
   return (
     <div className="relative h-full">
       <div className="hide-scroll-bar flex h-full flex-col gap-4 overflow-y-scroll">
+        {/* Filter Section */}
         <FilterSection
-          isOpenFilter={isOpenFilter}
-          setIsOpenFilter={setIsOpenFilter}
           propertyOption={propertyOptions}
           onChangePropertyValue={onChangePropertyValue}
           propertyValue={propertyValue}
+          selectedDateRange={selectedDateRange}
+          onChangeDateRange={onChangeDateRange}
           onClickReset={onClickReset}
-          onChangeStartDateValue={onChangeStartDateValue}
-          startDateValue={startDateValue}
-          onChangeEndDateValue={onChangeEndDateValue}
-          endDateValue={endDateValue}
         />
 
-        {/*<div className="hide-scroll-bar flex items-center overflow-y-hidden overflow-x-scroll pb-4">*/}
-        {/*  {map(btnLists, (list, index) => {*/}
-        {/*    const value = get(list, ["value"], "");*/}
-        {/*    const label = get(list, ["label"], "");*/}
+        {/* Status filter pills */}
+        <div className="hide-scroll-bar flex items-center gap-2 overflow-x-auto">
+          {statusFilters.map((filter) => (
+            <CustomButton
+              key={filter.value}
+              buttonText={filter.label}
+              buttonClassName={`btn-sm whitespace-nowrap ${isEqual(selectedStatus, filter.value) ? "btn-primary" : "btn-white"}`}
+              textClassName="text-xs"
+              onClick={() => setSelectedStatus(filter.value)}
+            />
+          ))}
+        </div>
 
-        {/*    return (*/}
-        {/*      <CustomButton*/}
-        {/*        key={index}*/}
-        {/*        buttonText={label}*/}
-        {/*        buttonClassName={`btn-sm ${isEqual(selectedStatus, value) ? "btn-primary" : "btn-white"} mr-2`}*/}
-        {/*        textClassName="text-xs"*/}
-        {/*        onClick={() => setSelectedStatus(value)}*/}
-        {/*      />*/}
-        {/*    );*/}
-        {/*  })}*/}
-        {/*</div>*/}
-
-        <div className="flex h-full flex-col gap-6 pt-6">
-          {isEmpty(schedulerData) ? (
+        {/* Task listing */}
+        <div className="flex h-full flex-col gap-4 pt-2">
+          {schedulerLoading ? (
+            <div className="flex h-full items-center justify-center">
+              <span className="loading loading-spinner loading-md text-primary"></span>
+            </div>
+          ) : isEmpty(filteredData) ? (
             <div className="flex h-full items-center justify-center">
               <CustomEmptyBox />
             </div>
           ) : (
-            map(schedulerData, (propertyGroups, date) => (
-              <div key={date}>
-                <CustomText textClassName="text-xs font-bold pb-2">
+            map(filteredData, (propertyGroups, date) => (
+              <div key={date} className="flex flex-col gap-3">
+                {/* Date header */}
+                <CustomText textClassName="text-xs font-semibold text-muted uppercase tracking-wider">
                   {date}
                 </CustomText>
+
                 {map(propertyGroups, (units, propertyName) => {
                   const collapseKey = date + "|" + propertyName;
                   const isOpen = openCollapse.includes(collapseKey);
+
                   return (
                     <div
                       key={collapseKey}
-                      className={`collapse bg-white ${isOpen ? "collapse-open" : ""}`}
+                      className="overflow-hidden rounded-2xl border border-border bg-white"
                     >
-                      <input
-                        type="checkbox"
-                        checked={isOpen}
-                        onChange={() => {
-                          setOpenCollapse(
-                            isOpen
-                              ? openCollapse.filter(
-                                  (key) => key !== collapseKey,
-                                )
-                              : [...openCollapse, collapseKey],
-                          );
-                        }}
-                        style={{ display: "none" }}
-                      />
-                      <div
-                        className="collapse-title cursor-pointer px-4 sm:px-4 md:px-4 lg:px-8 xl:px-8"
+                      {/* Collapse header */}
+                      <button
+                        className="flex w-full cursor-pointer items-center justify-between p-4"
                         onClick={() => {
                           setOpenCollapse(
                             isOpen
@@ -191,89 +200,95 @@ const CleaningTaskPage = () => {
                           );
                         }}
                       >
-                        <div className="flex items-center justify-between">
-                          <CustomText textClassName="font-bold">
+                        <div className="text-left">
+                          <CustomText textClassName="font-semibold text-black">
                             {propertyName}
                           </CustomText>
-                          <CustomImage
-                            src={
-                              isOpen ? Images.upIconBlack : Images.downIconBlack
-                            }
-                            className="w-4"
-                          />
-                        </div>
-                        <div className="flex items-end justify-start gap-4">
-                          <CustomText textClassName="text-disable text-sm">
-                            {date}
-                          </CustomText>
-                          <CustomText textClassName="text-xs">
-                            <span className="text-base font-bold text-primary">
-                              {units.length}
-                            </span>{" "}
-                            units
-                          </CustomText>
-                        </div>
-                      </div>
-
-                      <div
-                        className="collapse-content bg-[#E9F1FE] px-4 sm:px-4 md:px-4 lg:px-8 xl:px-8"
-                        style={{ paddingBottom: 0 }}
-                      >
-                        {map(units, (unit, index) => {
-                          const name = get(unit, "unit_name", "-");
-                          const id = get(unit, "id", "-");
-                          const statusLabel = get(
-                            unit,
-                            ["status", "label"],
-                            "-",
-                          );
-
-                          return (
-                            <div
-                              key={id}
-                              className={`${index === 0 ? "pt-4" : ""}`}
-                            >
-                              <div className="flex items-center">
-                                {/* Name and Status Group */}
-                                <div className="flex items-center gap-1">
-                                  <CustomText textClassName="text-sm">
-                                    {name}
-                                  </CustomText>
-                                  <div className="w-px h-4 bg-gray-300 mx-2"></div>
-                                  <StatusLabel status={statusLabel} />
-                                </div>
-                                
-                                {/* Spacer */}
-                                <div className="flex-1"></div>
-                                
-                                {/* Divider before Button */}
-                                <div className="w-px h-8 bg-gray-300 mx-4"></div>
-                                
-                                {/* Button Column */}
-                                <div className="w-32 flex justify-center">
-                                  {isEqual(toLower(statusLabel), "pending") ? (
-                                    <CustomButton
-                                      buttonClassName="btn-primary btn-sm w-full"
-                                      buttonText={"Hantar Laporan"}
-                                      onClick={() => onClickToDetail(id)}
-                                    />
-                                  ) : (
-                                    <div className="flex items-center justify-center w-full h-8 cursor-pointer" onClick={() => onClickToDetail(id)}>
-                                      <CustomText
-                                        textClassName="text-xs text-black font-bold"
-                                      >
-                                        Lihat
-                                      </CustomText>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-
-                              <div className="divider-white divider"></div>
+                          <div className="flex items-center gap-3 pt-1">
+                            <div className="flex items-center gap-1.5">
+                              <SvgIcon
+                                name="calendar"
+                                color="muted"
+                                size={14}
+                              />
+                              <CustomText textClassName="text-muted text-xs">
+                                {date}
+                              </CustomText>
                             </div>
-                          );
-                        })}
-                      </div>
+                            <CustomText textClassName="text-xs text-muted">
+                              <span className="font-semibold text-primary">
+                                {units.length}
+                              </span>{" "}
+                              units
+                            </CustomText>
+                          </div>
+                        </div>
+                        <SvgIcon
+                          name={isOpen ? "up" : "down"}
+                          color="muted"
+                          size={16}
+                        />
+                      </button>
+
+                      {/* Collapse content */}
+                      {isOpen && (
+                        <div className="border-t border-border bg-surface-secondary px-4 pb-2 pt-1">
+                          {map(units, (unit, index) => {
+                            const name = get(unit, "unit_name", "-");
+                            const id = get(unit, "id", "-");
+                            const statusLabel = get(
+                              unit,
+                              ["status", "label"],
+                              "-",
+                            );
+
+                            return (
+                              <div key={id}>
+                                <div
+                                  className="flex cursor-pointer items-center justify-between py-3"
+                                  onClick={() => onClickToDetail(id)}
+                                >
+                                  {/* Name and Status */}
+                                  <div className="flex items-center gap-2">
+                                    <CustomText textClassName="text-sm font-medium text-black">
+                                      {name}
+                                    </CustomText>
+                                    <StatusLabel status={statusLabel} />
+                                  </div>
+
+                                  {/* Action */}
+                                  <div className="shrink-0">
+                                    {isEqual(
+                                      toLower(statusLabel),
+                                      "pending",
+                                    ) ? (
+                                      <CustomButton
+                                        buttonClassName="btn-primary btn-sm"
+                                        buttonText="Hantar Laporan"
+                                        textClassName="text-xs"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          onClickToDetail(id);
+                                        }}
+                                      />
+                                    ) : (
+                                      <SvgIcon
+                                        name="right"
+                                        color="muted"
+                                        size={18}
+                                      />
+                                    )}
+                                  </div>
+                                </div>
+
+                                {index < units.length - 1 && (
+                                  <div className="border-b border-border"></div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   );
                 })}

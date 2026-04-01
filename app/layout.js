@@ -1,4 +1,5 @@
-import "@/app/styles/globals.scss";
+import "@/app/styles/globals.css";
+import "@/app/styles/partials.scss";
 import 'swiper/css';
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -11,7 +12,7 @@ export const metadata = {
   verification: {
     google: "xzSyuG_QIOpCOR6BfMK5zYb0-5UWt-jtdiE2vD4u5uI"
   },
-  themeColor: "#d71440",
+  themeColor: "#f5833c",
   manifest: "/manifest.json",
   icons: {
     icon: [
@@ -32,10 +33,10 @@ export const metadata = {
   },
   appleWebApp: {
     capable: true,
-    statusBarStyle: "#d71440"
+    statusBarStyle: "#f5833c"
   },
   other: {
-    "msapplication-navbutton-color": "#d71440"
+    "msapplication-navbutton-color": "#f5833c"
   }
 };
 
@@ -43,7 +44,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        {children}
+        <div className="mx-auto h-full w-full max-w-3xl">
+          {children}
+        </div>
         <Toaster />
       </body>
     </html>

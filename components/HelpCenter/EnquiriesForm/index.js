@@ -1,5 +1,4 @@
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import { map, get, isEqual } from "lodash";
 import CustomText from "@/components/CustomText";
 import DividerSection from "@/components/HelpCenter/DividerSection";
@@ -53,14 +52,10 @@ const EnquiriesForm = ({
 
             return (
               <div className="flex gap-2 items-center" key={index}>
-                <CustomImage
-                  className="cursor-pointer"
-                  src={
-                    isEqual(checkFeedbackMatters, value)
-                      ? Images.checkIconAqua
-                      : Images.uncheckIconWhite
-                  }
-                  imageStyle={{ width: 20, height: 20 }}
+                <SvgIcon
+                  name={isEqual(checkFeedbackMatters, value) ? "check" : "uncheck"}
+                  color={isEqual(checkFeedbackMatters, value) ? "aqua" : "white"}
+                  size={20}
                   onClick={() => onClickCheckFeedbackMatters(value)}
                 />
                 <CustomText textClassName="text-xs">{name}</CustomText>

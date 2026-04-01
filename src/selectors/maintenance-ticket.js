@@ -94,3 +94,7 @@ export const getCheckOutLatitude = (state) =>
   get(state, ["check_out_latitude"], "");
 export const getCheckOutLongitude = (state) =>
   get(state, ["check_out_longitude"], "");
+export const getSlaDate = (state) => get(state, ["sla_date"], null);
+export const getStatusValueRaw = (state) => get(state, ["status_value"], "");
+export const getPriorityValueRaw = (state) =>
+  get(state, ["priority_value"], "");

@@ -12,10 +12,7 @@ const PropertySelectionComponent = ({
   userRole,
 }) => {
   return (
-    <div
-      className="hide-scroll-bar hidden flex-col gap-4 overflow-y-scroll lg:flex xl:flex"
-      style={{ width: 220 }}
-    >
+    <div className="hide-scroll-bar flex flex-row gap-3 overflow-x-auto pb-1">
       {map(propertyListing, (list, index) => {
         const imageUrl = listingSelector.getImageUrl(list);
         const name = listingSelector.getName(list);
@@ -40,31 +37,24 @@ const PropertySelectionComponent = ({
         return (
           <div
             key={index}
-            className={`min-w-52 flex cursor-pointer flex-col items-center justify-center rounded-3xl bg-white p-4 ${isSelectProperty ? "border border-2 border-primary" : ""}`}
+            className={`flex min-w-[160px] cursor-pointer flex-col items-center rounded-2xl border bg-surface p-4 transition-all ${isSelectProperty ? "border-primary" : "border-border"}`}
             onClick={() => onClickSelectProperty(propertyId)}
           >
-            <div
-              style={{
-                width: 60,
-                height: 60,
-                maxWidth: 60,
-                maxHeight: 60,
-              }}
-            >
+            <div className="h-[56px] w-[56px] overflow-hidden rounded-xl">
               <CustomImage
-                className="global-border-radius overflow-hidden border"
+                className="overflow-hidden rounded-xl"
                 imageStyle={{
-                  width: 60,
-                  height: 60,
-                  maxWidth: 60,
-                  maxHeight: 60,
+                  width: 56,
+                  height: 56,
+                  maxWidth: 56,
+                  maxHeight: 56,
                 }}
                 src={isEmpty(imageUrl) ? Images.imageNotFound : imageUrl}
               />
             </div>
 
             <CustomText
-              textClassName={`py-1 text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
+              textClassName={`py-1.5 text-xs text-center font-semibold line-clamp-1 ${isSelectProperty ? "text-primary" : "text-muted"}`}
             >
               {isEmpty(name) ? "-" : name}
             </CustomText>
@@ -74,54 +64,47 @@ const PropertySelectionComponent = ({
               <>
                 <div className="flex items-center gap-1 pb-1">
                   <CustomText
-                    textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
+                    textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-muted"}`}
                   >
                     Total Unit:
                   </CustomText>
                   <CustomText
-                    textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
+                    textClassName={`text-xs text-center font-semibold ${isSelectProperty ? "text-primary" : "text-muted"}`}
                   >
                     {size(totalUnits)}
                   </CustomText>
                 </div>
 
-                <div className="hidden lg:block xl:block">
+                <div>
                   <div className="flex gap-1 pb-1">
                     <CustomText
-                      textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
+                      textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-muted"}`}
                     >{`R:`}</CustomText>
                     <CustomText
-                      textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
+                      textClassName={`text-xs text-center font-semibold ${isSelectProperty ? "text-primary" : "text-muted"}`}
                     >{`${totalOccupiedRoom}/${totalRoom} (${totalVacantRoom})`}</CustomText>
                     <CustomText
-                      textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
+                      textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-muted"}`}
                     >{`- OR:`}</CustomText>
                     <CustomText
-                      textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
+                      textClassName={`text-xs text-center font-semibold ${isSelectProperty ? "text-primary" : "text-muted"}`}
                     >{`${roomOccupancyRate}%`}</CustomText>
                   </div>
 
                   <div className="flex gap-1">
                     <CustomText
-                      textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
+                      textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-muted"}`}
                     >{`CP:`}</CustomText>
                     <CustomText
-                      textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
+                      textClassName={`text-xs text-center font-semibold ${isSelectProperty ? "text-primary" : "text-muted"}`}
                     >{`${totalOccupiedCarPark}/${totalCarPark} (${totalVacantCarPark}) `}</CustomText>
                     <CustomText
-                      textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-disable"}`}
+                      textClassName={`text-xs text-center ${isSelectProperty ? "text-black" : "text-muted"}`}
                     >{`- OR:`}</CustomText>
                     <CustomText
-                      textClassName={`text-xs text-center ${isSelectProperty ? "text-primary font-bold" : "text-disable"}`}
+                      textClassName={`text-xs text-center font-semibold ${isSelectProperty ? "text-primary" : "text-muted"}`}
                     >{`${carParkOccupancyRate}%`}</CustomText>
                   </div>
-                </div>
-
-                <div className="w-full lg:hidden xl:hidden">
-                  <CustomText textClassName="text-xs text-center">{`R: ${totalOccupiedRoom}/${totalRoom} (${totalVacantRoom})`}</CustomText>
-                  <CustomText textClassName="text-xs text-center">{`OR: ${roomOccupancyRate}%`}</CustomText>
-                  <CustomText textClassName="text-xs text-center">{`CP: ${totalOccupiedCarPark}/${totalCarPark} (${totalVacantCarPark})`}</CustomText>
-                  <CustomText textClassName="text-xs text-center">{`OR: ${carParkOccupancyRate}%`}</CustomText>
                 </div>
               </>
             ) : (

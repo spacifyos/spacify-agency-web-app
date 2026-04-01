@@ -1,6 +1,5 @@
 import CustomText from "@/components/CustomText";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import Helper from "@/src/utils/Helper";
 import _, { isEmpty, isEqual } from "lodash";
 import * as listingSelector from "@/src/selectors/listing";
@@ -29,9 +28,10 @@ const RentChargesComponent = ({
           {isEmpty(rentChargesLists) ? (
             false
           ) : (
-            <CustomImage
-              src={!openCharges ? Images.upIconBlack : Images.downIconBlack}
-              imageStyle={{ width: 13 }}
+            <SvgIcon
+              name={!openCharges ? "up" : "down"}
+              color="black"
+              size={13}
             />
           )}
         </div>
@@ -41,9 +41,10 @@ const RentChargesComponent = ({
 
       <div className="collapse-content p-0">
         <div className="flex items-center pt-1">
-          <CustomImage
-            src={Images.infoIconActive}
-            className="cursor-pointer w-4"
+          <SvgIcon
+            name="info"
+            color="active"
+            size={16}
             onClick={() =>
               Helper.documentGetElementById("rent_charges_details").showModal()
             }

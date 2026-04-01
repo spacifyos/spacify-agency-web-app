@@ -1,8 +1,7 @@
 import { get, isEmpty, isEqual, map, size } from "lodash";
 import Image from "next/image";
 import CustomText from "@/components/CustomText";
-import Images from "@/src/utils/Image";
-import CustomImage from "@/components/CustomImage";
+import SvgIcon from "@/components/SvgIcon";
 import CustomButton from "@/components/CustomButton";
 
 const CommentImageUploadModal = ({
@@ -18,8 +17,19 @@ const CommentImageUploadModal = ({
   const initBase64 = get(selectedImage, ["base64"], "");
 
   return open ? (
-    <div className="fixed inset-0 z-10 flex h-screen flex-1 flex-col items-center justify-center gap-4 overflow-hidden bg-black">
-      <div className="relative flex h-3/5 w-4/5 bg-white">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90">
+      {/* Close button */}
+      <button
+        className="absolute right-4 top-4 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-white/10 backdrop-blur-sm transition-colors hover:bg-white/20"
+        onClick={onClickCloseModal}
+      >
+        <CustomText textClassName="text-lg text-white font-medium">
+          X
+        </CustomText>
+      </button>
+
+      {/* Main image */}
+      <div className="relative flex h-3/5 w-11/12 max-w-lg overflow-hidden rounded-2xl bg-black">
         <Image
           loader={() => (isEmpty(initImage) ? initBase64 : initImage)}
           alt={isEmpty(initImage) ? initBase64 : initImage}
@@ -29,68 +39,63 @@ const CommentImageUploadModal = ({
           fill
         />
 
-        {size(imageList) >= 2 ? (
-          <div className="flex flex-1 items-end justify-center gap-2">
+        {/* Thumbnail strip */}
+        {size(imageList) >= 2 && (
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-2 bg-gradient-to-t from-black/60 to-transparent p-4">
             {map(imageList, (item, index) => {
               const image = get(item, ["image"], "");
               const base64 = get(item, ["base64"], "");
+              const isSelected = isEqual(
+                get(selectedImage, ["base64"], ""),
+                base64,
+              );
 
               return (
                 <div
                   key={index}
-                  className="relative mb-4 cursor-pointer overflow-hidden"
-                  style={{ width: 80, height: 60 }}
-                  onClick={() => setSelectedCommentImage(item)}
+                  className={`relative cursor-pointer overflow-hidden rounded-lg ${
+                    isSelected
+                      ? "ring-2 ring-white"
+                      : "opacity-60 hover:opacity-100"
+                  }`}
+                  style={{ width: 64, height: 48 }}
+                  onClick={() =>
+                    isSelected
+                      ? onClickRemoveCommentImage(item)
+                      : setSelectedCommentImage(item)
+                  }
                 >
                   <Image
                     loader={() => (isEmpty(image) ? base64 : image)}
                     alt={isEmpty(image) ? base64 : image}
                     src={isEmpty(image) ? base64 : image}
                     fill
+                    style={{ objectFit: "cover" }}
                   />
 
-                  {isEqual(get(selectedImage, ["base64"], ""), base64) ? (
-                    <div
-                      className="absolute inset-0 z-10 flex items-center justify-center border border-2 border-error"
-                      style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-                      onClick={() => onClickRemoveCommentImage(item)}
-                    >
-                      <CustomImage
-                        src={Images.deleteIcon}
-                        className="h-10 w-10"
-                      />
+                  {isSelected && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                      <SvgIcon name="delete" color="white" size={20} />
                     </div>
-                  ) : (
-                    false
                   )}
                 </div>
               );
             })}
           </div>
-        ) : (
-          false
         )}
       </div>
 
-      <div className="">
+      {/* Send button */}
+      <div className="mt-6">
         <CustomButton
-          buttonClassName="btn-primary min-w-28 min-h-10 h-10"
+          buttonClassName="btn-primary rounded-full px-8 py-2.5 h-auto min-h-0"
+          textClassName="text-sm font-medium"
           buttonText="Send"
           onClick={onClickUploadCommentImage}
         />
       </div>
-
-      <div
-        className="absolute right-3 top-3 z-10 flex h-10 w-10 cursor-pointer items-center justify-center rounded-3xl"
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.6)" }}
-        onClick={onClickCloseModal}
-      >
-        <CustomText textClassName="text-lg text-white">X</CustomText>
-      </div>
     </div>
-  ) : (
-    false
-  );
+  ) : null;
 };
 
 export default CommentImageUploadModal;

@@ -26,8 +26,7 @@ import CustomButton from "@/components/CustomButton";
 import CustomSelect from "@/components/CustomSelect";
 import BookingTextArea from "@/components/BookingTextArea";
 import LoadingOverlay from "@/components/LoadingOverlay";
-import CustomImage from "@/components/CustomImage";
-import Images from "@/src/utils/Image";
+import SvgIcon from "@/components/SvgIcon";
 import ImageModal from "@/components/ImageModal";
 import VideoModal from "@/components/VideoModal";
 import MediaInput from "@/components/MediaInput";
@@ -494,25 +493,27 @@ export default function CreateMaintenanceTicket() {
   };
 
   return (
-    <div className="hide-scroll-bar relative flex h-full flex-col gap-6 overflow-hidden overflow-y-scroll rounded-3xl bg-white p-6">
+    <div className="hide-scroll-bar relative flex h-full flex-col gap-5 overflow-hidden overflow-y-scroll">
       <LoadingOverlay
         loading={loading || optionLoading || propertyOptionLoading}
       />
 
-      <div className="flex items-center gap-4">
-        <CustomImage
-          src={Images.leftIconBlack}
-          className="h-6 w-6 cursor-pointer"
+      {/* Header */}
+      <div className="flex items-center gap-3">
+        <button
+          className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-border bg-surface transition-colors hover:bg-surface-secondary"
           onClick={() => router.back()}
-        />
-        <CustomText textClassName="text-xl font-bold">
+        >
+          <SvgIcon name="left" color="black" size={16} />
+        </button>
+        <CustomText textClassName="text-lg font-semibold text-black">
           Create Maintenance Ticket
         </CustomText>
       </div>
 
-      {/* Section 1: Property Selection */}
-      <div className="flex flex-col gap-4 rounded-xl bg-slate-50 p-4">
-        <CustomText textClassName="font-bold text-primary">
+      {/* Section 1: Property Information */}
+      <div className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-5">
+        <CustomText textClassName="font-semibold text-black">
           Property Information
         </CustomText>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -562,8 +563,8 @@ export default function CreateMaintenanceTicket() {
       </div>
 
       {/* Section 2: Ticket Details */}
-      <div className="flex flex-col gap-4 rounded-xl bg-slate-50 p-4">
-        <CustomText textClassName="font-bold text-primary">
+      <div className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-5">
+        <CustomText textClassName="font-semibold text-black">
           Ticket Details
         </CustomText>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -604,9 +605,9 @@ export default function CreateMaintenanceTicket() {
         {/* Media Upload */}
         <div className="flex flex-col gap-4">
           <div>
-            <div className="flex items-center gap-1">
-              <CustomText textClassName="text-error">*</CustomText>
-              <CustomText textClassName="text-xs font-bold">
+            <div className="flex items-center gap-1 pb-1.5">
+              <CustomText textClassName="text-error text-sm">*</CustomText>
+              <CustomText textClassName="text-xs font-semibold text-black">
                 Proof of Image (Max 5, 5MB each)
               </CustomText>
             </div>
@@ -627,9 +628,9 @@ export default function CreateMaintenanceTicket() {
           </div>
 
           <div>
-            <div className="flex items-center gap-1">
-              <CustomText textClassName="text-error">*</CustomText>
-              <CustomText textClassName="text-xs font-bold">
+            <div className="flex items-center gap-1 pb-1.5">
+              <CustomText textClassName="text-error text-sm">*</CustomText>
+              <CustomText textClassName="text-xs font-semibold text-black">
                 Proof of Video (Max 1, 50MB)
               </CustomText>
             </div>
@@ -651,15 +652,16 @@ export default function CreateMaintenanceTicket() {
         </div>
       </div>
 
-      <div className="flex justify-end gap-4 pb-6">
+      {/* Action buttons */}
+      <div className="flex justify-end gap-3 pb-6">
         <CustomButton
           buttonText="Cancel"
-          buttonClassName="btn-white w-32"
+          buttonClassName="btn-primary-outline rounded-xl px-6"
           onClick={() => router.back()}
         />
         <CustomButton
           buttonText="Create Ticket"
-          buttonClassName="btn-primary w-32"
+          buttonClassName="btn-primary rounded-xl px-6"
           onClick={onClickSubmit}
           loading={loading || imageUploading || videoUploading}
         />

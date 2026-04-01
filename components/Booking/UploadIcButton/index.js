@@ -1,19 +1,16 @@
-import Images from "@/src/utils/Image";
-import CustomButton from "@/components/CustomButton";
 import _ from "lodash";
-import CustomImage from "@/components/CustomImage";
+import SvgIcon from "@/components/SvgIcon";
 import CustomText from "@/components/CustomText";
 
 const UploadIcButton = ({
   onClickSelectImage,
   onChangeImage,
   buttonClassName,
-  icon,
+  iconName,
+  iconColor,
+  iconSize = 15,
   buttonText,
   name,
-  imageWidth = 20,
-  imageHeight = 20,
-  imageStyle,
   textClassName,
 }) => {
   return (
@@ -29,13 +26,8 @@ const UploadIcButton = ({
 
       <CustomText textClassName={textClassName}>{buttonText}</CustomText>
 
-      {!_.isEmpty(icon) ? (
-        <CustomImage
-          src={icon}
-          width={imageWidth}
-          height={imageHeight}
-          imageStyle={imageStyle}
-        />
+      {!_.isEmpty(iconName) ? (
+        <SvgIcon name={iconName} color={iconColor} size={iconSize} />
       ) : (
         false
       )}

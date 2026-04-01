@@ -2,6 +2,8 @@
 
 import CustomText from "@/components/CustomText";
 import CustomButton from "@/components/CustomButton";
+import CustomImage from "@/components/CustomImage";
+import Images from "@/src/utils/Image";
 import { useState } from "react";
 import { isEmpty } from "lodash";
 import Toast from "@/src/utils/Toast";
@@ -40,8 +42,6 @@ export default function AgencySignIn() {
 
   const signInSuccess = (res) => {
     const authToken = authSelector.getToken(res);
-    const isUserVerify = authSelector.getUserVerify(res);
-    const userPhoneNumber = authSelector.getUserPhoneNumber(res);
     const userType = authSelector.getUserType(res);
 
     AuthManager.setToken(authToken);
@@ -58,48 +58,77 @@ export default function AgencySignIn() {
     setPassword(e.target.value);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      onClickToLogin();
+    }
+  };
+
   return (
-    <div className="container mx-auto h-full max-w-screen-md flex flex-col items-center justify-center">
-      <CustomText textClassName="text-primary font-bold text-center w-full xl:text-3xl lg:text-2xl md:text-2xl sm:text-xl text-xl xl:pb-10 lg:pb-10 md:pb-10 sm:pb-5 pb-5">
-        Agency Sign In
-      </CustomText>
+    <div className="flex h-full flex-col items-center justify-center px-6">
+      <div className="w-full max-w-sm">
+        <div className="mb-8 flex justify-center">
+          <CustomImage
+            src={Images.logoHorizontalColor}
+            className="w-36"
+            alt="Spacify Logo"
+          />
+        </div>
 
-      <div className="global-box-shadow rounded-3xl bg-white p-4 sm:p-6 md:p-6 lg:p-8 xl:p-8">
-        <input
-          type="email"
-          value={email}
-          onChange={onChangeEmail}
-          placeholder={"Email"}
-          className="user-input input-bordered input mb-4 w-full bg-white"
-        />
+        <CustomText textClassName="text-2xl font-bold text-black text-center mb-1">
+          Welcome back
+        </CustomText>
+        <CustomText textClassName="text-sm text-muted text-center mb-8">
+          Sign in to your agency account
+        </CustomText>
 
-        <input
-          type="password"
-          value={password}
-          onChange={onChangePassword}
-          placeholder={"Password"}
-          className="user-input input-bordered input mb-4 w-full bg-white"
-        />
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-black">
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={onChangeEmail}
+              onKeyDown={handleKeyPress}
+              placeholder="Enter your email"
+              className="user-input input w-full bg-white px-4 py-3"
+            />
+          </div>
 
-        <div className="flex justify-center">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-black">
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={onChangePassword}
+              onKeyDown={handleKeyPress}
+              placeholder="Enter your password"
+              className="user-input input w-full bg-white px-4 py-3"
+            />
+          </div>
+
           <CustomButton
-            buttonClassName="btn-primary w-2/4 mb-2"
-            buttonText={"Sign In"}
+            buttonClassName="btn-primary mt-2 w-full py-3"
+            buttonText="Sign In"
             onClick={onClickToLogin}
             loading={signInLoading}
             disable={signInLoading}
           />
         </div>
 
-        <CustomText textClassName="text-xs my-5 text-center">
-          By using our services, you are deemed unconditionally agree, consent
-          and be bound by our terms and conditions and privacy policy.
+        <CustomText textClassName="text-xs text-muted text-center mt-8 leading-relaxed">
+          By signing in, you agree to our terms and conditions and privacy
+          policy.
         </CustomText>
 
-        <CustomText textClassName="text-xs text-center text-disable">
-          This site is protected by reCAPTCHA and the Google{" "}
-          <span className="underline">Privacy Policy</span> and{" "}
-          <span className="underline">Terms of Service</span> apply.
+        <CustomText textClassName="text-xs text-center text-muted mt-3">
+          Protected by reCAPTCHA.{" "}
+          <span className="text-primary underline">Privacy Policy</span> and{" "}
+          <span className="text-primary underline">Terms of Service</span>
         </CustomText>
       </div>
     </div>

@@ -1,9 +1,10 @@
 @mixin custom-input($bgColor) {
-  @apply border-white;
+  border: 1px solid var(--color-border);
   background-color: $bgColor;
+  border-radius: 12px;
+  transition: border-color 0.15s ease;
 
   textarea {
-
     width: 100%;
     height: 100%;
     @apply text-black;
@@ -14,6 +15,7 @@
     outline-offset: unset;
   }
 }
+
 input {
   width: 100%;
   @apply text-black;
@@ -21,7 +23,7 @@ input {
 }
 
 ::placeholder {
-  @apply text-sm text-disable;
+  @apply text-sm text-muted;
   opacity: 1;
 }
 
@@ -52,7 +54,10 @@ input:focus {
 
 .user-input {
   @apply text-black;
-  @apply border-disable;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  transition: border-color 0.15s ease;
 }
 
 .default-input {
@@ -61,8 +66,9 @@ input:focus {
 
 .user-input:focus,
 .user-input:focus-within {
-  @apply border-disable;
+  border-color: var(--color-primary);
   outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 131, 60, 0.1);
 }
 
 .default-input:focus,
@@ -71,7 +77,8 @@ input:focus {
 .meter-input:focus-within {
   outline: none;
   outline-offset: unset;
-  border: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(245, 131, 60, 0.1);
   @include custom-input(#FFFFFF);
 }
 
